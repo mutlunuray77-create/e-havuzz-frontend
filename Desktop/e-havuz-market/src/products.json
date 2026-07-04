@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "name": "Havuz Kloru %56 Toz Granül 25 kg",
+    "category": "Havuz Kimyasalları",
+    "price": 2450.00,
+    "image": "https://images.unsplash.com/photo-1576086213369-97a306d36557?w=500&auto=format&fit=crop&q=60",
+    "description": "Havuz suyunun dezenfeksiyonunda kullanılan, hızlı çözünen stabilizatörlü toz klor.",
+    "stock": 15
+  },
+  {
+    "id": 2,
+    "name": "Sıvı Yosun Önleyici Dezenfektan 20 lt",
+    "category": "Havuz Kimyasalları",
+    "price": 850.00,
+    "image": "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=500&auto=format&fit=crop&q=60",
+    "description": "Havuz duvarlarında ve tabanında yosun oluşumunu engelleyen konsantre sıvı ürün.",
+    "stock": 22
+  },
+  {
+    "id": 3,
+    "name": "Astral Pool Havuz Pompası 1.5 HP",
+    "category": "Havuz Ekipmanları",
+    "price": 14200.00,
+    "image": "https://images.unsplash.com/photo-1585338107529-13afc5f02586?w=500&auto=format&fit=crop&q=60",
+    "description": "Yüksek performanslı, sessiz çalışan, kendinden emişli sirkülasyon pompası.",
+    "stock": 5
+  },
+  {
+    "id": 4,
+    "name": "Uzaktan Kumandalı Led Havuz Lambası",
+    "category": "Aydınlatma Sistemleri",
+    "price": 1950.00,
+    "image": "https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?w=500&auto=format&fit=crop&q=60",
+    "description": "RGB renk değiştirebilen, enerji tasarruflu sıva altı havuz aydınlatma armatürü.",
+    "stock": 40
+  }
+]
