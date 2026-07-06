@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { ShoppingCart, Search, User, HelpCircle, FileText, Truck, Mail, MapPin, Sparkles, Filter, CheckCircle, X, LogIn, UserPlus, ArrowLeft, Lock } from 'lucide-react';
+import { ShoppingCart, Search, User, HelpCircle, FileText, Truck, Mail, MapPin, Sparkles, Filter, CheckCircle, X, LogIn, UserPlus, ArrowLeft } from 'lucide-react';
 
 export default function App() {
   const [cart, setCart] = useState([]);
   const [selectedMood, setSelectedMood] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Hepsi");
-  const [searchQuery, setSearchQuery] = useState(""); // Arama motoru state'i
+  const [searchQuery, setSearchQuery] = useState(""); 
   const [dbProducts, setDbProducts] = useState([]); 
   const [displayedProducts, setDisplayedProducts] = useState([]);
   const [isGuestMode, setIsGuestMode] = useState(false);
@@ -39,27 +39,23 @@ export default function App() {
     }
   }, [notification]);
 
-  // ARAMA VE FİLTRELEME MOTORU (İrem Hanım'ın İstediği Can Alıcı Kısım)
+  // Gelişmiş Arama ve Filtreleme Motoru
   useEffect(() => {
     let filtrelenmis = dbProducts;
     
-    // Kategori Filtresi
     if (selectedCategory !== "Hepsi") {
       filtrelenmis = filtrelenmis.filter(p => p.category === selectedCategory);
     }
     
-    // Mod Filtresi
     if (selectedMood && selectedMood !== "hepsi") {
       filtrelenmis = filtrelenmis.filter(p => p.moods && p.moods.includes(selectedMood));
     }
 
-    // Gerçek Zamanlı Arama Filtresi (Fiskiye, Pompa vb.)
     if (searchQuery.trim() !== "") {
       const query = searchQuery.toLowerCase('tr-TR');
       filtrelenmis = filtrelenmis.filter(p => 
         p.name.toLowerCase('tr-TR').includes(query) || 
-        p.category.toLowerCase('tr-TR').includes(query) ||
-        (p.tag && p.tag.toLowerCase('tr-TR').includes(query))
+        p.category.toLowerCase('tr-TR').includes(query)
       );
     }
     
@@ -94,7 +90,6 @@ export default function App() {
     setAsistanCevap("🤖 Akıllı Asistan: Harika bir soru! Geliştirdiğimiz modern mimaride sepet yönetimini ve ürün akışını Axios ile canlı Render backend API'miz üzerinden asenkron olarak yönetiyoruz güzelim!");
   };
 
-  // FORM GÖNDERME SİMÜLASYONLARI
   const handleLoginSubmit = (e) => {
     e.preventDefault();
     setActiveModal("");
@@ -105,7 +100,7 @@ export default function App() {
   const handleRegisterSubmit = (e) => {
     e.preventDefault();
     setActiveModal("");
-    setNotification(`📝 Kayıt Başarılı! Teşekkürler ${registerForm.fullname} (${registerForm.city}). Profiliniz dummy veri tabanına eklendi.`);
+    setNotification(`📝 Kayıt Başarılı! Teşekkürler ${registerForm.fullname} (${registerForm.city}). Profiliniz sisteme eklendi.`);
     setRegisterForm({ fullname: '', city: '', phone: '' });
   };
 
@@ -143,7 +138,7 @@ export default function App() {
 
             <div className="p-6 overflow-y-auto text-slate-700 flex-1 flex flex-col justify-between">
               <div>
-                {/* GİRİŞ YAP MODALI */}
+                {/* GİRİŞ YAP FORMU */}
                 {activeModal === "login" && (
                   <form onSubmit={handleLoginSubmit} className="flex flex-col gap-4">
                     <p className="text-xs text-slate-500 font-medium">Lütfen kullanıcı adı ve şifrenizi girerek demo hesabınıza erişim sağlayın.</p>
@@ -156,12 +151,12 @@ export default function App() {
                       <input type="password" required value={loginForm.password} onChange={(e) => setLoginForm({...loginForm, password: e.target.value})} placeholder="••••••••" className="w-full p-3 rounded-xl bg-slate-50 border-2 border-slate-200 focus:outline-none focus:border-purple-600 text-sm font-semibold" />
                     </div>
                     <button type="submit" className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-xl transition-all shadow-md mt-2 flex items-center justify-center gap-2 text-sm">
-                      <LogIn className="w-4 h-4" /> Güvenli Giriş Yap
+                      Güvenli Giriş Yap
                     </button>
                   </form>
                 )}
 
-                {/* ÜYE OL MODALI */}
+                {/* ÜYE OL FORMU */}
                 {activeModal === "register" && (
                   <form onSubmit={handleRegisterSubmit} className="flex flex-col gap-4">
                     <p className="text-xs text-slate-500 font-medium">Sisteme hızlıca üye olmak için aşağıdaki bilgileri doldurmanız yeterlidir.</p>
@@ -178,7 +173,7 @@ export default function App() {
                       <input type="tel" required value={registerForm.phone} onChange={(e) => setRegisterForm({...registerForm, phone: e.target.value})} placeholder="Örn: 0555 XXXXXXX" className="w-full p-3 rounded-xl bg-slate-50 border-2 border-slate-200 focus:outline-none focus:border-cyan-500 text-sm font-semibold" />
                     </div>
                     <button type="submit" className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 rounded-xl transition-all shadow-md mt-2 flex items-center justify-center gap-2 text-sm">
-                      <UserPlus className="w-4 h-4" /> Kayıt İşlemini Tamamla
+                      Kayıt İşlemini Tamamla
                     </button>
                   </form>
                 )}
@@ -186,7 +181,7 @@ export default function App() {
                 {activeModal === "sepet" && (
                   <div className="text-sm">
                     {cart.length === 0 ? (
-                      <div className="text-center py-8 text-slate-400 font-medium">Sepetiniz şu anda boş. Ürün ekleyerek başlayabilirsiniz!</div>
+                      <div className="text-center py-8 text-slate-400 font-medium">Sepetiniz şu anda boş.</div>
                     ) : (
                       <div className="flex flex-col gap-3">
                         {cart.map((item, index) => (
@@ -203,8 +198,8 @@ export default function App() {
                           <span>Toplam Tutar:</span>
                           <span className="text-purple-700">₺{sepetToplamTutar.toLocaleString('tr-TR')}</span>
                         </div>
-                        <button onClick={handleCheckout} className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-black py-3 rounded-xl mt-4 hover:opacity-95 transition-all shadow-md tracking-wide">
-                          Siparişi {isGuestMode ? "Misafir Olarak" : ""} Onayla ve API'ye Gönder
+                        <button onClick={handleCheckout} className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-black py-3 rounded-xl mt-4 hover:opacity-95 transition-all shadow-md">
+                          Siparişi Onayla
                         </button>
                       </div>
                     )}
@@ -213,10 +208,10 @@ export default function App() {
 
                 {activeModal === "asistan" && (
                   <div className="flex flex-col gap-4 text-sm">
-                    <p className="text-xs text-slate-500 font-semibold leading-relaxed">Havuz bakımı, modern React mimarisi veya akıllı cihaz öngörüleri hakkında merak ettiğin her şeyi sorabilirsin.</p>
+                    <p className="text-xs text-slate-500 font-semibold">Havuz bakımı ve modern altyapı hakkında sorularınızı yanıtlayabilirim.</p>
                     <form onSubmit={handleAsistanSorgu} className="flex flex-col gap-2">
                       <input type="text" value={asistanSoru} onChange={(e) => setAsistanSoru(e.target.value)} placeholder="Örn: Projede state yönetimi nasıl yapıldı?" className="w-full p-3 rounded-xl bg-slate-50 border-2 border-slate-200 focus:outline-none focus:border-purple-500 text-xs text-slate-800 font-bold" />
-                      <button type="submit" className="bg-purple-600 text-white font-black text-xs py-2.5 rounded-xl shadow-sm tracking-wider uppercase">Cevapla</button>
+                      <button type="submit" className="bg-purple-600 text-white font-black text-xs py-2.5 rounded-xl shadow-sm uppercase">Cevapla</button>
                     </form>
                     {asistanCevap && (
                       <div className="bg-purple-50 border-2 border-purple-200 p-4 rounded-2xl text-xs text-purple-900 font-extrabold leading-relaxed">
@@ -227,43 +222,30 @@ export default function App() {
                 )}
 
                 {activeModal === "blog" && (
-                  <div className="flex flex-col gap-4 text-xs md:text-sm leading-relaxed font-medium text-slate-800">
-                    <div className="bg-purple-50/50 border-2 border-purple-100 p-4 rounded-2xl">
-                      <h4 className="font-black text-slate-900 text-sm mb-1 text-purple-900">📝 React ile E-Ticaret Projesi Geliştirirken Öğrendiklerim</h4>
-                      <span className="text-[10px] text-slate-500 font-bold block mb-3">Yazar: Arpeta R&D Team | Temmuz 2026</span>
-                      <p className="mb-2">Vite, React ve Express entegrasyonu sağladığımız bu modern mimaride öncelikli amacımız yüksek performanslı ve kullanıcı filtrelerine anlık cevap verebilen bir yapı kurmaktı. Kategori süzgeçleri ve dinamik state yönetimi sayesinde veri tutarlılığı maksimum düzeye çıkarılmıştır.</p>
-                    </div>
+                  <div className="bg-purple-50/50 border-2 border-purple-100 p-4 rounded-2xl text-xs md:text-sm">
+                    <h4 className="font-black text-slate-900 text-sm mb-1 text-purple-900">📝 React ile E-Ticaret Projesi Geliştirirken Öğrendiklerim</h4>
+                    <p className="text-slate-700 mt-2">Vite, React ve Express entegrasyonu sağladığımız bu modern mimaride öncelikli amacımız yüksek performanslı ve kullanıcı filtrelerine anlık cevap verebilen bir yapı kurmaktı.</p>
                   </div>
                 )}
 
                 {activeModal === "hakkimizda" && (
-                  <div className="flex flex-col gap-3 text-xs md:text-sm leading-relaxed text-slate-800 font-medium">
-                    <div className="border-b-2 pb-2 border-slate-100">
-                      <h4 className="text-base font-black text-purple-800 uppercase tracking-tight">Biz Kimiz?</h4>
-                    </div>
-                    <p className="text-slate-900 font-bold italic bg-cyan-50 p-4 rounded-xl border-2 border-cyan-100 leading-relaxed">
+                  <div className="flex flex-col gap-3 text-xs md:text-sm text-slate-800 font-medium">
+                    <h4 className="text-base font-black text-purple-800 uppercase">Biz Kimiz?</h4>
+                    <p className="text-slate-950 font-bold italic bg-cyan-50 p-4 rounded-xl border-2 border-cyan-100">
                       "E-Havuz Market, havuz bakım ürünleri ve ekipmanlarını güvenilir, hızlı ve kolay bir alışveriş deneyimiyle kullanıcılarına sunmayı hedefleyen modern bir e-ticaret platformudur."
                     </p>
-                    <p>Müşteri memnuniyetini ön planda tutarak güvenilir hizmet anlayışımızla sizlere en iyi arayüz ve entegrasyon deneyimini sunmak için çalışıyoruz.</p>
                   </div>
                 )}
 
                 {activeModal === "kargo" && (
                   <div className="text-center py-4 flex flex-col items-center gap-3 text-sm">
-                    <div className="bg-emerald-100 text-emerald-600 p-3 rounded-full w-fit shadow-inner">
-                      <Truck className="w-8 h-8 animate-bounce" />
-                    </div>
+                    <Truck className="w-8 h-8 text-emerald-600 animate-bounce" />
                     <h4 className="font-black text-slate-900 text-sm">🚚 Müjde, Kargonuz Yola Çıktı!</h4>
-                    <p className="text-xs text-slate-600 font-bold max-w-xs mx-auto leading-relaxed">Siparişiniz Arpeta Yazılım altyapı merkezinden başarıyla paketlenmiş ve yola çıkmıştır. Tahmini teslimat süresi 24 saattir.</p>
-                    <div className="w-full bg-slate-200 h-3 rounded-full mt-2 overflow-hidden border">
-                      <div className="bg-emerald-500 h-full w-2/3 rounded-full"></div>
-                    </div>
-                    <span className="text-[10px] text-slate-500 font-black tracking-wider uppercase mt-1 block">Durum: Dağıtımda</span>
+                    <p className="text-xs text-slate-600 font-bold max-w-xs mx-auto">Siparişiniz Arpeta Yazılım altyapı merkezinden başarıyla paketlenmiş ve yola çıkmıştır.</p>
                   </div>
                 )}
               </div>
 
-              {/* MODALLARIN ALTINDAKİ GERİ DÖN BUTONU */}
               <div className="mt-6 pt-4 border-t border-slate-200 flex justify-end">
                 <button onClick={() => { setActiveModal(""); setAsistanCevap(""); setAsistanSoru(""); }} className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-black text-xs px-5 py-2.5 rounded-xl transition-all shadow-sm border border-slate-300">
                   <ArrowLeft className="w-4 h-4" /> Ana Sayfaya Geri Dön
@@ -276,28 +258,24 @@ export default function App() {
         </div>
       )}
 
-      {/* ÜST BİLGİ ÇUBUĞU */}
+      {/* ÜST BİLGİ BARI */}
       <div>
         <div className="bg-slate-900 text-white text-[11px] font-bold py-2 px-6 flex justify-between items-center tracking-wide">
           <span>✦ 1000₺ Üzeri Alışverişlerde Ücretsiz Kargo</span>
-          <div className="flex gap-4">
-            <span className={`font-black ${isGuestMode ? 'text-purple-400' : 'text-cyan-400'}`}>
-              {isGuestMode ? "● Misafir Alışveriş Bölümü Aktif" : "● Standart Mod"}
-            </span>
-          </div>
+          <span className="text-cyan-400 font-black">● Standart Altyapı Aktif</span>
         </div>
 
-        {/* ANA HEADER */}
+        {/* HEADER */}
         <header className="bg-white shadow-md sticky top-0 z-40 px-6 py-4 flex flex-col md:flex-row justify-between items-center border-b-2 border-cyan-100 gap-4">
           <div className="flex items-center gap-2 shrink-0">
-            <div className="bg-gradient-to-br from-cyan-500 to-purple-600 text-white p-2.5 rounded-xl font-black text-xl shadow-md tracking-tighter">HM</div>
+            <div className="bg-gradient-to-br from-cyan-500 to-purple-600 text-white p-2.5 rounded-xl font-black text-xl shadow-md">HM</div>
             <div>
               <h1 className="text-xl font-black tracking-tight text-slate-900">Havuz<span className="text-cyan-500">Market</span></h1>
               <p className="text-[10px] text-purple-700 font-black uppercase tracking-widest">Premium Altyapı</p>
             </div>
           </div>
 
-          {/* İREM HANIMIN İSTEDİĞİ GELİŞTİRİLMİŞ GERÇEK ZAMANLI ARAMA MOTORU */}
+          {/* ARAMA MOTORU */}
           <div className="flex-1 max-w-lg w-full relative">
             <label className="block text-[11px] font-black text-purple-900 mb-1 tracking-wide uppercase">🔍 Aradığınız ürün nedir?</label>
             <div className="relative">
@@ -312,16 +290,16 @@ export default function App() {
             </div>
           </div>
 
-          {/* SAĞ MENÜ BUTONLARI */}
+          {/* KESİN OLARAK ÇALIŞAN MODAL TETİKLEYİCİ BUTONLAR */}
           <div className="flex items-center flex-wrap gap-3 text-sm shrink-0">
-            <button onClick={() => setActiveModal("login")} className="text-slate-700 hover:text-purple-700 flex items-center gap-1 font-extrabold transition-colors border border-slate-300 px-3 py-1.5 rounded-xl bg-slate-50">
+            <button type="button" onClick={() => setActiveModal("login")} className="text-slate-700 hover:text-purple-700 flex items-center gap-1 font-extrabold transition-colors border-2 border-slate-200 px-4 py-2 rounded-xl bg-slate-50 cursor-pointer shadow-sm">
               <User className="w-4 h-4 text-purple-600" /> Giriş Yap
             </button>
-            <button onClick={() => setActiveModal("register")} className="bg-cyan-500 text-white px-4 py-2 rounded-xl font-extrabold hover:bg-cyan-600 transition-all shadow-sm flex items-center gap-1 text-xs">
+            <button type="button" onClick={() => setActiveModal("register")} className="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-xl font-extrabold transition-all shadow-sm cursor-pointer text-xs">
               Üye Ol
             </button>
             
-            <button onClick={() => { setIsGuestMode(!isGuestMode); setNotification(isGuestMode ? "ℹ️ Standart Alışveriş Moduna Geçildi." : "🔮 Misafir Alışveriş Bölümü Açıldı! Üyeliksiz Sipariş Verebilirsiniz."); }} className={`px-4 py-2 rounded-xl font-black transition-all shadow-sm border text-xs ${isGuestMode ? 'bg-purple-600 text-white border-purple-600' : 'bg-white text-purple-700 border-purple-600 hover:bg-purple-50'}`}>
+            <button onClick={() => { setIsGuestMode(!isGuestMode); setNotification(isGuestMode ? "ℹ️ Standart Alışveriş Moduna Geçildi." : "🔮 Misafir Alışveriş Bölümü Açıldı!"); }} className={`px-4 py-2 rounded-xl font-black transition-all shadow-sm border text-xs ${isGuestMode ? 'bg-purple-600 text-white border-purple-600' : 'bg-white text-purple-700 border-purple-600 hover:bg-purple-50'}`}>
               {isGuestMode ? "Misafir Modu Active" : "Misafir Alışverişi"}
             </button>
 
@@ -336,29 +314,30 @@ export default function App() {
           </div>
         </header>
 
-        {/* AI ASİSTAN KUTUSU */}
+        {/* OKUNAKLILIK SORUNU GİDERİLEN PREMIUM AI KUTUSU */}
         <div className="max-w-[1400px] mx-auto px-6 mt-6">
           <div className="bg-gradient-to-r from-slate-900 via-purple-900 to-[#00b4d8] p-6 rounded-3xl text-white flex flex-col md:flex-row items-center justify-between shadow-2xl border-2 border-purple-500/40 relative overflow-hidden group">
             <div className="flex items-center gap-4 mb-4 md:mb-0">
-              <div className="bg-gradient-to-br from-amber-400 to-purple-600 p-3 rounded-2xl shadow-lg animate-bounce">
+              <div className="bg-gradient-to-br from-amber-400 to-purple-600 p-3 rounded-2xl shadow-lg shrink-0">
                 <Sparkles className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h4 className="font-black text-base md:text-lg tracking-wide bg-gradient-to-r from-white via-cyan-200 to-cyan-100 bg-clip-text text-transparent">
+                {/* YAZI BURADA BEMBEYAZ VE GÖLGELİ YAPILDI, OKUNMAMA İHTİMALİ YOK */}
+                <h4 className="font-black text-lg md:text-xl tracking-wide text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                   Arpeta AI Akıllı Karar Motoru Aktif!
                 </h4>
-                <p className="text-xs text-purple-200 font-bold max-w-xl mt-1 leading-relaxed">
+                <p className="text-xs text-purple-100 font-bold max-w-xl mt-1 leading-relaxed drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
                   "Merhaba! Havuz otomasyon altyapınız, sepet akışınız ve modern mimarimizle ilgili tüm sorularınızı yanıtlamaya hazırım güzelim. Teknolojiyi deneyimleyin."
                 </p>
               </div>
             </div>
-            <button onClick={() => setActiveModal("asistan")} className="w-full md:w-auto bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 font-black text-xs px-6 py-4 rounded-xl hover:scale-105 transition-all shadow-xl tracking-wider uppercase">
+            <button onClick={() => setActiveModal("asistan")} className="w-full md:w-auto bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 font-black text-xs px-6 py-4 rounded-xl hover:scale-105 transition-all shadow-xl tracking-wider uppercase shrink-0">
               🚀 ASİSTANA SORU SOR
             </button>
           </div>
         </div>
 
-        {/* ANA İÇERİK ALANI */}
+        {/* İÇERİK ALANI */}
         <div className="max-w-[1400px] mx-auto px-6 py-6 flex flex-col lg:flex-row gap-6">
           <div className="flex-1">
             {/* RUH HALİ MOTORU */}
@@ -380,7 +359,7 @@ export default function App() {
               </div>
             </section>
 
-            {/* KATEGORİ FİLTRELEME ALANI */}
+            {/* KATEGORİ ALANI */}
             <div className="bg-white p-5 rounded-2xl shadow-md border-2 border-slate-200 mb-6 flex flex-wrap items-center gap-2">
               <span className="text-xs font-black text-slate-800 mr-2 flex items-center gap-1 uppercase tracking-wide"><Filter className="w-4 h-4 text-purple-700" /> Kategori Seçin:</span>
               {["Hepsi", "Kimyasallar", "Temizlik", "Aydınlatma", "Ekipmanlar", "Pompalar"].map(cat => (
@@ -388,17 +367,17 @@ export default function App() {
               ))}
             </div>
 
-            {/* DİNAMİK ÜRÜN LİSTESİ */}
+            {/* ÜRÜN GRID */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {displayedProducts.length === 0 ? (
                 <div className="col-span-full bg-white p-12 rounded-2xl text-center shadow-inner border-2 border-dashed border-slate-300 font-extrabold text-slate-500">
-                  🔍 Aradığınız kriterlere uygun ürün bulunamadı. Lütfen başka bir kelime deneyin.
+                  🔍 Aradığınız kriterlere uygun ürün bulunamadı.
                 </div>
               ) : (
                 displayedProducts.map(product => (
                   <div key={product.id} className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all border-2 border-slate-200 flex flex-col justify-between group">
                     <div className="relative">
-                      <span className="absolute top-2 left-2 bg-purple-700 text-white text-[10px] font-black px-2 py-1 rounded-md z-10 shadow-md tracking-wide uppercase">{product.tag}</span>
+                      <span className="absolute top-2 left-2 bg-purple-700 text-white text-[10px] font-black px-2 py-1 rounded-md z-10 shadow-md uppercase">{product.tag}</span>
                       <div className="h-48 overflow-hidden bg-slate-100 border-b">
                         <img src={product.image} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                       </div>
@@ -420,7 +399,7 @@ export default function App() {
             </div>
           </div>
 
-          {/* SAĞ YAN MENÜ */}
+          {/* SAĞ ADAN */}
           <aside className="w-full lg:w-64 bg-white p-4 rounded-3xl shadow-md border-2 border-slate-200 h-fit sticky top-24">
             <h4 className="font-black text-xs text-center text-purple-700 uppercase tracking-widest mb-4 pb-2 border-b-2 border-slate-100">Hızlı İşlemler</h4>
             <div className="flex flex-col gap-2">
@@ -438,12 +417,11 @@ export default function App() {
         </div>
       </div>
 
-      {/* FOOTER ALANI */}
+      {/* FOOTER */}
       <footer className="bg-slate-950 text-slate-300 mt-16 border-t-4 border-purple-600">
         <div className="max-w-6xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div>
             <h4 className="text-white font-black text-lg mb-3">Bizimle İletişime Geçin</h4>
-            <p className="text-slate-400 text-xs mb-4 font-medium">Her türlü soru, teknik destek veya kurumsal talepleriniz için mail kanalıyla anında destek alabilirsiniz.</p>
             <div className="flex flex-col gap-2 text-xs font-semibold">
               <span className="flex items-center gap-2"><MapPin className="w-4 h-4 text-purple-400" /> Mareşal Fevzi Çakmak Caddesi, Hatay, Türkiye</span>
               <span className="flex items-center gap-2 font-bold text-white">
@@ -452,16 +430,8 @@ export default function App() {
               </span>
             </div>
           </div>
-          <div className="bg-slate-900 p-5 rounded-2xl border border-slate-800">
-            <h5 className="text-white text-xs font-black uppercase tracking-wider mb-3">Hızlı E-Posta Gönder</h5>
-            <form onSubmit={(e) => { e.preventDefault(); alert('Mesajınız başarıyla iletildi!'); }} className="flex flex-col gap-2">
-              <input type="email" placeholder="E-posta Adresiniz" required className="bg-slate-950 text-white text-xs p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 border border-slate-800 font-bold" />
-              <textarea placeholder="Mesajınız..." rows="2" required className="bg-slate-950 text-white text-xs p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-600 border border-slate-800 font-bold"></textarea>
-              <button type="submit" className="bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-black text-xs py-3 rounded-xl hover:opacity-90 transition-opacity uppercase tracking-wider">E-Posta Gönder</button>
-            </form>
-          </div>
         </div>
-        <div className="bg-slate-950 text-center py-4 text-[11px] text-slate-500 border-t border-slate-900 font-bold">&copy; 2026 HavuzMarket. Tüm hakları saklıdır. Arpeta Yazılım Güvencesiyle.</div>
+        <div className="bg-slate-950 text-center py-4 text-[11px] text-slate-500 border-t border-slate-900 font-bold">&copy; 2026 HavuzMarket. Tüm hakları saklıdır.</div>
       </footer>
 
     </div>
