@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { ShoppingCart, Search, User, HelpCircle, FileText, Truck, Mail, MapPin, Sparkles, Filter, CheckCircle, X } from 'lucide-react';
+import { ShoppingCart, Search, User, HelpCircle, FileText, Truck, Mail, MapPin, Sparkles, Filter, CheckCircle, X, LogIn, UserPlus, ArrowLeft } from 'lucide-react';
 
 export default function App() {
   const [cart, setCart] = useState([]);
@@ -16,7 +16,6 @@ export default function App() {
   const [asistanCevap, setAsistanCevap] = useState("");
 
   useEffect(() => {
-    // 1. GÜNCELLEME: Ürünleri çekmek için canlı Render linkimiz kullanılıyor
     axios.get('https://e-havuzz-backend.onrender.com/api/products')
       .then(response => {
         setDbProducts(response.data);
@@ -30,7 +29,7 @@ export default function App() {
 
   useEffect(() => {
     if (notification) {
-      const timer = setTimeout(() => setNotification(""), 3000);
+      const timer = setTimeout(() => setNotification(""), 4000);
       return () => clearTimeout(timer);
     }
   }, [notification]);
@@ -51,7 +50,6 @@ export default function App() {
 
   const handleCheckout = () => {
     const orderData = { items: cart, totalPrice: sepetToplamTutar, isGuest: isGuestMode };
-    // 2. GÜNCELLEME: Sipariş göndermek için canlı Render linkimiz kullanılıyor
     axios.post('https://e-havuzz-backend.onrender.com/api/orders', orderData)
       .then(response => {
         if (response.data.success) {
@@ -71,121 +69,136 @@ export default function App() {
     setAsistanCevap("🤖 Akıllı Asistan: Harika bir soru! Geliştirdiğimiz modern mimaride sepet yönetimini ve ürün akışını Axios ile canlı Render backend API'miz üzerinden asenkron olarak yönetiyoruz güzelim!");
   };
 
+  // DUMMY GİRİŞ VE ÜYE OLMA FONKSİYONLARI
+  const handleDummyLogin = () => {
+    setNotification("🔑 [Dummy API] Giriş Başarılı! Hoş geldin Nuray Mutlu. Standart kullanıcı token'ı oluşturuldu.");
+  };
+
+  const handleDummyRegister = () => {
+    setNotification("📝 [Dummy API] Kayıt Başarılı! Yeni kullanıcı profili simüle edildi ve veri tabanına eklendi.");
+  };
+
   const sepetToplamTutar = cart.reduce((sum, item) => sum + item.price, 0);
 
   return (
     <div className="min-h-screen bg-[#f0f7ff] text-slate-800 flex flex-col justify-between relative">
       
       {notification && (
-        <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-emerald-600 text-white font-bold text-xs md:text-sm px-6 py-3 rounded-full shadow-2xl z-50 flex items-center gap-2 border-2 border-emerald-400">
-          <CheckCircle className="w-4 h-4" />
-          {notification}
+        <div className="fixed top-24 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white font-bold text-xs md:text-sm px-6 py-4 rounded-2xl shadow-2xl z-50 flex items-center gap-2 border-2 border-cyan-400 max-w-md text-center">
+          <CheckCircle className="w-5 h-5 text-cyan-400 shrink-0" />
+          <span>{notification}</span>
         </div>
       )}
 
       {/* MODAL SİSTEMİ */}
       {activeModal && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-slate-900/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl w-full max-w-xl overflow-hidden shadow-2xl border border-slate-100 flex flex-col max-h-[85vh]">
             
-            <div className="p-5 border-b border-slate-100 flex justify-between items-center bg-gradient-to-r from-purple-900 to-[#00b4d8] text-white">
+            <div className="p-5 border-b border-slate-100 flex justify-between items-center bg-gradient-to-r from-purple-950 via-purple-900 to-[#00b4d8] text-white">
               <h3 className="font-extrabold text-base flex items-center gap-2">
-                {activeModal === "sepet" && "Güncel Sepetiniz"}
-                {activeModal === "asistan" && "Akıllı Havuz Asistanı"}
-                {activeModal === "blog" && "E-Havuz Market Blog"}
-                {activeModal === "hakkimizda" && "Hakkımızda"}
-                {activeModal === "kargo" && "Kargo Takip Durumu"}
+                {activeModal === "sepet" && "🛒 Güncel Sepetiniz"}
+                {activeModal === "asistan" && "🤖 Akıllı Havuz Asistanı"}
+                {activeModal === "blog" && "📝 E-Havuz Market Blog"}
+                {activeModal === "hakkimizda" && "✨ Hakkımızda"}
+                {activeModal === "kargo" && "🚚 Kargo Takip Durumu"}
               </h3>
               <button onClick={() => { setActiveModal(""); setAsistanCevap(""); setAsistanSoru(""); }} className="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 transition-colors">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="p-6 overflow-y-auto text-slate-600 flex-1">
-              {activeModal === "sepet" && (
-                <div className="text-sm">
-                  {cart.length === 0 ? (
-                    <div className="text-center py-8 text-slate-400">Sepetiniz şu anda boş bebek. Ürün ekleyerek başlayabilirsiniz!</div>
-                  ) : (
-                    <div className="flex flex-col gap-3">
-                      {cart.map((item, index) => (
-                        <div key={index} className="flex items-center gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-100">
-                          <img src={item.image} className="w-12 h-12 rounded-xl object-cover" />
-                          <div className="flex-1">
-                            <h5 className="font-bold text-xs text-slate-800 line-clamp-1">{item.name}</h5>
-                            <span className="text-[10px] text-[#00b4d8] font-bold uppercase">{item.category}</span>
+            <div className="p-6 overflow-y-auto text-slate-600 flex-1 flex flex-col justify-between">
+              <div>
+                {activeModal === "sepet" && (
+                  <div className="text-sm">
+                    {cart.length === 0 ? (
+                      <div className="text-center py-8 text-slate-400">Sepetiniz şu anda boş bebek. Ürün ekleyerek başlayabilirsiniz!</div>
+                    ) : (
+                      <div className="flex flex-col gap-3">
+                        {cart.map((item, index) => (
+                          <div key={index} className="flex items-center gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                            <img src={item.image} className="w-12 h-12 rounded-xl object-cover" />
+                            <div className="flex-1">
+                              <h5 className="font-bold text-xs text-slate-800 line-clamp-1">{item.name}</h5>
+                              <span className="text-[10px] text-[#00b4d8] font-bold uppercase">{item.category}</span>
+                            </div>
+                            <span className="font-extrabold text-xs text-slate-900">₺{item.price.toLocaleString('tr-TR')}</span>
                           </div>
-                          <span className="font-extrabold text-xs text-slate-900">₺{item.price.toLocaleString('tr-TR')}</span>
+                        ))}
+                        <div className="border-t pt-4 mt-2 flex justify-between items-center font-black text-slate-900 text-base">
+                          <span>Toplam Tutar:</span>
+                          <span className="text-purple-600">₺{sepetToplamTutar.toLocaleString('tr-TR')}</span>
                         </div>
-                      ))}
-                      <div className="border-t pt-4 mt-2 flex justify-between items-center font-black text-slate-900 text-base">
-                        <span>Toplam Tutar:</span>
-                        <span className="text-purple-600">₺{sepetToplamTutar.toLocaleString('tr-TR')}</span>
+                        <button onClick={handleCheckout} className="w-full bg-gradient-to-r from-[#00b4d8] to-purple-600 text-white font-bold py-3 rounded-xl mt-4 hover:opacity-95 transition-opacity shadow-md">
+                          Siparişi {isGuestMode ? "Misafir Olarak" : ""} Onayla ve API'ye Gönder
+                        </button>
                       </div>
-                      <button onClick={handleCheckout} className="w-full bg-gradient-to-r from-[#00b4d8] to-purple-600 text-white font-bold py-3 rounded-xl mt-4 hover:opacity-95 transition-opacity">
-                        Siparişi {isGuestMode ? "Misafir Olarak" : ""} Onayla ve API'ye Gönder
-                      </button>
+                    )}
+                  </div>
+                )}
+
+                {activeModal === "asistan" && (
+                  <div className="flex flex-col gap-4 text-sm">
+                    <p className="text-xs text-slate-500">Havuz bakımı, modern React mimarisi veya akıllı cihaz öngörüleri hakkında merak ettiğin her şeyi sorabilirsin güzelim.</p>
+                    <form onSubmit={handleAsistanSorgu} className="flex flex-col gap-2">
+                      <input type="text" value={asistanSoru} onChange={(e) => setAsistanSoru(e.target.value)} placeholder="Örn: Projede state yönetimi nasıl yapıldı?" className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-purple-500 text-xs text-slate-800 font-medium" />
+                      <button type="submit" className="bg-purple-600 text-white font-bold text-xs py-2.5 rounded-xl">Cevapla</button>
+                    </form>
+                    {asistanCevap && (
+                      <div className="bg-purple-50 border border-purple-100 p-4 rounded-2xl text-xs text-purple-900 font-semibold leading-relaxed animate-pulse">
+                        {asistanCevap}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {activeModal === "blog" && (
+                  <div className="flex flex-col gap-4 text-xs md:text-sm leading-relaxed">
+                    <div className="bg-purple-50/50 border border-purple-100 p-4 rounded-2xl">
+                      <h4 className="font-black text-slate-800 text-sm mb-1 text-purple-800">📝 React ile E-Ticaret Projesi Geliştirirken Öğrendiklerim</h4>
+                      <span className="text-[9px] text-slate-400 font-bold block mb-3">Yazar: Arpeta R&D Team | Temmuz 2026</span>
+                      <p className="mb-2">Her yazılım projesi yeni bir öğrenme süreci demek. Bu e-ticaret projesinde amacım sadece çalışan bir uygulama geliştirmek değil, aynı zamanda modern React mimarisini adım adım deneyimlemekti.</p>
+                      <p className="mb-2">Projeye hızlı bir başlangıç yapabilmek için Vite ve React kullandım. Sayfalar arası geçişleri yönetmek için react-router-dom ile dinamik routing yapısını oluşturdum. Ürün detay sayfalarında useParams kullanarak URL üzerinden gelen ID bilgisine göre ilgili ürünü ekrana getirdim.</p>
+                      <p className="mb-2">İlk aşamada backend geliştirmeyi beklememek adına tüm ürün verilerini statik bir JSON dosyasında tuttum. Sepet işlemlerini ise React Context API ile merkezi bir state üzerinden yönettim. Böylece prop drilling problemini ortadan kaldırırken daha temiz ve yönetilebilir bir yapı kurmuş oldum.</p>
                     </div>
-                  )}
-                </div>
-              )}
+                  </div>
+                )}
 
-              {activeModal === "asistan" && (
-                <div className="flex flex-col gap-4 text-sm">
-                  <p className="text-xs text-slate-500">Havuz bakımı, modern React mimarisi veya akıllı cihaz öngörüleri hakkında merak ettiğin her şeyi sorabilirsin güzelim.</p>
-                  <form onSubmit={handleAsistanSorgu} className="flex flex-col gap-2">
-                    <input type="text" value={asistanSoru} onChange={(e) => setAsistanSoru(e.target.value)} placeholder="Örn: Projede state yönetimi nasıl yapıldı?" className="w-full p-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:border-purple-500 text-xs text-slate-800 font-medium" />
-                    <button type="submit" className="bg-purple-600 text-white font-bold text-xs py-2.5 rounded-xl">Cevapla</button>
-                  </form>
-                  {asistanCevap && (
-                    <div className="bg-purple-50 border border-purple-100 p-4 rounded-2xl text-xs text-purple-900 font-semibold leading-relaxed">
-                      {asistanCevap}
+                {activeModal === "hakkimizda" && (
+                  <div className="flex flex-col gap-3 text-xs md:text-sm leading-relaxed text-slate-600">
+                    <div className="border-b pb-2 border-slate-100">
+                      <h4 className="text-base font-black text-purple-700 uppercase tracking-tight">Biz Kimiz?</h4>
                     </div>
-                  )}
-                </div>
-              )}
+                    <p className="text-slate-700 font-medium italic bg-cyan-50 p-3 rounded-xl border border-cyan-100">
+                      "E-Havuz Market, havuz bakım ürünleri ve ekipmanlarını güvenilir, hızlı ve kolay bir alışveriş deneyimiyle kullanıcılarına sunmayı hedefleyen modern bir e-ticaret platformudur."
+                    </p>
+                    <p>Kaliteli ürün yelpazemiz, kullanıcı dostu arayüzümüz ve pratik alışveriş sürecimiz sayesinde ihtiyaç duyduğunuz ürünlere kolayca ulaşmanızı amaçlıyoruz. Müşteri memnuniyetini ön planda tutarak güvenilir hizmet anlayışımızla sizlere en iyi deneyimi sunmak için çalışıyoruz.</p>
+                  </div>
+                )}
 
-              {activeModal === "blog" && (
-                <div className="flex flex-col gap-4 text-xs md:text-sm leading-relaxed">
-                  <div className="bg-purple-50 border border-purple-100 p-4 rounded-2xl">
-                    <h4 className="font-black text-slate-800 text-sm mb-1 text-purple-800">📝 React ile E-Ticaret Projesi Geliştirirken Öğrendiklerim</h4>
-                    <span className="text-[9px] text-slate-400 font-bold block mb-3">Yazar: Arpeta R&D Team | Temmuz 2026</span>
-                    <p className="mb-2">Her yazılım projesi yeni bir öğrenme süreci demek. Bu e-ticaret projesinde amacım sadece çalışan bir uygulama geliştirmek değil, aynı zamanda modern React mimarisini adım adım deneyimlemekti.</p>
-                    <p className="mb-2">Projeye hızlı bir başlangıç yapabilmek için Vite og React kullandım. Sayfalar arası geçişleri yönetmek için react-router-dom ile dinamik routing yapısını oluşturdum. Ürün detay sayfalarında useParams kullanarak URL üzerinden gelen ID bilgisine göre ilgili ürünü ekrana getirdim.</p>
-                    <p className="mb-2">İlk aşamada backend geliştirmeyi beklememek adına tüm ürün verilerini statik bir JSON dosyasında tuttum. Sepet işlemlerini ise React Context API ile merkezi bir state üzerinden yönettim. Böylece prop drilling problemini ortadan kaldırırken daha temiz ve yönetilebilir bir yapı kurmuş oldum.</p>
-                    <p className="mb-2">Arayüz tarafında responsive bir tasarım hedefledim. CSS Grid yardımıyla ürün kartlarını tamamen dinamik şekilde oluşturdum. Sepet ekranında ise conditional rendering ile boş sepet, ürün listesi ve sipariş tamamlandı ekranlarını tek yapı içerisinde yöneterek kullanıcı deneyimini iyileştirdim.</p>
-                    <p className="mb-2">Projenin ilerleyen aşamasında statik verileri gerçek bir Express API ile değiştirdim. Kategori filtreleme için query parametrelerini kullandım, ürün detay sayfasını API üzerinden veri çekecek şekilde güncelledim ve hata yönetimini ekleyerek uygulamayı daha sağlam hale getirdim.</p>
-                    <p className="mb-2">Son olarak kullanıcı deneyimini geliştirmek amacıyla global toast bildirim sistemi ekledim. Kullanıcı sepete ürün eklediğinde ekranda anlık geri bildirim verilmesi, uygulamanın daha profesyonel hissettirmesini sağladı.</p>
-                    <p className="font-semibold text-purple-900 mt-2">Bu proje bana yalnızca React kullanmayı değil; planlı geliştirme, ölçeklenebilir yapı kurma, state yönetimi, API entegrasyonu ve kullanıcı odaklı arayüz tasarlama konularında da önemli deneyimler kazandırdı.</p>
+                {activeModal === "kargo" && (
+                  <div className="text-center py-4 flex flex-col items-center gap-3 text-sm">
+                    <div className="bg-emerald-100 text-emerald-600 p-3 rounded-full w-fit">
+                      <Truck className="w-8 h-8 animate-bounce" />
+                    </div>
+                    <h4 className="font-extrabold text-slate-800 text-sm">🚚 Müjde, Kargonuz Yola Çıktı bebek!</h4>
+                    <p className="text-xs text-slate-500 max-w-xs mx-auto">Siparişiniz Arpeta Yazılım altyapı merkezinden başarıyla paketlenmiş ve yola çıkmıştır. Tahmini teslimat süresi 24 saattir.</p>
+                    <div className="w-full bg-slate-100 h-2 rounded-full mt-2 overflow-hidden">
+                      <div className="bg-emerald-500 h-full w-2/3 rounded-full"></div>
+                    </div>
+                    <span className="text-[10px] text-slate-400 font-bold block">Durum: Dağıtımda</span>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
 
-              {activeModal === "hakkimizda" && (
-                <div className="flex flex-col gap-3 text-xs md:text-sm leading-relaxed text-slate-600">
-                  <div className="border-b pb-2 border-slate-100">
-                    <h4 className="text-base font-black text-purple-700 uppercase tracking-tight">Hakkımızda</h4>
-                  </div>
-                  <p className="text-slate-700 font-medium italic">
-                    "E-Havuz Market, havuz bakım ürünleri ve ekipmanlarını güvenilir, hızlı ve kolay bir alışveriş deneyimiyle kullanıcılarına sunmayı hedefleyen modern bir e-ticaret platformudur."
-                  </p>
-                  <p>Kaliteli ürün yelpazemiz, kullanıcı dostu arayüzümüz ve pratik alışveriş sürecimiz sayesinde ihtiyaç duyduğunuz ürünlere kolayca ulaşmanızı amaçlıyoruz. Müşteri memnuniyetini ön planda tutarak güvenilir hizmet anlayışımızla sizlere en iyi deneyimi sunmak için çalışıyoruz.</p>
-                </div>
-              )}
+              {/* YENİ ÖZELLİK: MODALLARIN ALTINA EKLEDİĞİMİZ ŞIK GERİ DÖN BUTONU */}
+              <div className="mt-6 pt-4 border-t border-slate-100 flex justify-end">
+                <button onClick={() => { setActiveModal(""); setAsistanCevap(""); setAsistanSoru(""); }} className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-5 py-2.5 rounded-xl transition-all shadow-sm">
+                  <ArrowLeft className="w-4 h-4" /> Ana Sayfaya Geri Dön
+                </button>
+              </div>
 
-              {activeModal === "kargo" && (
-                <div className="text-center py-6 flex flex-col items-center gap-3 text-sm">
-                  <div className="bg-emerald-100 text-emerald-600 p-3 rounded-full w-fit">
-                    <Truck className="w-8 h-8 animate-bounce" />
-                  </div>
-                  <h4 className="font-extrabold text-slate-800 text-sm">🚚 Müjde, Kargonuz Yola Çıktı bebek!</h4>
-                  <p className="text-xs text-slate-500 max-w-xs mx-auto">Siparişiniz Arpeta Yazılım altyapı merkezinden başarıyla paketlenmiş ve yola çıkmıştır. Tahmini teslimat süresi 24 saattir.</p>
-                  <div className="w-full bg-slate-100 h-2 rounded-full mt-2 overflow-hidden">
-                    <div className="bg-emerald-500 h-full w-2/3 rounded-full"></div>
-                  </div>
-                  <span className="text-[10px] text-slate-400 font-bold block">Durum: Dağıtımda</span>
-                </div>
-              )}
             </div>
 
           </div>
@@ -217,9 +230,14 @@ export default function App() {
             <Search className="absolute right-4 top-2.5 text-slate-400 w-4 h-4" />
           </div>
 
+          {/* DUMMY DATA SİMÜLASYONU GİRİŞ/ÜYE OL BUTONLARI */}
           <div className="flex items-center gap-3 text-sm">
-            <button className="text-slate-600 hover:text-[#00b4d8] flex items-center gap-1 font-medium transition-colors"><User className="w-4 h-4" /> Giriş Yap</button>
-            <button className="bg-[#00b4d8] text-white px-4 py-1.5 rounded-full font-bold hover:bg-cyan-500 transition-all shadow-sm">Üye Ol</button>
+            <button onClick={handleDummyLogin} className="text-slate-600 hover:text-[#00b4d8] flex items-center gap-1 font-bold transition-colors">
+              <LogIn className="w-4 h-4 text-slate-400" /> Giriş Yap
+            </button>
+            <button onClick={handleDummyRegister} className="bg-[#00b4d8] text-white px-4 py-1.5 rounded-full font-bold hover:bg-cyan-500 transition-all shadow-sm flex items-center gap-1 text-xs">
+              <UserPlus className="w-3 h-3" /> Üye Ol
+            </button>
             
             <button onClick={() => { setIsGuestMode(!isGuestMode); setNotification(isGuestMode ? "ℹ️ Standart Alışveriş Moduna Geçildi." : "🔮 Misafir Alışveriş Bölümü Açıldı! Üyeliksiz Sipariş Verebilirsiniz."); }} className={`px-4 py-1.5 rounded-full font-bold transition-all shadow-sm border text-xs ${isGuestMode ? 'bg-purple-600 text-white border-purple-600' : 'bg-white text-purple-600 border-purple-600 hover:bg-purple-50'}`}>
               {isGuestMode ? "Misafir Bölümündesiniz" : "Misafir Alışveriş Bölümü"}
@@ -236,19 +254,25 @@ export default function App() {
           </div>
         </header>
 
+        {/* PREMIUM YAPILAN VE ARTIK ÇOK DAHA PARLAK OLAN AI ASİSTAN KUTUSU */}
         <div className="max-w-[1400px] mx-auto px-6 mt-6">
-          <div className="bg-gradient-to-r from-purple-900 to-[#00b4d8] p-4 rounded-2xl text-white flex items-center justify-between shadow-md">
-            <div className="flex items-center gap-3">
-              <div className="bg-white/20 p-2 rounded-xl">
-                <Sparkles className="w-5 h-5 text-purple-200" />
+          <div className="bg-gradient-to-r from-slate-900 via-purple-900 to-[#00b4d8] p-6 rounded-3xl text-white flex flex-col md:flex-row items-center justify-between shadow-2xl border-2 border-purple-500/30 relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+            <div className="flex items-center gap-4 mb-4 md:mb-0">
+              <div className="bg-gradient-to-br from-amber-400 to-purple-600 p-3 rounded-2xl shadow-lg animate-bounce">
+                <Sparkles className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h4 className="font-extrabold text-sm">Size nasıl yardımcı olabilirim?</h4>
-                <p className="text-xs text-purple-100 italic">"Merhaba! Arpeta Yazılım akıllı asistan motoru, havuz otomasyon projenizle ilgili her soruyu yanıtlamaya hazır."</p>
+                <h4 className="font-black text-base md:text-lg tracking-tight bg-gradient-to-r from-white via-cyan-200 to-cyan-100 bg-clip-text text-transparent flex items-center gap-2">
+                  Arpeta AI Akıllı Karar Motoru Aktif!
+                </h4>
+                <p className="text-xs text-purple-200 font-medium max-w-xl mt-1 leading-relaxed">
+                  "Merhaba! Havuz otomasyon altyapınız, sepet akışınız ve modern mimarimizle ilgili tüm sorularınızı yanıtlamaya hazırım güzelim. Teknolojiyi deneyimleyin."
+                </p>
               </div>
             </div>
-            <button onClick={() => setActiveModal("asistan")} className="bg-white text-purple-900 font-bold text-xs px-4 py-2 rounded-xl hover:bg-purple-50 transition-all shadow-sm">
-              Soru Sor
+            <button onClick={() => setActiveModal("asistan")} className="w-full md:w-auto bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 font-black text-xs px-6 py-3.5 rounded-xl hover:scale-105 transition-all shadow-xl tracking-wider uppercase">
+              🚀 ASİSTANA SORU SOR
             </button>
           </div>
         </div>
@@ -296,7 +320,7 @@ export default function App() {
                       <div className="mt-3 bg-purple-50 border border-purple-100 p-2 rounded-xl text-[10px] font-semibold text-purple-700">{product.aiInsight}</div>
                     </div>
                     <div className="flex items-center justify-between mt-4 border-t pt-2 border-slate-50">
-                      <span className="text-base font-black text-slate-900">破{product.price.toLocaleString('tr-TR')}</span>
+                      <span className="text-base font-black text-slate-900">₺{product.price.toLocaleString('tr-TR')}</span>
                       <button onClick={() => addToCart(product)} className="bg-purple-600 hover:bg-[#00b4d8] text-white text-[11px] font-bold px-4 py-2 rounded-xl transition-colors shadow-sm">Sepete Ekle</button>
                     </div>
                   </div>
