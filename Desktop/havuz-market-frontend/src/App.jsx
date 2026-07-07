@@ -13,6 +13,7 @@ export default function App() {
   const [activeModal, setActiveModal] = useState(""); 
   const [asistanSoru, setAsistanSoru] = useState("");
   const [asistanCevap, setAsistanCevap] = useState("");
+  const [asistanOnerilenUrun, setAsistanOnerilenUrun] = useState(null);
 
   // Form ve Takip State Yapıları
   const [loginForm, setLoginForm] = useState({ username: '', password: '' });
@@ -84,6 +85,49 @@ export default function App() {
     setNotification("📦 Siparişiniz Alındı ve Hazırlanıyor! 3 Gün İçinde Kargoda.");
   };
 
+  // ASİSTAN AKILLI SORU SOR CEVAPLAMA VE FİLTRELEME MOTORU
+  const handleAsistanSorgu = (e) => {
+    e.preventDefault();
+    if (!asistanSoru) return;
+
+    const soruLower = asistanSoru.toLowerCase('tr-TR');
+    
+    if (soruLower.includes("temiz") || soruLower.includes("robot") || soruLower.includes("süpürge")) {
+      setSearchQuery("Robot");
+      setAsistanCevap("🤖 Akıllı Asistan: Havuz temizliği için sana harika bir önerim var güzelim! Arka plandaki mağazada 'Temizlik' kategorisini senin için süzdüm. Özellikle v4 Pro Robot modelimizi incelemeni öneririm; duvar tırmanma sonar haritalama altyapısı muazzamdır!");
+      setAsistanOnerilenUrun(mock20Products.find(p => p.id === 213));
+    } else if (soruLower.includes("klor") || soruLower.includes("kimyasal")) {
+      setSearchQuery("Klor");
+      setAsistanCevap("🤖 Akıllı Asistan: Havuzun pırıl pırıl kalması ve dezenfeksiyonu için 'Kimyasallar' kategorisindeki stabilizatörlü Granül Klor ürünümüzü listeledim. Suyu yormadan koruma sağlar.");
+      setAsistanOnerilenUrun(mock20Products.find(p => p.id === 211));
+    } else if (soruLower.includes("pompa") || soruLower.includes("devirdaim")) {
+      setSearchQuery("Pompa");
+      setAsistanCevap("🤖 Akıllı Asistan: Sirkülasyon ve filtreleme döngüsü için 2 HP Yüksek Verimli Pompa modelimizi listeledim. Düşük desibel sessiz çalışma teknolojisi ile kurumsal standarttadır.");
+      setAsistanOnerilenUrun(mock20Products.find(p => p.id === 214));
+    } else if (soruLower.includes("ışık") || soruLower.includes("led") || soruLower.includes("aydınlatma")) {
+      setSearchQuery("LED");
+      setAsistanCevap("🤖 Akıllı Asistan: Gece keyfi ve ambiyans için kumandalı AquaGlow LED serimizi listeledim. Enerji tasarruflu 12V altyapıya sahiptir.");
+      setAsistanOnerilenUrun(mock20Products.find(p => p.id === 201));
+    } else if (soruLower.includes("şelale") || soruLower.includes("fıskiye")) {
+      setSearchQuery("Şelale");
+      setAsistanCevap("🤖 Akıllı Asistan: Estetik bir su perdesi dokusu ve masaj keyfi için Paslanmaz Şelale Fıskiyesini öneririm. Mağazada anlık listelendi!");
+      setAsistanCevap("🤖 Akıllı Asistan: Havuzunuza estetik katacak Paslanmaz Şelale ve Jet Nozullarımızı listeledim bebek. Harika bir keyif modu sunar.");
+      setAsistanCevap("🤖 Akıllı Asistan: Havuzunuza modern bir mimari hava katacak olan Lüks Duvar Tipi Şelale Perdesi'ni listeledim canım, inceleyebilirsin.");
+      setAsistanCevap("🤖 Akıllı Asistan: Havuzunuza modern bir hava katacak Paslanmaz Şelale Fıskiyesi listelendi güzelim. Keyif modunuza tam uyum sağlar.");
+      setAsistanCevap("🤖 Akıllı Asistan: Harika bir tercih! Lüks Şelale Fıskiyesi modelimiz havuzunuza modern bir hava katarken, su sesiyle harika bir dinginlik sağlar canım. Ürün arka planda listelendi!");
+      setAsistanOnerilenUrun(mock20Products.find(p => p.id === 212));
+    } else {
+      setSearchQuery("");
+      setAsistanCevap("🤖 Akıllı Asistan: Sorunu duydum güzelim! Havuz otomasyon altyapınız, sepet akışınız ve ürünlerimizle ilgili aradığın her şeyi yukarıdaki arama motoruna yazarak veya sol panelden filtreleyerek anında listeyebilirsin.");
+      setAsistanCevap("🤖 Akıllı Asistan: Harika bir soru! Geliştirdiğimiz premium e-ticaret altyapısında sepet yönetimini, PayTR sanal pos simülasyonunu ve ürün akışını asenkron olarak yönetiyoruz güzelim. Arama çubuğuna kelimeler yazarak da ürün süzebilirsin!");
+      setAsistanCevap("🤖 Akıllı Asistan: Sorunu anladım güzelim! İstediğin ürünü yukarıdaki arama motoruna yazarak ya da kategorilerden süzerek anında 20 premium ürün arasından bulabilirsin. Arpeta altyapısı hizmetinde!");
+      setAsistanCevap("🤖 Akıllı Asistan: Harika bir soru! Geliştirdiğimiz modern mimaride sepet yönetimini, PayTR sanal pos API simülasyonunu ve ürün akışını asenkron olarak yönetiyoruz güzelim!");
+      setAsistanCevap("🤖 Akıllı Asistan: Havuzunun berraklığı ve ekipman kalitesi için 'klor', 'robot', 'pompa' gibi kelimeleri arama motoruna yazarak akıllı eşleşmeleri görebilirsin canım!");
+      setAsistanCevap("🤖 Akıllı Asistan: Projede state yönetimini ve PayTR sanal pos akışlarını tamamen senkronize ettik güzelim. Merak ettiğin her havuz ürününe vitrinden anında ulaşabilirsin!");
+      setAsistanCevap("🤖 Akıllı Asistan: Havuz otomasyon altyapınız, sepet akışınız ve modern mimarimizle ilgili tüm sorularınızı yanıtlamaya hazırım güzelim. Teknolojiyi deneyimleyin.");
+    }
+  };
+
   const handleLoginSubmit = (e) => {
     e.preventDefault();
     setIsLoggedIn(true);
@@ -121,7 +165,7 @@ export default function App() {
               <h3 className="font-black text-sm md:text-base flex items-center gap-2 tracking-wide">
                 {activeModal === "sepet" && "🛒 Alışveriş Sepetiniz & PayTR Ödeme"}
                 {activeModal === "asistan" && "🤖 Akıllı Havuz Asistanı"}
-                {activeModal === "kargo" && "🚚 Sipariş Alındı & Kargo Takip"}
+                {activeModal === "kargo" && "🚚 Sipariş Kargo Durumu"}
                 {activeModal === "login" && "🔑 Üye Girişi"}
                 {activeModal === "register" && "📝 Yeni Üye Kaydı"}
                 {activeModal === "blog" && "📝 E-Havuz Market Blog"}
@@ -192,15 +236,15 @@ export default function App() {
                       <div className="absolute left-6 right-6 top-4 h-1 bg-slate-200 -z-10"></div>
                       <div className="flex flex-col items-center gap-1 bg-white px-2">
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${simulatedOrderStatus === "Hazırlanıyor" || simulatedOrderStatus === "Yola Çıktı" || simulatedOrderStatus === "Tamamlandı" ? 'bg-purple-600 text-white' : 'bg-slate-200'}`}>1</div>
-                        <span className="text-[10px] font-black text-purple-700">Sipariş Alındı</span>
+                        <span className="text-[10px] font-black text-slate-700">Sipariş Hazır</span>
                       </div>
                       <div className="flex flex-col items-center gap-1 bg-white px-2">
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${simulatedOrderStatus === "Yola Çıktı" || simulatedOrderStatus === "Tamamlandı" ? 'bg-purple-600 text-white' : 'bg-slate-200'}`}>2</div>
-                        <span className="text-[10px] font-black text-slate-700">Hazırlanıyor</span>
+                        <span className="text-[10px] font-black text-purple-700">Kargo Yola Çıktı</span>
                       </div>
                       <div className="flex flex-col items-center gap-1 bg-white px-2">
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${simulatedOrderStatus === "Tamamlandı" ? 'bg-purple-600 text-white' : 'bg-slate-200'}`}>3</div>
-                        <span className="text-[10px] font-black text-slate-700">3 Günde Kargoda</span>
+                        <span className="text-[10px] font-black text-slate-700">Tamamlandı</span>
                       </div>
                     </div>
 
@@ -250,7 +294,7 @@ export default function App() {
                   </form>
                 )}
 
-                {/* BLOG YAZISI */}
+                {/* SÜRECİ ANLATAN YENİ MUAZZAM BLOG YAZISI */}
                 {activeModal === "blog" && (
                   <div className="flex flex-col gap-4 text-xs md:text-sm leading-relaxed font-medium text-slate-800">
                     <div className="bg-purple-50/70 border-2 border-purple-100 p-5 rounded-2xl">
@@ -274,11 +318,39 @@ export default function App() {
                   </div>
                 )}
 
+                {/* ASİSTANA SORU SOR PANELİ (EKSİK KALAN KISIM TAMAMLANDI) */}
+                {activeModal === "asistan" && (
+                  <div className="flex flex-col gap-4 text-sm">
+                    <p className="text-xs text-slate-500 font-bold">Havuz bakımı, temizliği veya aydınlatma ihtiyaçlarınızı yazın, akıllı asistan anlık süzüp ürün önersin bebek.</p>
+                    <form onSubmit={handleAsistanSorgu} className="flex gap-2">
+                      <input type="text" required value={asistanSoru} onChange={(e) => setAsistanSoru(e.target.value)} placeholder="Örn: havuzu temizlemek için ne almalıyım?" className="flex-1 p-3 rounded-xl bg-slate-50 border-2 border-slate-200 text-xs font-bold focus:outline-none focus:border-purple-600" />
+                      <button type="submit" className="bg-purple-600 text-white font-black text-xs px-5 rounded-xl uppercase shadow-sm">Sorgula</button>
+                    </form>
+                    
+                    {asistanCevap && (
+                      <div className="bg-purple-50 border-2 border-purple-200 p-4 rounded-2xl text-xs text-purple-900 font-extrabold leading-relaxed flex flex-col gap-3 animate-fadeIn">
+                        <p>{asistanCevap}</p>
+                        
+                        {asistanOnerilenUrun && (
+                          <div className="mt-1 bg-white p-3 rounded-xl border border-purple-200 flex items-center justify-between gap-3 shadow-sm">
+                            <div className="flex flex-col">
+                              <span className="text-[10px] bg-purple-600 text-white px-2 py-0.5 rounded-full w-fit font-black mb-1 uppercase">{asistanOnerilenUrun.tag}</span>
+                              <span className="font-extrabold text-slate-900 text-xs line-clamp-1">{asistanOnerilenUrun.name}</span>
+                              <span className="font-black text-cyan-600 text-xs mt-0.5">₺{asistanOnerilenUrun.price.toLocaleString('tr-TR')}</span>
+                            </div>
+                            <button type="button" onClick={() => { addToCart(asistanOnerilenUrun); setActiveModal(""); }} className="bg-cyan-500 hover:bg-purple-600 text-white font-black text-[10px] px-3 py-2 rounded-lg uppercase tracking-wider shrink-0 transition-colors">Hemen Ekle</button>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+
               </div>
             </div>
 
             <div className="p-4 bg-slate-50 border-t flex justify-end">
-              <button onClick={() => setActiveModal("")} className="flex items-center gap-2 bg-white hover:bg-slate-100 text-slate-800 font-black text-xs px-5 py-2 rounded-xl transition-all shadow-sm border">
+              <button onClick={() => { setActiveModal(""); setAsistanCevap(""); setAsistanSoru(""); setAsistanOnerilenUrun(null); }} className="flex items-center gap-2 bg-white hover:bg-slate-100 text-slate-800 font-black text-xs px-5 py-2 rounded-xl transition-all shadow-sm border">
                 <ArrowLeft className="w-4 h-4" /> Ana Sayfaya Geri Dön
               </button>
             </div>
@@ -358,7 +430,7 @@ export default function App() {
               ))}
             </div>
 
-            {/* DİNAMİK VİTRİN */}
+            {/* DİNAMİK 20 ÜRÜNLÜK VİTRİN */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {displayedProducts.map(product => (
                 <div key={product.id} className="bg-white rounded-2xl overflow-hidden shadow-md border-2 border-slate-200 flex flex-col justify-between group">
