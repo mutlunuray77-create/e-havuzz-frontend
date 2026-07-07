@@ -79,9 +79,9 @@ export default function App() {
   const handleOrderSubmit = (e) => {
     e.preventDefault();
     setCart([]);
-    setSimulatedOrderStatus("Yola Çıktı"); 
+    setSimulatedOrderStatus("Hazırlanıyor"); 
     setActiveModal("kargo"); 
-    setNotification("💳 PayTR Ödemesi Alındı! Kargonuz Yola Çıktı.");
+    setNotification("📦 Siparişiniz Alındı ve Hazırlanıyor! 3 Gün İçinde Kargoda.");
   };
 
   const handleLoginSubmit = (e) => {
@@ -121,7 +121,7 @@ export default function App() {
               <h3 className="font-black text-sm md:text-base flex items-center gap-2 tracking-wide">
                 {activeModal === "sepet" && "🛒 Alışveriş Sepetiniz & PayTR Ödeme"}
                 {activeModal === "asistan" && "🤖 Akıllı Havuz Asistanı"}
-                {activeModal === "kargo" && "🚚 Sipariş Kargo Durumu"}
+                {activeModal === "kargo" && "🚚 Sipariş Alındı & Kargo Takip"}
                 {activeModal === "login" && "🔑 Üye Girişi"}
                 {activeModal === "register" && "📝 Yeni Üye Kaydı"}
                 {activeModal === "blog" && "📝 E-Havuz Market Blog"}
@@ -186,32 +186,34 @@ export default function App() {
                 {activeModal === "kargo" && (
                   <div className="text-center py-4 flex flex-col items-center gap-4">
                     <Truck className="w-10 h-10 text-purple-600 animate-bounce" />
-                    <h4 className="font-black text-slate-900 text-base">🚚 Sipariş Durum Ekranı</h4>
+                    <h4 className="font-black text-slate-900 text-base">🚚 Sipariş Takip Paneli</h4>
                     
                     <div className="w-full flex justify-between items-center px-4 mt-2 relative">
                       <div className="absolute left-6 right-6 top-4 h-1 bg-slate-200 -z-10"></div>
                       <div className="flex flex-col items-center gap-1 bg-white px-2">
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${simulatedOrderStatus === "Hazırlanıyor" || simulatedOrderStatus === "Yola Çıktı" || simulatedOrderStatus === "Tamamlandı" ? 'bg-purple-600 text-white' : 'bg-slate-200'}`}>1</div>
-                        <span className="text-[10px] font-black text-slate-700">Sipariş Hazır</span>
+                        <span className="text-[10px] font-black text-purple-700">Sipariş Alındı</span>
                       </div>
                       <div className="flex flex-col items-center gap-1 bg-white px-2">
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${simulatedOrderStatus === "Yola Çıktı" || simulatedOrderStatus === "Tamamlandı" ? 'bg-purple-600 text-white' : 'bg-slate-200'}`}>2</div>
-                        <span className="text-[10px] font-black text-purple-700">Kargo Yola Çıktı</span>
+                        <span className="text-[10px] font-black text-slate-700">Hazırlanıyor</span>
                       </div>
                       <div className="flex flex-col items-center gap-1 bg-white px-2">
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${simulatedOrderStatus === "Tamamlandı" ? 'bg-purple-600 text-white' : 'bg-slate-200'}`}>3</div>
-                        <span className="text-[10px] font-black text-slate-700">Tamamlandı</span>
+                        <span className="text-[10px] font-black text-slate-700">3 Günde Kargoda</span>
                       </div>
                     </div>
 
-                    <div className="mt-4 p-4 bg-purple-50 rounded-2xl border border-purple-100 text-xs font-bold text-purple-900 w-full">
-                      Mevcut Durum: {simulatedOrderStatus === "Yola Çıktı" ? "📦 Kargonuz Başarıyla Arpeta Dağıtım Merkezinden Çıktı!" : simulatedOrderStatus === "Tamamlandı" ? "✅ Siparişiniz Alıcıya Teslim Edilmiştir." : "📦 Siparişiniz Hazırlanıyor."}
+                    <div className="mt-4 p-4 bg-purple-50 rounded-2xl border border-purple-100 text-xs font-bold text-purple-900 w-full leading-relaxed">
+                      {simulatedOrderStatus === "Hazırlanıyor" && "✅ Harika! Siparişiniz başarıyla sistemimize ulaştı. Havuz uzmanlarımız ürünlerinizi hazırlamaya başladı bile bebek. En geç 3 gün içinde kargoya teslim edilecektir."}
+                      {simulatedOrderStatus === "Yola Çıktı" && "📦 Siparişiniz şu an Arpeta Dağıtım Merkezi'nde paketlenme aşamasındadır."}
+                      {simulatedOrderStatus === "Tamamlandı" && "🚀 Kargonuz başarıyla yola çıktı, teslimat adresine doğru ilerliyor!"}
                     </div>
 
                     <div className="flex gap-2 mt-2 w-full">
-                      <button onClick={() => setSimulatedOrderStatus("Hazırlanıyor")} className="flex-1 bg-slate-100 text-slate-800 text-[9px] font-black py-1 rounded-md uppercase">Sipariş Hazır</button>
-                      <button onClick={() => setSimulatedOrderStatus("Yola Çıktı")} className="flex-1 bg-purple-100 text-purple-800 text-[9px] font-black py-1 rounded-md uppercase">Kargo Yola Çıktı</button>
-                      <button onClick={() => setSimulatedOrderStatus("Tamamlandı")} className="flex-1 bg-emerald-100 text-emerald-800 text-[9px] font-black py-1 rounded-md uppercase">Tamamlandı</button>
+                      <button onClick={() => setSimulatedOrderStatus("Hazırlanıyor")} className="flex-1 bg-purple-100 text-purple-800 text-[9px] font-black py-1 rounded-md uppercase">Sipariş Alındı</button>
+                      <button onClick={() => setSimulatedOrderStatus("Yola Çıktı")} className="flex-1 bg-slate-100 text-slate-800 text-[9px] font-black py-1 rounded-md uppercase">Hazırlanıyor</button>
+                      <button onClick={() => setSimulatedOrderStatus("Tamamlandı")} className="flex-1 bg-emerald-100 text-emerald-800 text-[9px] font-black py-1 rounded-md uppercase">3 Günde Kargoda</button>
                     </div>
                   </div>
                 )}
@@ -224,7 +226,7 @@ export default function App() {
                   </form>
                 )}
 
-                {/* ÜYE OL FORMU (AD SOYAD, TC, TELEFON, ADRES TAMAMLANDI) */}
+                {/* ÜYE OL FORMU */}
                 {activeModal === "register" && (
                   <form onSubmit={handleRegisterSubmit} className="flex flex-col gap-3 animate-fadeIn">
                     <p className="text-xs text-slate-500 font-bold mb-1">Havuz Market ayrıcalıklarından yararlanmak için formu eksiksiz doldurun bebek.</p>
@@ -248,7 +250,7 @@ export default function App() {
                   </form>
                 )}
 
-                {/* SÜRECİ ANLATAN YENİ MUAZZAM BLOG YAZISI */}
+                {/* BLOG YAZISI */}
                 {activeModal === "blog" && (
                   <div className="flex flex-col gap-4 text-xs md:text-sm leading-relaxed font-medium text-slate-800">
                     <div className="bg-purple-50/70 border-2 border-purple-100 p-5 rounded-2xl">
@@ -261,7 +263,7 @@ export default function App() {
                   </div>
                 )}
 
-                {/* GÜNCEL HAKKIMIZDA YAZISI */}
+                {/* HAKKIMIZDA YAZISI */}
                 {activeModal === "hakkimizda" && (
                   <div className="flex flex-col gap-3 text-xs md:text-sm text-slate-800 font-medium">
                     <h4 className="text-base font-black text-purple-800 uppercase tracking-tight">✨ Platformumuz Hakkında</h4>
@@ -356,7 +358,7 @@ export default function App() {
               ))}
             </div>
 
-            {/* DİNAMİK 20 ÜRÜNLÜK VİTRİN */}
+            {/* DİNAMİK VİTRİN */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {displayedProducts.map(product => (
                 <div key={product.id} className="bg-white rounded-2xl overflow-hidden shadow-md border-2 border-slate-200 flex flex-col justify-between group">
