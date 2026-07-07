@@ -16,39 +16,37 @@ export default function App() {
 
   // Form ve Takip State Yapıları
   const [loginForm, setLoginForm] = useState({ username: '', password: '' });
-  const [registerForm, setRegisterForm] = useState({ fullname: '', city: '', phone: '', email: '' });
+  const [registerForm, setRegisterForm] = useState({ fullname: '', city: '', phone: '', email: '', tcNo: '' });
   const [cardInfo, setCardInfo] = useState({ name: '', number: '', date: '', cvc: '' });
-  const [trackingEmail, setTrackingEmail] = useState("");
-  const [simulatedOrderStatus, setSimulatedOrderStatus] = useState(""); // Hazırlanıyor, Yola Çıktı, Tamamlandı
+  const [simulatedOrderStatus, setSimulatedOrderStatus] = useState("Hazırlanıyor"); 
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
 
-  
+  // Tam 20 Ürünlük Yapay Zeka Destekli Liste
   const mock20Products = [
-    { id: 201, name: "AquaGlow Turkuaz LED Havuz Aydınlatma", category: "Aydınlatma", price: 1450, image: "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=500&q=60", tag: "Yeni Sezon", moods: ["keyifli", "teknolojik"], aiInsight: "💡 Bugün alabilirsiniz, önümüzdeki 7 günde fiyatı %6 artabilir!" },
-    { id: 202, name: "Rio Masaj Etkili Paslanmaz Havuz Şelalesi", category: "Ekipmanlar", price: 12800, image: "https://images.unsplash.com/photo-1562184560-a11b7cf7c847?w=500&q=60", tag: "Özel Tasarım", moods: ["yorgun", "sakin"], aiInsight: "🔥 Son 3 günün en düşük fiyatı! Kaçırmayın." },
-    { id: 203, name: "EcoFilter Premium Cam Havuz Kumu 20 kg", category: "Ekipmanlar", price: 340, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=500&q=60", tag: "En Çok Satan", moods: ["titiz", "sakin"], aiInsight: "📉 Fiyatı şu an kararlı durumda. Güvenle alabilirsiniz." },
-    { id: 204, name: "SmartPool Bluetooth Akıllı Dozaj Pompası", category: "Pompalar", price: 18500, image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=500&q=60", tag: "Akıllı Ürün", moods: ["teknolojik", "titiz"], aiInsight: "🤖 Yapay Zeka Öngörüsü: Gelecek ay stok durumuna bağlı olarak fiyatı yükselebilir." },
-    { id: 205, name: "Olimpik Stil Havuz Emniyet ve Kulvar Çizgisi", category: "Ekipmanlar", price: 2100, image: "https://images.unsplash.com/photo-1519669011783-4eaa95fa1b7d?w=500&q=60", tag: "Güvenlik", moods: ["sakin", "titiz"], aiInsight: "💡 Sezon ortası indirimi: Son 48 saatin en iyi fiyatı." },
-    { id: 206, name: "DeepClean Profesyonel Havuz Temizlik Süpürgesi", category: "Temizlik", price: 950, image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=500&q=60", tag: "Pratik Ürün", moods: ["titiz", "yorgun"], aiInsight: "⚡ Önümüzdeki 5 günde fiyatı %4 artış eğiliminde görünüyor." },
-    { id: 207, name: "ThermoComfort Dijital Havuz Suyu Isı Ölçer", category: "Aydınlatma", price: 420, image: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=500&q=60", tag: "Yeni", moods: ["teknolojik"], aiInsight: "📉 Fiyat analizine göre şu an satın almak için en ideal dönem." },
-    { id: 208, name: "Premium Paslanmaz Havuz Giriş Merdiveni (4 Basamak)", category: "Ekipmanlar", price: 4750, image: "https://images.unsplash.com/photo-1572331507600-664123d1115e?w=500&q=60", tag: "Lüks", moods: ["sakin"], aiInsight: "🔥 Son 3 günün en düşük fiyatı fırsatını yakalayın." },
-    { id: 209, name: "Anti-Yosun Concentre Havuz Bakım Sıvısı 10 L", category: "Kimyasallar", price: 780, image: "https://images.unsplash.com/photo-1527156279143-6cd52a32c2a1?w=500&q=60", tag: "Etkili Formül", moods: ["titiz"], aiInsight: "💡 Kimyasal ürünlerde kur dalgalanması öncesi bugün almanız önerilir." },
-    { id: 210, name: "SolarTarpaulin Isı Koruyucu Havuz Temizlik Brbrandası", category: "Temizlik", price: 3200, image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=500&q=60", tag: "Çevre Dostu", moods: ["keyifli"], aiInsight: "📈 Yapay zeka talebin arttığını öngörüyor, fiyat %8 yükselebilir!" },
-    { id: 211, name: "Premium Havuz Kloru 25 KG (Granül %56)", category: "Kimyasallar", price: 2450, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=500&q=60", tag: "Çok Satan", moods: ["titiz"], aiInsight: "💡 Maksimum dezenfeksiyon performansı sağlayan stabilizatörlü formül." },
-    { id: 212, name: "Paslanmaz Çelik Şelale Fıskiyesi Geniş Tip", category: "Ekipmanlar", price: 14500, image: "https://images.unsplash.com/photo-1562184560-a11b7cf7c847?w=500&q=60", tag: "Mimari", moods: ["sakin", "yorgun"], aiInsight: "🌊 Estetik su perdesi tasarımıyla havuzunuza modern bir hava katar." },
-    { id: 213, name: "Yüzey Sıyırıcı Skimmer Geniş Ağızlı Set", category: "Ekipmanlar", price: 1200, image: "https://images.unsplash.com/photo-1572331507600-664123d1115e?w=500&q=60", tag: "Gerekli", aiInsight: "💡 Yüzeydeki yaprak ve partikülleri filtre haznesine çeker." },
-    { id: 214, name: "Düşük Desibel Havuz Sirkülasyon Pompası 2 HP", category: "Pompalar", price: 11200, image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=500&q=60", tag: "Yüksek Güç", aiInsight: "⚡ Enerji tasarruflu ECO motoruyla sessiz devirdaim yapar." },
-    { id: 215, name: "Sualtı Paslanmaz Masaj Jet Nozulu", category: "Ekipmanlar", price: 2100, image: "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=500&q=80", tag: "Keyif", moods: ["yorgun", "keyifli"], aiInsight: "💆‍♂️ Basınçlı hava ve su karışımı ile harika bir jakuzi etkisi." },
-    { id: 216, name: "Güneş Enerjili Akıllı Havuz İyonizeri", category: "Ekipmanlar", price: 4300, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=500&q=60", tag: "Ekolojik", moods: ["teknolojik"], aiInsight: "🤖 Kimyasal kullanımını %80 azaltan solar mineral teknolojisi." },
-    { id: 217, name: "Havuz Süpürge Hortumu Kendinden Yüzer 15m", category: "Temizlik", price: 1650, image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=500&q=60", tag: "Esnek", moods: ["titiz"], aiInsight: "⚡ Kırılmaz özel takviyeli iç çeper yapısına sahiptir." },
-    { id: 218, name: "Lineer Havuz Kenar Izgarası Geçmeli Set", category: "Ekipmanlar", price: 450, image: "https://images.unsplash.com/photo-1519669011783-4eaa95fa1b7d?w=500&q=60", tag: "Güvenlik", moods: ["sakin"], aiInsight: "💡 Anti-slip kaymaz yüzey dokusuyla emniyeti maksimuma çıkarır." },
-    { id: 219, name: "Tuz Klor Jeneratörü Otomasyon Sistemi", category: "Ekipmanlar", price: 39000, image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=500&q=60", tag: "Yapay Zeka", moods: ["teknolojik", "titiz"], aiInsight: "✨ Göz yakmayan, kokusuz ve tamamen doğal iyonize su döngüsü üretir." },
-    { id: 220, name: "Slim Led Havuz Aydınlatma Armatürü Beyaz", category: "Aydınlatma", price: 2200, image: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=500&q=60", tag: "Minimalist", moods: ["keyifli"], aiInsight: "💡 Duvara tam sıfır yapısı sayesinde havuz içi hareket alanını daraltmaz." }
+    { id: 201, name: "AquaGlow Turkuaz LED Havuz Aydınlatma", category: "Aydınlatma", price: 1450, image: "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=500&q=80", tag: "Yeni Sezon", moods: ["keyifli", "teknolojik"], aiInsight: "💡 Bugün alabilirsiniz, önümüzdeki 7 günde fiyatı %6 artabilir!" },
+    { id: 202, name: "Rio Masaj Etkili Paslanmaz Havuz Şelalesi", category: "Ekipmanlar", price: 12800, image: "https://images.unsplash.com/photo-1562184560-a11b7cf7c847?w=500&q=80", tag: "Özel Tasarım", moods: ["yorgun", "sakin"], aiInsight: "🔥 Son 3 günün en düşük fiyatı! Kaçırmayın." },
+    { id: 203, name: "EcoFilter Premium Cam Havuz Kumu 20 kg", category: "Ekipmanlar", price: 340, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=500&q=80", tag: "En Çok Satan", moods: ["titiz", "sakin"], aiInsight: "📉 Fiyatı şu an kararlı durumda. Güvenle alabilirsiniz." },
+    { id: 204, name: "SmartPool Bluetooth Akıllı Dozaj Pompası", category: "Pompalar", price: 18500, image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=500&q=80", tag: "Akıllı Ürün", moods: ["teknolojik", "titiz"], aiInsight: "🤖 Yapay Zeka Öngörüsü: Gelecek ay stok durumuna bağlı olarak fiyatı yükselebilir." },
+    { id: 205, name: "Olimpik Stil Havuz Emniyet and Kulvar Çizgisi", category: "Ekipmanlar", price: 2100, image: "https://images.unsplash.com/photo-1519669011783-4eaa95fa1b7d?w=500&q=80", tag: "Güvenlik", moods: ["sakin", "titiz"], aiInsight: "💡 Sezon ortası indirimi: Son 48 saatin en iyi fiyatı." },
+    { id: 206, name: "DeepClean Profesyonel Havuz Temizlik Süpürgesi", category: "Temizlik", price: 950, image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=500&q=80", tag: "Pratik Ürün", moods: ["titiz", "yorgun"], aiInsight: "⚡ Önümüzdeki 5 günde fiyatı %4 artış eğiliminde görünüyor." },
+    { id: 207, name: "ThermoComfort Dijital Havuz Suyu Isı Ölçer", category: "Aydınlatma", price: 420, image: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=500&q=80", tag: "Yeni", moods: ["teknolojik"], aiInsight: "📉 Fiyat analizine göre şu an satın almak için en ideal dönem." },
+    { id: 208, name: "Premium Paslanmaz Havuz Giriş Merdiveni (4 Basamak)", category: "Ekipmanlar", price: 4750, image: "https://images.unsplash.com/photo-1572331507600-664123d1115e?w=500&q=80", tag: "Lüks", moods: ["sakin"], aiInsight: "🔥 Son 3 günün en düşük fiyatı fırsatını yakalayın." },
+    { id: 209, name: "Anti-Yosun Concentre Havuz Bakım Sıvısı 10 L", category: "Kimyasallar", price: 780, image: "https://images.unsplash.com/photo-1527156279143-6cd52a32c2a1?w=500&q=80", tag: "Etkili Formül", moods: ["titiz"], aiInsight: "💡 Kimyasal ürünlerde kur dalgalanması öncesi bugün almanız önerilir." },
+    { id: 210, name: "SolarTarpaulin Isı Koruyucu Havuz Temizlik Brbrandası", category: "Temizlik", price: 3200, image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=500&q=80", tag: "Çevre Dostu", moods: ["keyifli"], aiInsight: "📈 Yapay zeka talebin arttığını öngörüyor, fiyat %8 yükselebilir!" },
+    { id: 211, name: "Granül Havuz Kloru %56 Stabilizatörlü 25 KG", category: "Kimyasallar", price: 2300, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=500&q=80", tag: "Fırsat Ürünü", moods: ["titiz"], aiInsight: "💡 Su dezenfeksiyonu için haftalık periyotta en kararlı klor bileşiğidir." },
+    { id: 212, name: "Lüks Duvar Tipi Havuz Şelalesi Şelale Perdesi", category: "Ekipmanlar", price: 15400, image: "https://images.unsplash.com/photo-1562184560-a11b7cf7c847?w=500&q=80", tag: "Özel Tasarım", moods: ["sakin", "yorgun"], aiInsight: "🌊 Mimari şelale tasarımı ortamdaki gürültüyü absorbe ederek sakinlik verir." },
+    { id: 213, name: "Otomatik Havuz Dip Süpürme Robotu Klasik", category: "Temizlik", price: 34500, image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=500&q=80", tag: "Premium Altyapı", moods: ["teknolojik", "titiz"], aiInsight: "🤖 Yapay Zeka Öngörüsü: Rutin temizlik saatlerinde %40 energy tasarrufu sunar." },
+    { id: 214, name: "Yüksek Verimli Havuz Sirkülasyon Pompası 2 HP", category: "Pompalar", price: 11200, image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=500&q=80", tag: "Yüksek Güç", moods: ["teknolojik"], aiInsight: "⚡ Büyük ölçekli havuz filtrasyon döngülerinde standartlara tam uyumlu." },
+    { id: 215, name: "Sıvı Ph Düşürücü Havuz Kimyasalı 20 KG", category: "Kimyasallar", price: 690, image: "https://images.unsplash.com/photo-1527156279143-6cd52a32c2a1?w=500&q=80", tag: "Temel İhtiyaç", aiInsight: "📉 Fiyat analizine göre stabil kalma eğiliminde, güvenle stoklanabilir." },
+    { id: 216, name: "Havuz İçi RGB Aydınlatma Trafosu Kumandalı", category: "Aydınlatma", price: 2400, image: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=500&q=80", tag: "Yeni Ürün", aiInsight: "💡 Uzaktan kumanda entegrasyonu ile 12V armatürlerin akıllı kontrolünü sağlar.", moods: ["sakin", "teknolojik"] },
+    { id: 217, name: "Havuz Suyu Parlatıcı ve Çöktürücü 10 L", category: "Kimyasallar", price: 510, image: "https://images.unsplash.com/photo-1527156279143-6cd52a32c2a1?w=500&q=80", tag: "Hızlı Etki", aiInsight: "✨ Havuz suyundaki donukluğu saniyeler içinde gidererek kristal berraklık sunar.", moods: ["titiz"] },
+    { id: 218, name: "Teleskobik Havuz Kepçesi Derin Tip Filreli", category: "Temizlik", price: 680, image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=500&q=80", tag: "Pratik", aiInsight: "⚡ İnce gözenekli yapısı sayesinde yüzeydeki polenleri dahi kolayca yakalar.", moods: ["titiz"] },
+    { id: 219, name: "Güneş Enerjili Akıllı Havuz İyonizasyon Cihazı", category: "Ekipmanlar", price: 5400, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=500&q=80", tag: "Akıllı Ürün", moods: ["teknolojik"], aiInsight: "🤖 Güneş enerjisi paneli sayesinde sıfır işletme maliyeti ile koruma sağlar." },
+    { id: 220, name: "Geçmeli Havuz Kenar Izgara Köşe Parçası", category: "Ekipmanlar", price: 190, image: "https://images.unsplash.com/photo-1519669011783-4eaa95fa1b7d?w=500&q=80", tag: "Yedek Parça", aiInsight: "💡 UV ışınlarına ve kırılmalara dayanıklı polimer yapısıyla uzun ömürlüdür.", moods: ["sakin"] }
   ];
 
-  // Burada backend verisi yerine zorunlu olarak mock20Products listemizi bağlıyoruz ki pürüz kalmasın!
   useEffect(() => {
     setDbProducts(mock20Products);
     setDisplayedProducts(mock20Products);
@@ -61,7 +59,6 @@ export default function App() {
     }
   }, [notification]);
 
-  // Arama ve Filtre Dinamik Motoru
   useEffect(() => {
     let filtrelenmis = dbProducts;
     if (selectedCategory !== "Hepsi") filtrelenmis = filtrelenmis.filter(p => p.category === selectedCategory);
@@ -79,21 +76,28 @@ export default function App() {
     setNotification(`✅ ${product.name} sepete eklendi!`);
   };
 
-  // KART BİLGİLERİ İLE SİPARİŞİ ONAYLAMA FONKSİYONU
   const handleOrderSubmit = (e) => {
     e.preventDefault();
     setCart([]);
-    setSimulatedOrderStatus("Yola Çıktı"); // İrem Hanım'ın istediği durum tetikleyicisi
+    setSimulatedOrderStatus("Yola Çıktı"); 
     setActiveModal("kargo"); 
-    setNotification("💳 PayTR Ödemesi Alındı! Kargonuz Yola Çıktı bebek.");
+    setNotification("💳 PayTR Ödemesi Alındı! Kargonuz Yola Çıktı.");
   };
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
     setIsLoggedIn(true);
-    setCurrentUser({ fullname: loginForm.username, email: "nuray@arpeta.com" });
+    setCurrentUser({ fullname: loginForm.username });
     setActiveModal("");
     setNotification(`🔑 Hoş geldin ${loginForm.username}!`);
+  };
+
+  const handleRegisterSubmit = (e) => {
+    e.preventDefault();
+    setIsLoggedIn(true);
+    setCurrentUser({ fullname: registerForm.fullname });
+    setActiveModal("");
+    setNotification(`📝 Kayıt Başarılı! Hoş geldin ${registerForm.fullname}.`);
   };
 
   const sepetToplamTutar = cart.reduce((sum, item) => sum + item.price, 0);
@@ -120,6 +124,8 @@ export default function App() {
                 {activeModal === "kargo" && "🚚 Sipariş Kargo Durumu"}
                 {activeModal === "login" && "🔑 Üye Girişi"}
                 {activeModal === "register" && "📝 Yeni Üye Kaydı"}
+                {activeModal === "blog" && "📝 E-Havuz Market Blog"}
+                {activeModal === "hakkimizda" && "✨ Hakkımızda"}
               </h3>
               <button onClick={() => setActiveModal("")} className="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 transition-colors">
                 <X className="w-5 h-5" />
@@ -129,7 +135,7 @@ export default function App() {
             <div className="p-6 overflow-y-auto text-slate-700 flex-1 flex flex-col justify-between">
               <div>
                 
-                {/* SEPET + KART BİLGİLERİ + SEPETİ ONAYLA ALANI */}
+                {/* SEPET + PAYTR ÖDEME FORMU */}
                 {activeModal === "sepet" && (
                   <div className="text-sm">
                     {cart.length === 0 ? (
@@ -147,7 +153,6 @@ export default function App() {
                           <span className="text-xl text-purple-700">₺{sepetToplamTutar.toLocaleString('tr-TR')}</span>
                         </div>
 
-                        {/* İREM HANIMIN İSTEDİĞİ KART BİLGİLERİ VE SİPARİŞİ ONAYLA FORMU */}
                         <form onSubmit={handleOrderSubmit} className="mt-2 bg-slate-50 p-4 rounded-2xl border-2 border-purple-200 flex flex-col gap-3">
                           <span className="font-black text-xs text-purple-900 uppercase flex items-center gap-1">🔒 PayTR Güvenli Ödeme Altyapısı</span>
                           <div>
@@ -160,16 +165,16 @@ export default function App() {
                           </div>
                           <div className="grid grid-cols-2 gap-2">
                             <div>
-                              <label className="block text-[10px] font-black uppercase text-slate-500 mb-0.5">AA/YY</label>
-                              <input type="text" required placeholder="12/29" value={cardInfo.date} onChange={(e) => setCardInfo({...cardInfo, date: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-white focus:border-purple-600 outline-none" />
+                              <label className="block text-[10px] font-black uppercase text-slate-500">Son Kullanma</label>
+                              <input type="text" required placeholder="12/29" className="w-full p-2 text-xs font-bold rounded-xl border border-slate-300 bg-white" />
                             </div>
                             <div>
-                              <label className="block text-[10px] font-black uppercase text-slate-500 mb-0.5">CVC</label>
-                              <input type="text" required maxLength="3" placeholder="000" value={cardInfo.cvc} onChange={(e) => setCardInfo({...cardInfo, cvc: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-white focus:border-purple-600 outline-none" />
+                              <label className="block text-[10px] font-black uppercase text-slate-500">CVC</label>
+                              <input type="text" required placeholder="000" className="w-full p-2 text-xs font-bold rounded-xl border border-slate-300 bg-white" />
                             </div>
                           </div>
-                          <button type="submit" className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-black py-3 rounded-xl shadow-md text-xs uppercase tracking-wide mt-2">
-                            Siparişi Onayla ve Öde ➔
+                          <button type="submit" className="w-full bg-purple-600 hover:bg-cyan-500 text-white font-black py-3 rounded-xl transition-all shadow-md text-xs uppercase tracking-wider mt-2 flex items-center justify-center gap-2">
+                            <CreditCard className="w-4 h-4" /> Siparişi Onayla ve Öde ➔
                           </button>
                         </form>
                       </div>
@@ -177,13 +182,12 @@ export default function App() {
                   </div>
                 )}
 
-                {/* İREM HANIMIN İSTEDİĞİ: SİPARİŞ HAZIR / YOLA ÇIKTI / TAMAMLANDI PANELİ */}
+                {/* SİPARİŞ TAKİP AŞAMALARI */}
                 {activeModal === "kargo" && (
                   <div className="text-center py-4 flex flex-col items-center gap-4">
                     <Truck className="w-10 h-10 text-purple-600 animate-bounce" />
                     <h4 className="font-black text-slate-900 text-base">🚚 Sipariş Durum Ekranı</h4>
                     
-                    {/* Görsel Step Progress Çubuğu */}
                     <div className="w-full flex justify-between items-center px-4 mt-2 relative">
                       <div className="absolute left-6 right-6 top-4 h-1 bg-slate-200 -z-10"></div>
                       <div className="flex flex-col items-center gap-1 bg-white px-2">
@@ -201,45 +205,91 @@ export default function App() {
                     </div>
 
                     <div className="mt-4 p-4 bg-purple-50 rounded-2xl border border-purple-100 text-xs font-bold text-purple-900 w-full">
-                      Mevcut Durum: {simulatedOrderStatus === "Yola Çıktı" ? "📦 Kargonuz Başarıyla Arpeta Dağıtım Merkezinden Çıktı!" : "Siparişiniz Alındı."}
+                      Mevcut Durum: {simulatedOrderStatus === "Yola Çıktı" ? "📦 Kargonuz Başarıyla Arpeta Dağıtım Merkezinden Çıktı!" : simulatedOrderStatus === "Tamamlandı" ? "✅ Siparişiniz Alıcıya Teslim Edilmiştir." : "📦 Siparişiniz Hazırlanıyor."}
                     </div>
 
-                    {/* Simülasyonu Değiştirme Butonları (İrem Hanıma Göstermek İçin) */}
                     <div className="flex gap-2 mt-2 w-full">
-                      <button onClick={() => setSimulatedOrderStatus("Hazırlanıyor")} className="flex-1 bg-slate-100 text-slate-800 text-[9px] font-black py-1 rounded-md uppercase">Hazır Yap</button>
-                      <button onClick={() => setSimulatedOrderStatus("Yola Çıktı")} className="flex-1 bg-purple-100 text-purple-800 text-[9px] font-black py-1 rounded-md uppercase">Yola Çıkar</button>
-                      <button onClick={() => setSimulatedOrderStatus("Tamamlandı")} className="flex-1 bg-emerald-100 text-emerald-800 text-[9px] font-black py-1 rounded-md uppercase">Tamamla</button>
+                      <button onClick={() => setSimulatedOrderStatus("Hazırlanıyor")} className="flex-1 bg-slate-100 text-slate-800 text-[9px] font-black py-1 rounded-md uppercase">Sipariş Hazır</button>
+                      <button onClick={() => setSimulatedOrderStatus("Yola Çıktı")} className="flex-1 bg-purple-100 text-purple-800 text-[9px] font-black py-1 rounded-md uppercase">Kargo Yola Çıktı</button>
+                      <button onClick={() => setSimulatedOrderStatus("Tamamlandı")} className="flex-1 bg-emerald-100 text-emerald-800 text-[9px] font-black py-1 rounded-md uppercase">Tamamlandı</button>
                     </div>
                   </div>
                 )}
 
                 {activeModal === "login" && (
                   <form onSubmit={handleLoginSubmit} className="flex flex-col gap-4">
-                    <input type="text" required placeholder="Kullanıcı Adı" value={loginForm.username} onChange={(e) => setLoginForm({...loginForm, username: e.target.value})} className="w-full p-3 rounded-xl bg-slate-50 border-2" />
-                    <input type="password" required placeholder="Şifre" className="w-full p-3 rounded-xl bg-slate-50 border-2" />
-                    <button type="submit" className="w-full bg-purple-600 text-white font-black py-3 rounded-xl">Giriş Yap</button>
+                    <input type="text" required placeholder="Kullanıcı Adı" value={loginForm.username} onChange={(e) => setLoginForm({...loginForm, username: e.target.value})} className="w-full p-3 rounded-xl bg-slate-50 border-2 text-xs font-bold" />
+                    <input type="password" required placeholder="Şifre" className="w-full p-3 rounded-xl bg-slate-50 border-2 text-xs font-bold" />
+                    <button type="submit" className="w-full bg-purple-600 text-white font-black py-3 rounded-xl text-xs uppercase">Giriş Yap</button>
                   </form>
                 )}
 
-              </div>
+                {/* ÜYE OL FORMU (AD SOYAD, TC, TELEFON, ADRES TAMAMLANDI) */}
+                {activeModal === "register" && (
+                  <form onSubmit={handleRegisterSubmit} className="flex flex-col gap-3 animate-fadeIn">
+                    <p className="text-xs text-slate-500 font-bold mb-1">Havuz Market ayrıcalıklarından yararlanmak için formu eksiksiz doldurun bebek.</p>
+                    <div>
+                      <label className="block text-[10px] font-black uppercase text-slate-700 mb-0.5">Ad Soyad</label>
+                      <input type="text" required placeholder="Örn: Nuray Mutlu" value={registerForm.fullname} onChange={(e) => setRegisterForm({...registerForm, fullname: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 text-xs font-bold" />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-black uppercase text-slate-700 mb-0.5">TC Kimlik Numarası</label>
+                      <input type="text" required maxLength="11" placeholder="11 Haneli TC Kimlik No" value={registerForm.tcNo} onChange={(e) => setRegisterForm({...registerForm, tcNo: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 text-xs font-bold" />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-black uppercase text-slate-700 mb-0.5">Telefon Numarası</label>
+                      <input type="tel" required placeholder="0555 XXXXXXX" value={registerForm.phone} onChange={(e) => setRegisterForm({...registerForm, phone: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 text-xs font-bold" />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-black uppercase text-slate-700 mb-0.5">Teslimat Adresi</label>
+                      <textarea required rows="2" placeholder="Açık adresinizi buraya yazın..." value={registerForm.city} onChange={(e) => setRegisterForm({...registerForm, city: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 text-xs font-bold"></textarea>
+                    </div>
+                    <button type="submit" className="w-full bg-cyan-500 text-white font-black py-3 rounded-xl text-xs uppercase tracking-wide shadow-sm mt-1">Kayıt İşlemini Tamamla</button>
+                  </form>
+                )}
 
-              <div className="mt-6 pt-4 border-t border-slate-200 flex justify-end">
-                <button onClick={() => setActiveModal("")} className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-black text-xs px-5 py-2.5 rounded-xl transition-all shadow-sm border border-slate-300">
-                  <ArrowLeft className="w-4 h-4" /> Ana Sayfaya Geri Dön
-                </button>
-              </div>
+                {/* SÜRECİ ANLATAN YENİ MUAZZAM BLOG YAZISI */}
+                {activeModal === "blog" && (
+                  <div className="flex flex-col gap-4 text-xs md:text-sm leading-relaxed font-medium text-slate-800">
+                    <div className="bg-purple-50/70 border-2 border-purple-100 p-5 rounded-2xl">
+                      <h4 className="font-black text-slate-900 text-sm mb-1 text-purple-900">📝 Bir Bilgisayar Mühendisliği Öğrencisinin E-Ticaret Geliştirme Günlüğü</h4>
+                      <span className="text-[10px] text-slate-500 font-black block mb-3">Yazar: Arpeta R&D Stajyeri Nuray | Temmuz 2026</span>
+                      <p className="mb-3">Merhaba! Bir bilgisayar mühendisliği 2. sınıf öğrencisi olarak bu projeye başladığımda amacım sadece bir arayüz tasarlamak değil, gerçek bir e-ticaret akışını sıfırdan kurmaktı. Geliştirme sürecinde en çok zevk aldığım ama bir o kadar da zorlandığım an, dinamik filtreleme state'leri ile canlı backend entegrasyonunu sağlamaktı.</p>
+                      <p className="mb-3">Ufak tefek Git çakışmaları, terminaldeki LF/CRLF satır sonu uyarıları ve 'sepetToplamTutar' değişkenindeki görünmez boşluk hataları bana kod yazarken ne kadar titiz olunması gerektiğini bir kez daha öğretti. Her hatayı adım adım çözüp, İrem Hanım'ın ve ekibin değerli yönlendirmeleriyle platformu PayTR sanal POS simülasyonu ve 3 kademeli sipariş takip sistemine kadar genişletmeyi başardık.</p>
+                      <p>Bu süreç, teorik bilgilerimi sektörel bir premium altyapıya dönüştürme yolunda benim için harika bir dönüm noktası oldu. Teknolojiyi ve kod yazmayı çok seviyorum!</p>
+                    </div>
+                  </div>
+                )}
 
+                {/* GÜNCEL HAKKIMIZDA YAZISI */}
+                {activeModal === "hakkimizda" && (
+                  <div className="flex flex-col gap-3 text-xs md:text-sm text-slate-800 font-medium">
+                    <h4 className="text-base font-black text-purple-800 uppercase tracking-tight">✨ Platformumuz Hakkında</h4>
+                    <p className="text-slate-950 font-bold italic bg-cyan-50 p-4 rounded-xl border-2 border-cyan-100 leading-relaxed">
+                      "HavuzMarket, modern otomasyon çözümlerinden endüstriyel havuz kimyasallarına kadar uzanan 20 premium ürünüyle, kullanıcılarına uçtan uca kusursuz bir dijital tedarik deneyimi sunmak amacıyla Arpeta Yazılım bünyesinde geliştirilmiştir."
+                    </p>
+                    <p className="mt-1">Yapay zeka destekli akıllı karar motorumuz, kullanıcıların anlık ruh hallerine ve havuz durum analizlerine göre en doğru ekipmanı listeler. Güvenli PayTR ödeme geçidi ve şeffaf 3 aşamalı sipariş takip modülümüzle sektörel standartları yeniden belirliyoruz.</p>
+                  </div>
+                )}
+
+              </div>
+            </div>
+
+            <div className="p-4 bg-slate-50 border-t flex justify-end">
+              <button onClick={() => setActiveModal("")} className="flex items-center gap-2 bg-white hover:bg-slate-100 text-slate-800 font-black text-xs px-5 py-2 rounded-xl transition-all shadow-sm border">
+                <ArrowLeft className="w-4 h-4" /> Ana Sayfaya Geri Dön
+              </button>
             </div>
 
           </div>
         </div>
       )}
 
-      {/* HEADER BARI */}
+      {/* HEADER BARI VE ANA SAYFA TASARIMI */}
       <div>
         <div className="bg-slate-900 text-white text-[11px] font-bold py-2 px-6 flex justify-between items-center tracking-wide">
           <span>✦ 1000₺ Üzeri Alışverişlerde Ücretsiz Kargo</span>
-          <span className="text-cyan-400 font-black">{isLoggedIn ? `● Oturum: ${currentUser?.fullname}` : "● Standart Mod"}</span>
+          <span className="text-cyan-400 font-black">{isLoggedIn ? `● Oturum Açık` : "● Standart Mod"}</span>
         </div>
 
         <header className="bg-white shadow-md sticky top-0 z-40 px-6 py-4 flex flex-col md:flex-row justify-between items-center border-b-2 border-cyan-100 gap-4">
@@ -262,7 +312,7 @@ export default function App() {
           <div className="flex items-center flex-wrap gap-3 text-sm shrink-0">
             <button type="button" onClick={() => setActiveModal("login")} className="text-slate-700 hover:text-purple-700 flex items-center gap-1 font-extrabold border-2 border-slate-200 px-4 py-2 rounded-xl bg-slate-50 text-xs shadow-sm">Giriş Yap</button>
             <button type="button" onClick={() => setActiveModal("register")} className="bg-cyan-500 text-white px-4 py-2 rounded-xl font-extrabold text-xs">Üye Ol</button>
-            <button onClick={() => { setActiveModal("kargo"); }} className="px-4 py-2 rounded-xl font-black border border-purple-600 bg-white text-purple-700 text-xs">📋 Sipariş Sorgula</button>
+            <button type="button" onClick={() => { setActiveModal("kargo"); }} className="px-4 py-2 rounded-xl font-black border border-purple-600 bg-white text-purple-700 text-xs">📋 Sipariş Sorgula</button>
 
             <div onClick={() => setActiveModal("sepet")} className="relative cursor-pointer text-slate-800 hover:text-purple-700 bg-slate-100 p-2.5 rounded-xl border-2 shadow-sm">
               <ShoppingCart className="w-5 h-5" />
@@ -271,7 +321,7 @@ export default function App() {
           </div>
         </header>
 
-        {/* AI ASİSTAN BARI */}
+        {/* AI MOTORU KUTUSU */}
         <div className="max-w-[1400px] mx-auto px-6 mt-6">
           <div className="bg-gradient-to-r from-slate-900 via-purple-900 to-[#00b4d8] p-6 rounded-3xl text-white flex flex-col md:flex-row items-center justify-between shadow-2xl border-2 border-purple-500/40 relative overflow-hidden group">
             <div className="flex items-center gap-4 mb-4 md:mb-0">
