@@ -9,7 +9,7 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
 
-// İREM HANIMIN İSTEDİĞİ TAM 20 ADET PREMIUM YAPAY ZEKA DESTEKLİ ÜRÜN LİSTESİ
+
 const yapayZekaDestekliUrunler = [
   { id: 201, name: "AquaGlow Turkuaz LED Havuz Aydınlatma", category: "Aydınlatma", price: 1450, image: "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=500&q=60", tag: "Yeni Sezon", moods: ["sakin", "teknolojik"], aiInsight: "💡 Bugün alabilirsiniz, önümüzdeki 7 günde fiyatı %6 artabilir!" },
   { id: 202, name: "Rio Masaj Etkili Paslanmaz Havuz Şelalesi", category: "Ekipmanlar", price: 12800, image: "https://images.unsplash.com/photo-1562184560-a11b7cf7c847?w=500&q=60", tag: "Özel Tasarım", moods: ["yorgun", "sakin"], aiInsight: "🔥 Son 3 günün en düşük fiyatı! Kaçırmayın." },
