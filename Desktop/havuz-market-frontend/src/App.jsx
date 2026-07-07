@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'react-redux'; // Not: Orijinal importunu koruyoruz
-import axiosActual from 'axios';
-import { ShoppingCart, Search, User, HelpCircle, FileText, Truck, Mail, MapPin, Sparkles, Filter, CheckCircle, X, LogIn, UserPlus, ArrowLeft, CreditCard, History } from 'lucide-react';
+import axios from 'axios';
+import { ShoppingCart, Search, User, HelpCircle, FileText, Truck, Mail, MapPin, Sparkles, Filter, CheckCircle, X, LogIn, UserPlus, ArrowLeft, CreditCard, History, ShieldAlert, Key } from 'lucide-react';
 
 export default function App() {
   const [cart, setCart] = useState([]);
@@ -10,65 +9,52 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState(""); 
   const [dbProducts, setDbProducts] = useState([]); 
   const [displayedProducts, setDisplayedProducts] = useState([]);
-  const [isGuestMode, setIsGuestMode] = useState(false);
   const [notification, setNotification] = useState("");
-
   const [activeModal, setActiveModal] = useState(""); 
   const [asistanSoru, setAsistanSoru] = useState("");
   const [asistanCevap, setAsistanCevap] = useState("");
 
-  // Giriş ve Kayıt Form State'leri
+  
   const [loginForm, setLoginForm] = useState({ username: '', password: '' });
-  const [registerForm, setRegisterForm] = useState({ fullname: '', city: '', phone: '' });
+  const [registerForm, setRegisterForm] = useState({ fullname: '', city: '', phone: '', email: '' });
+  const [guestForm, setGuestForm] = useState({ fullname: '', email: '', phone: '', city: '' });
+  const [forgotEmail, setForgotEmail] = useState("");
 
-  // İREM HANIMIN İSTEDİĞİ DEVLET DÜZEYİNDE STATE YÖNETİMLERİ
+  // Oturum ve PayTR Akış State'leri
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
-  const [orders, setOrders] = useState([]); // Sipariş geçmişi havuzu
-  const [paytrStep, setPaytrStep] = useState(false); // PayTR Ödeme Ekranı Kontrolü
-  const [cardInfo, setCardInfo] = useState({ number: '', expiry: '', cvc: '', name: '' });
+  const [orders, setOrders] = useState([]); 
+  const [orderSearchEmail, setOrderSearchEmail] = useState("");
+  const [paytrStep, setPaytrStep] = useState(false); 
+  const [paytrTokenData, setPaytrTokenData] = useState(null);
+  const [isGuestCheckout, setIsGuestCheckout] = useState(false);
+  const [subModal, setSubModal] = useState(""); // login, register, forgot, guestForm
 
-  // İREM HANIMIN İSTEDİĞİ TAM 20 PREMIUM ÜRÜN LİSTESİ
-  const mock20Products = [
-    { id: 1, name: "Premium Havuz Kloru 25 KG (Granül %56)", category: "Kimyasallar", price: 2450, tag: "En Çok Satan", aiInsight: "💡 Yüksek çözünme hızıyla havuz PH dengesini yormadan maksimum dezenfeksiyon sağlar.", moods: ["titiz"] },
-    { id: 2, name: "Arpeta Akıllı Havuz Robotu v4 Pro", category: "Temizlik", price: 42000, tag: "Yapay Zeka", aiInsight: "💡 Duvar tırmanma ve entegre sonar haritalama ile %99 filtreleme verimliliği.", moods: ["teknolojik", "titiz"] },
-    { id: 3, name: "RGB Sualtı LED Aydınlatma Armatürü 12V", category: "Aydınlatma", price: 1850, tag: "Yeni Ürün", aiInsight: "💡 Enerji tasarruflu yapısıyla modunuza göre 16 farklı renk senkronizasyonu sunar.", moods: ["sakin", "teknolojik"] },
-    { id: 4, name: "Sirkülasyon Havuz Pompası 1.5 HP ECO", category: "Pompalar", price: 8900, tag: "Yüksek Güç", aiInsight: "💡 Düşük desibel teknolojisiyle gece sessizliğinde bile maksimum devirdaim yapar.", moods: ["teknolojik"] },
-    { id: 5, name: "Yosun Önleyici ve Parlatıcı Konsantre 5 LT", category: "Kimyasallar", price: 480, tag: "Fırsat", aiInsight: "💡 Suyun berraklığını arttırarak mikroskobik partikülleri filtreye taşır.", moods: ["titiz"] },
-    { id: 6, name: "Teleskobik Temizlik Sapı Alüminyum 4.8m", category: "Temizlik", price: 920, tag: "Dayanıklı", aiInsight: "💡 Hafifletilmiş alaşımıyla derin temizlikte kullanıcı ergonomisini korur.", moods: ["titiz"] },
-    { id: 7, name: "Paslanmaz Çelik Havuz Merdiveni (3 Basamaklı)", category: "Ekipmanlar", price: 6200, tag: "Premium", aiInsight: "💡 AISI 304 kalite çelik yapısıyla korozyona ve havuz kimyasallarına tam dirençlidir.", moods: ["sakin"] },
-    { id: 8, name: "Dijital Havuz Suyu Test Cihazı (PH/Klor Bluetooth)", category: "Ekipmanlar", price: 3400, tag: "Teknolojik", aiInsight: "💡 Bluetooth bağlantısıyla anlık su analiz sonuçlarını mobil uygulamaya iletedir.", moods: ["teknolojik", "titiz"] },
-    { id: 9, name: "Havuz Dip Filtre Nozulu Gömme Tip", category: "Ekipmanlar", price: 350, tag: "Standart", aiInsight: "💡 Suyun tabandan homojen şekilde dağılmasını sağlayarak kör noktaları engeller.", moods: ["sakin"] },
-    { id: 10, name: "Kuvars Havuz Filtre Kumu 25 KG", category: "Ekipmanlar", price: 290, tag: "Temel İhtiyaç", aiInsight: "💡 İdeal tane boyutuyla pompanın yükünü azaltır, berraklığı maksimuma çıkarır.", moods: ["titiz"] },
-    { id: 11, name: "Ph Düşürücü Toz Kimyasal 10 KG", category: "Kimyasallar", price: 850, tag: "Hızlı Etki", aiInsight: "💡 Klorun aktifleşmesi için suyun alkalinite seviyesini güvenli aralığa çeker.", moods: ["titiz"] },
-    { id: 12, name: "Lüks Havuz Fıskiyesi Paslanmaz Şelale Tipi", category: "Ekipmanlar", price: 14500, tag: "Özel Tasarım", aiInsight: "💡 Estetik su perdesi tasarımıyla havuzunuza modern ve sakinleştirici bir mimari hava katar.", moods: ["sakin", "yorgun"] },
-    { id: 13, name: "Yüzey Sıyırıcı Skimmer Geniş Ağızlı", category: "Ekipmanlar", price: 1200, tag: "Gerekli", aiInsight: "💡 Yaprak ve toz gibi yüzen pislikleri dip çökelmeden önce hızla yakalar.", moods: ["titiz"] },
-    { id: 14, name: "Havuz Isı Pompası ve Eşanjör Sistemi", category: "Pompalar", price: 78000, tag: "Premium", aiInsight: "💡 Dört mevsim ideal su sıcaklığı için minimum enerjiyle maksimum termal güç sağlar.", moods: ["yorgun", "teknolojik"] },
-    { id: 15, name: "Sualtı Paslanmaz Jet Masaj Nozulu", category: "Ekipmanlar", price: 2100, tag: "Keyif Modu", aiInsight: "💡 Yüksek basınçlı su ve hava karışımıyla harika bir hidroterapi ve masaj etkisi yaratır.", moods: ["yorgun", "sakin"] },
-    { id: 16, name: "Güneş Enerjili Havuz İyonizeri", category: "Ekipmanlar", price: 4300, tag: "Çevre Dostu", aiInsight: "💡 Kimyasal kullanımını %80 azaltarak bakır-gümüş iyonlarıyla doğal koruma sağlar.", moods: ["teknolojik"] },
-    { id: 17, name: "Havuz Süpürge Hortumu Kendinden Yüzer 15m", category: "Temizlik", price: 1650, tag: "Esnek", aiInsight: "💡 Vakum esnasında kırılma yapmayan özel bükülmez profil teknolojisine sahiptir.", moods: ["titiz"] },
-    { id: 18, name: "Lineer Havuz Kenar Izgarası (Geçmeli 20cm)", category: "Ekipmanlar", price: 450, tag: "Güvenli", aiInsight: "💡 Kaymaz gözenekli plastik yapısıyla havuz kenarı güvenliğini optimize eder.", moods: ["sakin"] },
-    { id: 19, name: "Tuz Klor Jeneratörü Otomasyon Seti", category: "Ekipmanlar", price: 39000, tag: "Yapay Zeka", aiInsight: "💡 Doğal tuzdan klor üreterek göz yakmayan, kokusuz ve sağlıklı bir su sunar.", moods: ["teknolojik", "titiz"] },
-    { id: 20, name: "Ayarlanabilir LED Havuz Duvar Lambası Slim", category: "Aydınlatma", price: 2200, tag: "Minimalist", aiInsight: "💡 İnce yapısı sayesinde havuz içinde yer kaplamaz, homojen bir ışık yayar.", moods: ["sakin"] }
-  ];
+  // API Bağlantısı (Render Canlı Backend)
+  const BACKEND_URL = "https://e-havuzz-backend.onrender.com";
 
+  // 1. Ürünleri Canlı Sunucudan Çekme
   useEffect(() => {
-    // Canlı backend'i tetikler, her koşulda 20 ürünü garantiye alır
-    axiosActual.get('https://e-havuzz-backend.onrender.com/api/products')
+    axios.get(`${BACKEND_URL}/api/products`)
       .then(response => {
-        if (response.data && response.data.length >= 20) {
-          setDbProducts(response.data);
-          setDisplayedProducts(response.data);
-        } else {
-          setDbProducts(mock20Products);
-          setDisplayedProducts(mock20Products);
-        }
+        setDbProducts(response.data);
+        setDisplayedProducts(response.data);
       })
       .catch(error => {
-        setDbProducts(mock20Products);
-        setDisplayedProducts(mock20Products);
+        console.error("Hata:", error);
+        setNotification("❌ Canlı sunucu verileri yüklenirken bir pürüz oluştu!");
       });
   }, []);
+
+  // Siparişleri Anlık Sorgulama Fonksiyonu
+  const fetchOrders = (email) => {
+    if (!email) return;
+    axios.get(`${BACKEND_URL}/api/orders/search?email=${email}`)
+      .then(response => {
+        setOrders(response.data);
+      })
+      .catch(err => console.error(err));
+  };
 
   useEffect(() => {
     if (notification) {
@@ -77,7 +63,7 @@ export default function App() {
     }
   }, [notification]);
 
-  // Arama, Kategori ve Ruh Hali Filtresi
+  // Arama, Kategori ve Ruh Hali Filtre Entegrasyonu
   useEffect(() => {
     let filtrelenmis = dbProducts;
     
@@ -104,73 +90,122 @@ export default function App() {
     const guncelSepet = [...cart, product];
     setCart(guncelSepet);
     const toplamTutar = guncelSepet.reduce((sum, item) => sum + item.price, 0);
-    setNotification(`✅ ${product.name} eklendi! Güncel Tutar: ₺${toplamTutar.toLocaleString('tr-TR')}`);
+    setNotification(`✅ ${product.name} eklendi! Toplam: ₺${toplamTutar.toLocaleString('tr-TR')}`);
   };
 
-  // PayTR Ödeme Aşamasına Geçiş
-  const handleCheckout = () => {
-    setPaytrStep(true);
+  // Sepet Aşamasından Sonra Seçim Ekranını Tetikler
+  const handleCheckoutInit = () => {
+    if (isLoggedIn) {
+      // Kullanıcı zaten giriş yapmışsa direkt PayTR token aşamasına geç
+      generatePaytrToken(currentUser.email, currentUser.fullname, currentUser.phone);
+    } else {
+      // Giriş yapmamışsa Seçim Modalını Göster (Giriş yap / Misafir devam et)
+      setPaytrStep(true);
+      setSubModal("checkout_choice");
+    }
   };
 
-  // PayTR Entegrasyon Simülasyonu Tetikleyicisi
-  const handlePaytrPayment = (e) => {
-    e.preventDefault();
-    const orderId = "RE-TR-" + Math.floor(100000 + Math.random() * 900000);
-    
-    const orderData = {
-      orderId: orderId,
-      items: cart,
+  // 2. PAYTR API TOKEN ÜRETİMİ (Axios POST)
+  const generatePaytrToken = (email, fullname, phone) => {
+    axios.post(`${BACKEND_URL}/api/paytr/token`, {
       totalPrice: sepetToplamTutar,
-      isGuest: !isLoggedIn,
-      buyerName: isLoggedIn ? currentUser.fullname : "Misafir Kullanıcı",
-      date: new Date().toLocaleDateString('tr-TR'),
-      status: "PayTR Onaylandı / Hazırlanıyor"
+      email,
+      fullname,
+      phone
+    })
+    .then(res => {
+      if (res.data.success) {
+        setPaytrTokenData(res.data);
+        setSubModal("paytr_iframe");
+      }
+    })
+    .catch(() => {
+      setNotification("❌ PayTR Token üretilirken API hatası oluştu!");
+    });
+  };
+
+  // Misafir Bilgileri Alındıktan Sonra Tetiklenen PayTR Akışı
+  const handleGuestFormSubmit = (e) => {
+    e.preventDefault();
+    setIsGuestCheckout(true);
+    generatePaytrToken(guestForm.email, guestForm.fullname, guestForm.phone);
+  };
+
+  // 3. ÖDEME ONAYI VE SİPARİŞİ VERİTABANINA YAZMA (Axios POST)
+  const handleFinalPaymentConfirm = () => {
+    const buyerInfo = isGuestCheckout ? guestForm : {
+      fullname: currentUser?.fullname || "Üye Kullanıcı",
+      email: currentUser?.email || "uye@arpeta.com",
+      phone: currentUser?.phone || "0555XXXXXXX"
     };
 
-    // Axios Post ile sunucuya simüle sipariş iletimi
-    axiosActual.post('https://e-havuzz-backend.onrender.com/api/orders', { items: cart, totalPrice: sepetToplamTutar, isGuest: !isLoggedIn })
-      .then(() => {
-        setOrders([orderData, ...orders]);
-        setCart([]);
-        setPaytrStep(false);
-        setActiveModal("kargo"); // Başarılı olunca kargo/takip ekranını aç
-        setNotification(`💳 PayTR Ödemesi Başarılı! Siparişiniz Alındı: ${orderId}`);
+    const payload = {
+      items: cart,
+      totalPrice: sepetToplamTutar,
+      isGuest: isGuestCheckout,
+      buyerName: buyerInfo.fullname,
+      buyerEmail: buyerInfo.email,
+      buyerPhone: buyerInfo.phone,
+      merchant_oid: paytrTokenData?.merchant_oid
+    };
+
+    axios.post(`${BACKEND_URL}/api/orders`, payload)
+      .then(res => {
+        if (res.data.success) {
+          fetchOrders(buyerInfo.email);
+          setCart([]);
+          setPaytrStep(false);
+          setPaytrTokenData(null);
+          setActiveModal("kargo");
+          setNotification(`💳 PayTR Ödemesi Başarıyla Tamamlandı! Sipariş No: ${res.data.order.orderId}`);
+        }
       })
       .catch(() => {
-        // Hata durumunda bile kesintisiz kullanıcı akışı için local sipariş oluşturur
-        setOrders([orderData, ...orders]);
-        setCart([]);
-        setPaytrStep(false);
-        setActiveModal("kargo");
-        setNotification(`💳 PayTR Ödemesi Başarılı! (Local Mode) Sipariş: ${orderId}`);
+        setNotification("❌ Sipariş veritabanına işlenirken hata oluştu!");
       });
-  };
-
-  const handleAsistanSorgu = (e) => {
-    e.preventDefault();
-    if (!asistanSoru) return;
-    setAsistanCevap("🤖 Akıllı Asistan: Harika bir soru! Geliştirdiğimiz modern mimaride sepet yönetimini, PayTR sanal pos API simülasyonunu ve ürün akışını Axios ile canlı Render backend'imiz üzerinden asenkron olarak yönetiyoruz güzelim!");
   };
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
     setIsLoggedIn(true);
-    setCurrentUser({ fullname: loginForm.username, city: "Hatay", phone: "0555 XXXXXXX" });
-    setActiveModal("");
-    setNotification(`🔑 Hoş geldin ${loginForm.username}! Giriş ve Sipariş Geçmişi aktif edildi.`);
+    const user = { fullname: loginForm.username, email: `${loginForm.username}@gmail.com`, city: "Hatay", phone: "0532 111 22 33" };
+    setCurrentUser(user);
+    setSubModal("");
+    if (paytrStep) {
+      // Eğer sepet adımlarında giriş yaptıysa direkt PayTR tetikle
+      setIsGuestCheckout(false);
+      generatePaytrToken(user.email, user.fullname, user.phone);
+    } else {
+      setActiveModal("");
+      setNotification(`🔑 Hoş geldin ${loginForm.username}! Sipariş yönetim paneli açıldı.`);
+    }
   };
 
   const handleRegisterSubmit = (e) => {
     e.preventDefault();
     setIsLoggedIn(true);
-    setCurrentUser({ fullname: registerForm.fullname, city: registerForm.city, phone: registerForm.phone });
-    setActiveModal("");
-    setNotification(`📝 Kayıt Başarılı! Hoş geldin ${registerForm.fullname}. Profiliniz entegre edildi.`);
+    const user = { fullname: registerForm.fullname, email: registerForm.email, city: registerForm.city, phone: registerForm.phone };
+    setCurrentUser(user);
+    setSubModal("");
+    if (paytrStep) {
+      setIsGuestCheckout(false);
+      generatePaytrToken(user.email, user.fullname, user.phone);
+    } else {
+      setActiveModal("");
+      setNotification(`📝 Kayıt Başarılı! Hoş geldin ${registerForm.fullname}.`);
+    }
+  };
+
+  const handleForgotPassword = (e) => {
+    e.preventDefault();
+    alert(`✉️ Şifre sıfırlama linki ${forgotEmail} adresine başarıyla gönderildi bebek!`);
+    setSubModal("login");
   };
 
   const handleLogout = () => {
     setIsLoggedIn(false);
     setCurrentUser(null);
+    setOrders([]);
     setNotification("ℹ️ Güvenli çıkış yapıldı.");
   };
 
@@ -193,14 +228,13 @@ export default function App() {
             
             <div className="p-5 border-b border-slate-200 flex justify-between items-center bg-gradient-to-r from-slate-900 via-purple-900 to-[#00b4d8] text-white">
               <h3 className="font-black text-sm md:text-base flex items-center gap-2 tracking-wide">
-                {activeModal === "sepet" && "🛒 Güncel Sepetiniz"}
+                {activeModal === "sepet" && "🛒 Alışveriş Sepetiniz & PayTR"}
                 {activeModal === "asistan" && "🤖 Akıllı Havuz Asistanı"}
                 {activeModal === "blog" && "📝 E-Havuz Market Blog"}
                 {activeModal === "hakkimizda" && "✨ Hakkımızda"}
                 {activeModal === "kargo" && "🚚 Sipariş Takip Durumu"}
-                {activeModal === "login" && "🔑 Üye Girişi"}
-                {activeModal === "register" && "📝 Yeni Üye Kaydı"}
-                {activeModal === "orders" && "📋 Sipariş Geçmişiniz"}
+                {activeModal === "auth" && "🔑 Kullanıcı İşlem Merkezi"}
+                {activeModal === "orders" && "📋 Sipariş Takip & Geçmişi"}
               </h3>
               <button onClick={() => { setActiveModal(""); setPaytrStep(false); setAsistanCevap(""); }} className="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 transition-colors">
                 <X className="w-5 h-5" />
@@ -210,13 +244,13 @@ export default function App() {
             <div className="p-6 overflow-y-auto text-slate-700 flex-1 flex flex-col justify-between">
               <div>
                 
-                {/* SEPET VE PAYTR ÖDEME ALANI */}
+                {/* 1. SEPET VE PAYTR ÖDEME ENTEGRASYON AKIŞLARI */}
                 {activeModal === "sepet" && (
                   <div className="text-sm">
                     {!paytrStep ? (
                       <>
                         {cart.length === 0 ? (
-                          <div className="text-center py-8 text-slate-400 font-medium">Sepetiniz şu anda boş.</div>
+                          <div className="text-center py-8 text-slate-400 font-medium">Sepetiniz şu anda boş. Ürün ekleyerek başlayabilirsiniz!</div>
                         ) : (
                           <div className="flex flex-col gap-3">
                             {cart.map((item, index) => (
@@ -232,119 +266,177 @@ export default function App() {
                               <span>Toplam Tutar:</span>
                               <span className="text-purple-700">₺{sepetToplamTutar.toLocaleString('tr-TR')}</span>
                             </div>
-                            <button onClick={handleCheckout} className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-black py-3 rounded-xl mt-4 hover:opacity-95 transition-all shadow-md">
-                              PayTR ile Ödemeye Geç ➔
+                            <button onClick={handleCheckoutInit} className="w-full bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-black py-3 rounded-xl mt-4 hover:opacity-95 transition-all shadow-md">
+                              Güvenli Ödeme Aşamasına Geç ➔
                             </button>
                           </div>
                         )}
                       </>
                     ) : (
-                      /* PAYTR ÖDEME ENTEGRASYON ARAYÜZÜ */
-                      <form onSubmit={handlePaytrPayment} className="flex flex-col gap-3 bg-slate-50 p-4 rounded-2xl border-2 border-purple-200 animate-fadeIn">
-                        <div className="flex justify-between items-center border-b pb-2 mb-2">
-                          <span className="font-black text-xs text-purple-900 uppercase">PayTR Sanal POS iFrame</span>
-                          <span className="text-[10px] bg-emerald-100 text-emerald-700 font-bold px-2 py-0.5 rounded-full">Güvenli Mod</span>
-                        </div>
-                        <div className="text-xs font-bold text-slate-700">Ödenecek Tutar: <span className="text-purple-700 text-sm font-black">₺{sepetToplamTutar.toLocaleString('tr-TR')}</span></div>
-                        <div>
-                          <label className="block text-[10px] font-black uppercase text-slate-500">Kart Üzerindeki İsim</label>
-                          <input type="text" required placeholder="NURAY MUTLU" className="w-full p-2 text-xs font-bold rounded-xl border border-slate-300 bg-white" />
-                        </div>
-                        <div>
-                          <label className="block text-[10px] font-black uppercase text-slate-500">Kart Numarası (Test Modu)</label>
-                          <input type="text" required maxLength="19" placeholder="4000 1234 5678 9010" className="w-full p-2 text-xs font-bold rounded-xl border border-slate-300 bg-white" />
-                        </div>
-                        <div className="grid grid-cols-2 gap-2">
-                          <div>
-                            <label className="block text-[10px] font-black uppercase text-slate-500">Son Kullanma</label>
-                            <input type="text" required placeholder="12/29" className="w-full p-2 text-xs font-bold rounded-xl border border-slate-300 bg-white" />
+                      <>
+                        {/* A - Giriş Seçim Ekranı */}
+                        {subModal === "checkout_choice" && (
+                          <div className="flex flex-col gap-4 text-center py-4">
+                            <h4 className="font-black text-slate-800 text-sm">Nasıl devam etmek istersiniz bebek?</h4>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+                              <button onClick={() => setSubModal("checkout_login")} className="p-4 bg-purple-50 hover:bg-purple-100 border-2 border-purple-200 rounded-2xl flex flex-col items-center justify-center gap-1.5 transition-all">
+                                <LogIn className="w-6 h-6 text-purple-700" />
+                                <span className="font-black text-xs text-purple-900">Giriş Yaparak Devam Et</span>
+                              </button>
+                              <button onClick={() => setSubModal("checkout_guest")} className="p-4 bg-cyan-50 hover:bg-cyan-100 border-2 border-cyan-200 rounded-2xl flex flex-col items-center justify-center gap-1.5 transition-all">
+                                <UserPlus className="w-6 h-6 text-cyan-700" />
+                                <span className="font-black text-xs text-cyan-900">Misafir Olarak Devam Et</span>
+                              </button>
+                            </div>
                           </div>
-                          <div>
-                            <label className="block text-[10px] font-black uppercase text-slate-500">CVC</label>
-                            <input type="text" required placeholder="000" className="w-full p-2 text-xs font-bold rounded-xl border border-slate-300 bg-white" />
+                        )}
+
+                        {/* B - Sepet İçi Giriş Yap Formu */}
+                        {subModal === "checkout_login" && (
+                          <form onSubmit={handleLoginSubmit} className="flex flex-col gap-3">
+                            <span className="font-black text-xs text-purple-900 uppercase">Üye Girişi</span>
+                            <input type="text" required placeholder="Kullanıcı Adı" value={loginForm.username} onChange={(e) => setLoginForm({...loginForm, username: e.target.value})} className="w-full p-2.5 text-xs font-bold rounded-xl border border-slate-300 bg-white" />
+                            <input type="password" required placeholder="Şifre" value={loginForm.password} onChange={(e) => setLoginForm({...loginForm, password: e.target.value})} className="w-full p-2.5 text-xs font-bold rounded-xl border border-slate-300 bg-white" />
+                            <button type="submit" className="w-full bg-purple-600 text-white font-black py-2.5 rounded-xl text-xs">Giriş Yap ve Ödemeyi Tetikle</button>
+                          </form>
+                        )}
+
+                        {/* C - Misafir Teslimat Bilgileri Formu */}
+                        {subModal === "checkout_guest" && (
+                          <form onSubmit={handleGuestFormSubmit} className="flex flex-col gap-3 animate-fadeIn">
+                            <span className="font-black text-xs text-cyan-900 uppercase">Misafir İletişim & Teslimat Bilgileri</span>
+                            <input type="text" required placeholder="Adınız Soyadınız" value={guestForm.fullname} onChange={(e) => setGuestForm({...guestForm, fullname: e.target.value})} className="w-full p-2.5 text-xs font-bold rounded-xl border border-slate-300" />
+                            <input type="email" required placeholder="E-Posta Adresiniz (Takip İçin Önemli)" value={guestForm.email} onChange={(e) => setGuestForm({...guestForm, email: e.target.value})} className="w-full p-2.5 text-xs font-bold rounded-xl border border-slate-300" />
+                            <input type="tel" required placeholder="Telefon Numaranız" value={guestForm.phone} onChange={(e) => setGuestForm({...guestForm, phone: e.target.value})} className="w-full p-2.5 text-xs font-bold rounded-xl border border-slate-300" />
+                            <input type="text" required placeholder="Şehir / İlçe" value={guestForm.city} onChange={(e) => setGuestForm({...guestForm, city: e.target.value})} className="w-full p-2.5 text-xs font-bold rounded-xl border border-slate-300" />
+                            <button type="submit" className="w-full bg-cyan-500 text-white font-black py-2.5 rounded-xl text-xs">Bilgileri Kaydet ve PayTR'ye İlerle</button>
+                          </form>
+                        )}
+
+                        {/* D - PAYTR iFRAME ÖDEME EKRANI SİMÜLASYONU */}
+                        {subModal === "paytr_iframe" && (
+                          <div className="flex flex-col gap-3 bg-slate-900 p-4 rounded-2xl border-2 border-purple-500 text-white animate-fadeIn">
+                            <div className="flex justify-between items-center border-b border-slate-700 pb-2">
+                              <span className="font-black text-xs text-purple-400 uppercase tracking-widest flex items-center gap-1">🔒 PAYTR SECURE iFRAME</span>
+                              <span className="text-[9px] bg-emerald-500/20 text-emerald-400 font-bold px-2 py-0.5 rounded-full border border-emerald-500/30">TEST MODU</span>
+                            </div>
+                            <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 text-[11px] text-slate-300 flex flex-col gap-1">
+                              <div>Sipariş No: <span className="text-white font-bold">{paytrTokenData?.merchant_oid}</span></div>
+                              <div>Token: <span className="text-cyan-400 font-mono break-all text-[9px]">{paytrTokenData?.token}</span></div>
+                              <div>Toplam Tutar: <span className="text-emerald-400 font-black">₺{sepetToplamTutar.toLocaleString('tr-TR')}</span></div>
+                            </div>
+                            
+                            <div className="p-3 bg-slate-800 rounded-xl border border-slate-700 flex flex-col gap-2">
+                              <label className="block text-[10px] font-black uppercase text-slate-400">Kredi Kartı No (Simüle)</label>
+                              <input type="text" required disabled placeholder="4000 1234 5678 9010 (PayTR Güvenli Giriş)" className="w-full p-2 text-xs font-bold rounded-lg bg-slate-950 text-slate-400 border border-slate-700" />
+                              <div className="grid grid-cols-2 gap-2">
+                                <input type="text" disabled placeholder="12/29" className="w-full p-2 text-xs font-bold rounded-lg bg-slate-950 text-slate-400 border border-slate-700" />
+                                <input type="text" disabled placeholder="000" className="w-full p-2 text-xs font-bold rounded-lg bg-slate-950 text-slate-400 border border-slate-700" />
+                              </div>
+                            </div>
+
+                            <button type="button" onClick={handleFinalPaymentConfirm} className="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-black py-3 rounded-xl transition-all text-xs uppercase tracking-wider mt-1 flex items-center justify-center gap-1.5">
+                              <CreditCard className="w-4 h-4" /> Ödemeyi Onayla (Callback Tetikle)
+                            </button>
                           </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                )}
+
+                {/* 2. SİPARİŞ TAKİP VE GEÇMİŞ SORGULAMA PANELİ */}
+                {activeModal === "orders" && (
+                  <div className="flex flex-col gap-4">
+                    <div className="bg-slate-50 p-4 rounded-2xl border-2 border-slate-200 flex flex-col gap-2">
+                      <label className="block text-xs font-black text-slate-700 uppercase">📧 Sipariş Geçmişi Sorgulama</label>
+                      <div className="flex gap-2">
+                        <input 
+                          type="email" 
+                          placeholder="Sipariş verdiğiniz e-posta adresini girin..." 
+                          value={orderSearchEmail}
+                          onChange={(e) => setOrderSearchEmail(e.target.value)}
+                          className="flex-1 p-2.5 text-xs font-bold rounded-xl border border-slate-300 bg-white" 
+                        />
+                        <button onClick={() => fetchOrders(orderSearchEmail)} className="bg-purple-600 text-white font-black text-xs px-4 rounded-xl">Sorgula</button>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-3">
+                      {orders.length === 0 ? (
+                        <div className="text-center py-6 text-slate-400 font-medium">Girilen e-posta adresine ait güncel veya geçmiş sipariş kaydı bulunamadı.</div>
+                      ) : (
+                        orders.map((order, idx) => (
+                          <div key={idx} className="bg-white p-4 rounded-2xl border-2 border-slate-200 text-xs flex flex-col gap-1.5 shadow-sm animate-fadeIn">
+                            <div className="flex justify-between font-black text-slate-900">
+                              <span className="text-purple-700">Sipariş ID: {order.orderId}</span>
+                              <span className="text-emerald-600">₺{order.totalPrice.toLocaleString('tr-TR')}</span>
+                            </div>
+                            <div className="text-[11px] font-bold text-slate-500 flex justify-between border-b pb-1.5">
+                              <span>Alıcı: {order.buyerName} ({order.isGuest ? "Misafir" : "Üye"})</span>
+                              <span>Tarih: {order.date}</span>
+                            </div>
+                            <div className="flex flex-col gap-1 mt-1">
+                              {order.items && order.items.map((item, i) => (
+                                <div key={i} className="text-[11px] font-bold text-slate-700 flex justify-between">
+                                  <span>• {item.name}</span>
+                                  <span>₺{item.price.toLocaleString('tr-TR')}</span>
+                                </div>
+                              ))}
+                            </div>
+                            <div className="text-[10px] font-black tracking-wider uppercase text-purple-700 bg-purple-50 px-2.5 py-1 rounded-lg w-fit mt-2 border border-purple-200 flex items-center gap-1">
+                              <Truck className="w-3 h-3" /> Durum: {order.status}
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* 3. KULLANICI AUTH PANELİ (Kayıt, Giriş, Şifremi Unuttum) */}
+                {activeModal === "auth" && (
+                  <div className="text-sm">
+                    {subModal === "login" && (
+                      <form onSubmit={handleLoginSubmit} className="flex flex-col gap-4">
+                        <p className="text-xs text-slate-500 font-semibold">Hesabınıza giriş yaparak kayıtlı adreslerinizi ve siparişlerinizi yönetin.</p>
+                        <input type="text" required placeholder="Kullanıcı Adı" value={loginForm.username} onChange={(e) => setLoginForm({...loginForm, username: e.target.value})} className="w-full p-3 rounded-xl bg-slate-50 border-2 border-slate-200 text-sm font-semibold" />
+                        <input type="password" required placeholder="Şifre" value={loginForm.password} onChange={(e) => setLoginForm({...loginForm, password: e.target.value})} className="w-full p-3 rounded-xl bg-slate-50 border-2 border-slate-200 text-sm font-semibold" />
+                        <button type="submit" className="w-full bg-purple-600 text-white font-black py-3 rounded-xl shadow-md text-sm">Güvenli Giriş Yap</button>
+                        <button type="button" onClick={() => setSubModal("forgot")} className="text-xs text-purple-700 font-bold hover:underline self-start">🔑 Şifremi Unuttum?</button>
+                      </form>
+                    )}
+
+                    {subModal === "register" && (
+                      <form onSubmit={handleRegisterSubmit} className="flex flex-col gap-3 animate-fadeIn">
+                        <p className="text-xs text-slate-500 font-semibold">Yeni bir profil oluşturarak tüm sipariş geçmişinizi tek panelden takip edin.</p>
+                        <input type="text" required placeholder="İsim Soyisim" value={registerForm.fullname} onChange={(e) => setRegisterForm({...registerForm, fullname: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 border-slate-200 text-xs font-bold" />
+                        <input type="email" required placeholder="E-Posta Adresi" value={registerForm.email} onChange={(e) => setRegisterForm({...registerForm, email: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 border-slate-200 text-xs font-bold" />
+                        <input type="text" required placeholder="Bulunduğunuz İl" value={registerForm.city} onChange={(e) => setRegisterForm({...registerForm, city: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 border-slate-200 text-xs font-bold" />
+                        <input type="tel" required placeholder="Telefon Numarası" value={registerForm.phone} onChange={(e) => setRegisterForm({...registerForm, phone: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 border-slate-200 text-xs font-bold" />
+                        <button type="submit" className="w-full bg-cyan-500 text-white font-black py-3 rounded-xl text-xs uppercase tracking-wide shadow-sm">Kayıt İşlemini Tamamla</button>
+                      </form>
+                    )}
+
+                    {subModal === "forgot" && (
+                      <form onSubmit={handleForgotPassword} className="flex flex-col gap-4 animate-fadeIn">
+                        <h4 className="font-black text-sm text-slate-800 flex items-center gap-1"><Key className="w-4 h-4 text-purple-600" /> Şifre Sıfırlama Merkezi</h4>
+                        <p className="text-xs text-slate-500 font-semibold">Sistemde kayıtlı e-posta adresinizi girerek yeni şifre oluşturma bağlantısı talep edebilirsiniz.</p>
+                        <input type="email" required placeholder="E-Posta Adresiniz" value={forgotEmail} onChange={(e) => setForgotEmail(e.target.value)} className="w-full p-3 rounded-xl bg-slate-50 border-2 border-slate-200 text-xs font-bold" />
+                        <div className="flex gap-2">
+                          <button type="submit" className="flex-1 bg-purple-600 text-white font-black py-2.5 rounded-xl text-xs">Sıfırlama Bağlantısı Gönder</button>
+                          <button type="button" onClick={() => setSubModal("login")} className="px-4 bg-slate-100 text-slate-700 font-bold rounded-xl text-xs">Geri Dön</button>
                         </div>
-                        <button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3 rounded-xl transition-all shadow-md text-xs uppercase tracking-wider mt-2 flex items-center justify-center gap-2">
-                          <CreditCard className="w-4 h-4" /> PayTR ile Şimdi Öde
-                        </button>
                       </form>
                     )}
                   </div>
                 )}
 
-                {/* SİPARİŞ GEÇMİŞİ MODALI (Üyelik & Misafir Siparişleri) */}
-                {activeModal === "orders" && (
-                  <div className="flex flex-col gap-3">
-                    <p className="text-xs text-slate-500 font-bold">Aşağıda gerçekleştirdiğiniz güncel üyelik veya misafir sipariş hareketleri listelenmektedir.</p>
-                    {orders.length === 0 ? (
-                      <div className="text-center py-8 text-slate-400 font-medium">Kayıtlı sipariş geçmişiniz bulunmuyor bebek.</div>
-                    ) : (
-                      <div className="flex flex-col gap-3">
-                        {orders.map((order, idx) => (
-                          <div key={idx} className="bg-slate-50 p-4 rounded-2xl border-2 border-slate-200 text-xs flex flex-col gap-1.5">
-                            <div className="flex justify-between font-black text-slate-900">
-                              <span>Kod: {order.orderId}</span>
-                              <span className="text-purple-700">₺{order.totalPrice.toLocaleString('tr-TR')}</span>
-                            </div>
-                            <div className="text-[11px] font-bold text-slate-600 flex justify-between">
-                              <span>Alıcı: {order.buyerName}</span>
-                              <span>Tarih: {order.date}</span>
-                            </div>
-                            <div className="text-[10px] font-black tracking-wider uppercase text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg w-fit mt-1 border border-emerald-200">
-                              {order.status}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* GİRİŞ YAP FORMU */}
-                {activeModal === "login" && (
-                  <form onSubmit={handleLoginSubmit} className="flex flex-col gap-4">
-                    <p className="text-xs text-slate-500 font-medium">Lütfen kullanıcı adı ve şifrenizi girerek demo hesabınıza erişim sağlayın.</p>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">Kullanıcı Adı</label>
-                      <input type="text" required value={loginForm.username} onChange={(e) => setLoginForm({...loginForm, username: e.target.value})} placeholder="Örn: nuraymutlu" className="w-full p-3 rounded-xl bg-slate-50 border-2 border-slate-200 focus:outline-none focus:border-purple-600 text-sm font-semibold" />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">Şifre</label>
-                      <input type="password" required value={loginForm.password} onChange={(e) => setLoginForm({...loginForm, password: e.target.value})} placeholder="••••••••" className="w-full p-3 rounded-xl bg-slate-50 border-2 border-slate-200 focus:outline-none focus:border-purple-600 text-sm font-semibold" />
-                    </div>
-                    <button type="submit" className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 rounded-xl transition-all shadow-md mt-2 flex items-center justify-center gap-2 text-sm">
-                      Güvenli Giriş Yap
-                    </button>
-                  </form>
-                )}
-
-                {/* ÜYE OL FORMU */}
-                {activeModal === "register" && (
-                  <form onSubmit={handleRegisterSubmit} className="flex flex-col gap-4">
-                    <p className="text-xs text-slate-500 font-medium">Sisteme hızlıca üye olmak için aşağıdaki bilgileri doldurmanız yeterlidir.</p>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">İsim Soyisim</label>
-                      <input type="text" required value={registerForm.fullname} onChange={(e) => setRegisterForm({...registerForm, fullname: e.target.value})} placeholder="Örn: Nuray Mutlu" className="w-full p-3 rounded-xl bg-slate-50 border-2 border-slate-200 focus:outline-none focus:border-cyan-500 text-sm font-semibold" />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">Bulunduğunuz İl</label>
-                      <input type="text" required value={registerForm.city} onChange={(e) => setRegisterForm({...registerForm, city: e.target.value})} placeholder="Örn: Hatay" className="w-full p-3 rounded-xl bg-slate-50 border-2 border-slate-200 focus:outline-none focus:border-cyan-500 text-sm font-semibold" />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">Telefon Numarası</label>
-                      <input type="tel" required value={registerForm.phone} onChange={(e) => setRegisterForm({...registerForm, phone: e.target.value})} placeholder="Örn: 0555 XXXXXXX" className="w-full p-3 rounded-xl bg-slate-50 border-2 border-slate-200 focus:outline-none focus:border-cyan-500 text-sm font-semibold" />
-                    </div>
-                    <button type="submit" className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 rounded-xl transition-all shadow-md mt-2 flex items-center justify-center gap-2 text-sm">
-                      Kayıt İşlemini Tamamla
-                    </button>
-                  </form>
-                )}
-
                 {activeModal === "asistan" && (
                   <div className="flex flex-col gap-4 text-sm">
-                    <p className="text-xs text-slate-500 font-semibold">Havuz bakımı ve modern altyapı hakkında sorularınızı yanıtlayabilirim.</p>
+                    <p className="text-xs text-slate-500 font-semibold">Havuz otomasyon altyapısı ve entegre PayTR mimarimiz hakkında sorularınızı yanıtlayabilirim.</p>
                     <form onSubmit={handleAsistanSorgu} className="flex flex-col gap-2">
-                      <input type="text" value={asistanSoru} onChange={(e) => setAsistanSoru(e.target.value)} placeholder="Örn: Projede state yönetimi nasıl yapıldı?" className="w-full p-3 rounded-xl bg-slate-50 border-2 border-slate-200 focus:outline-none focus:border-purple-500 text-xs text-slate-800 font-bold" />
+                      <input type="text" value={asistanSoru} onChange={(e) => setAsistanSoru(e.target.value)} placeholder="Örn: Projede PayTR entegrasyonu nasıl yapıldı?" className="w-full p-3 rounded-xl bg-slate-50 border-2 border-slate-200 focus:outline-none focus:border-purple-500 text-xs text-slate-800 font-bold" />
                       <button type="submit" className="bg-purple-600 text-white font-black text-xs py-2.5 rounded-xl shadow-sm uppercase">Cevapla</button>
                     </form>
                     {asistanCevap && (
@@ -357,8 +449,8 @@ export default function App() {
 
                 {activeModal === "blog" && (
                   <div className="bg-purple-50/50 border-2 border-purple-100 p-4 rounded-2xl text-xs md:text-sm">
-                    <h4 className="font-black text-slate-900 text-sm mb-1 text-purple-900">📝 PayTR Ödeme Geçidi Altyapı Çalışmaları</h4>
-                    <p className="text-slate-700 mt-2">Bu güncellemede, iFrame üzerinden tetiklenen sanal POS akışları optimize edilmiş ve hem üye hem misafir kullanıcı siparişleri sipariş takip veri tabanına entegre edilmiştir.</p>
+                    <h4 className="font-black text-slate-900 text-sm mb-1 text-purple-900">📝 PayTR iFrame Sanal POS ve Callback Optimizasyon Özetleri</h4>
+                    <p className="text-slate-700 mt-2">Mühendislik ekibimiz, sunucu tarafında oluşturulan SHA256 şifreli hash kodlarını PayTR test gateway sistemine başarıyla bağlamıştır. Hem üyelikli hem de üyeliksiz alışveriş hareketleri izlenebilmektedir.</p>
                   </div>
                 )}
 
@@ -375,7 +467,7 @@ export default function App() {
                   <div className="text-center py-4 flex flex-col items-center gap-3 text-sm">
                     <Truck className="w-8 h-8 text-emerald-600 animate-bounce" />
                     <h4 className="font-black text-slate-900 text-sm">🚚 Siparişiniz PayTR Tarafından Onaylandı!</h4>
-                    <p className="text-xs text-slate-600 font-bold max-w-xs mx-auto">Sipariş paketiniz Arpeta Yazılım altyapı merkezinden paketleme aşamasına geçmiştir. Detayları 'Sipariş Geçmişim' sekmesinden anlık takip edebilirsiniz.</p>
+                    <p className="text-xs text-slate-600 font-bold max-w-xs mx-auto">Sipariş paketiniz Arpeta Yazılım merkezinden paketleme aşamasına geçmiştir. Detayları üst menüdeki 'Sipariş Sorgula' sekmesinden takip edebilirsiniz bebek.</p>
                   </div>
                 )}
               </div>
@@ -398,7 +490,7 @@ export default function App() {
           <span>✦ 1000₺ Üzeri Alışverişlerde Ücretsiz Kargo</span>
           <div className="flex gap-4">
             <span className={`font-black ${isLoggedIn ? 'text-emerald-400' : 'text-cyan-400'}`}>
-              {isLoggedIn ? `● Oturum Açık: ${currentUser?.fullname}` : "● Misafir Girişi / Standart Altyapı Aktif"}
+              {isLoggedIn ? `● Oturum Açık: ${currentUser?.fullname}` : "● Standart Giriş Modu Aktif"}
             </span>
           </div>
         </div>
@@ -413,7 +505,6 @@ export default function App() {
             </div>
           </div>
 
-          {/* ARAMA MOTORU */}
           <div className="flex-1 max-w-lg w-full relative">
             <label className="block text-[11px] font-black text-purple-900 mb-1 tracking-wide uppercase">🔍 Aradığınız ürün nedir?</label>
             <div className="relative">
@@ -421,38 +512,37 @@ export default function App() {
                 type="text" 
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Örn: klor, robot, led lamba, pompa, fıskiye..." 
+                placeholder="Örn: led lamba, şelale, klor, pompa..." 
                 className="w-full pl-5 pr-12 py-3 border-2 border-slate-300 rounded-full focus:outline-none focus:border-cyan-500 bg-slate-50 font-bold text-sm shadow-inner transition-all" 
               />
               <Search className="absolute right-4 top-3.5 text-slate-400 w-5 h-5" />
             </div>
           </div>
 
-          {/* KULLANICI DURUM BUTONLARI (Giriş/Çıkış & Sipariş Takip) */}
+          {/* DİNAMİK HEADER KULLANICI KONTROL ALANLARI */}
           <div className="flex items-center flex-wrap gap-3 text-sm shrink-0">
             {!isLoggedIn ? (
               <>
-                <button type="button" onClick={() => setActiveModal("login")} className="text-slate-700 hover:text-purple-700 flex items-center gap-1 font-extrabold transition-colors border-2 border-slate-200 px-4 py-2 rounded-xl bg-slate-50 cursor-pointer shadow-sm">
-                  <User className="w-4 h-4 text-purple-600" /> Giriş Yap
+                <button type="button" onClick={() => { setActiveModal("auth"); setSubModal("login"); }} className="text-slate-700 hover:text-purple-700 flex items-center gap-1 font-extrabold transition-colors border-2 border-slate-200 px-4 py-2 rounded-xl bg-slate-50 cursor-pointer shadow-sm text-xs">
+                  Giriş Yap
                 </button>
-                <button type="button" onClick={() => setActiveModal("register")} className="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-xl font-extrabold transition-all shadow-sm cursor-pointer text-xs">
+                <button type="button" onClick={() => { setActiveModal("auth"); setSubModal("register"); }} className="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-xl font-extrabold transition-all shadow-sm cursor-pointer text-xs">
                   Üye Ol
                 </button>
               </>
             ) : (
               <>
-                <button type="button" onClick={() => setActiveModal("orders")} className="text-emerald-700 hover:text-emerald-800 flex items-center gap-1 font-extrabold border-2 border-emerald-200 px-4 py-2 rounded-xl bg-emerald-50 cursor-pointer shadow-sm text-xs">
-                  <History className="w-4 h-4" /> Sipariş Geçmişim
+                <button type="button" onClick={() => { setActiveModal("orders"); fetchOrders(currentUser?.email); }} className="text-emerald-700 hover:text-emerald-800 flex items-center gap-1 font-extrabold border-2 border-emerald-200 px-4 py-2 rounded-xl bg-emerald-50 cursor-pointer shadow-sm text-xs">
+                  <History className="w-4 h-4" /> Siparişlerim
                 </button>
                 <button type="button" onClick={handleLogout} className="text-rose-600 hover:text-rose-700 font-extrabold px-3 py-2 border border-rose-200 rounded-xl bg-rose-50 text-xs">
-                  Çıkış Yap
+                  Çıkış
                 </button>
               </>
             )}
             
-            {/* MİSAFİR DURUM BUTONU */}
             <button onClick={() => { setActiveModal("orders"); }} className="px-4 py-2 rounded-xl font-black transition-all shadow-sm border border-purple-600 bg-white text-purple-700 hover:bg-purple-50 text-xs">
-              📋 Sipariş Durumu Sorgula
+              📋 Sipariş Sorgula
             </button>
 
             <div onClick={() => setActiveModal("sepet")} className="relative cursor-pointer text-slate-800 hover:text-purple-700 transition-colors bg-slate-100 p-2.5 rounded-xl border-2 border-slate-200 shadow-sm">
@@ -510,7 +600,6 @@ export default function App() {
               </div>
             </section>
 
-            {/* KATEGORİ ALANI */}
             <div className="bg-white p-5 rounded-2xl shadow-md border-2 border-slate-200 mb-6 flex flex-wrap items-center gap-2">
               <span className="text-xs font-black text-slate-800 mr-2 flex items-center gap-1 uppercase tracking-wide"><Filter className="w-4 h-4 text-purple-700" /> Kategori Seçin:</span>
               {["Hepsi", "Kimyasallar", "Temizlik", "Aydınlatma", "Ekipmanlar", "Pompalar"].map(cat => (
@@ -518,7 +607,7 @@ export default function App() {
               ))}
             </div>
 
-            {/* ÜRÜN GRID - ARTIK TAM 20 ÜRÜN LİSTELENİYOR */}
+            {/* DİNAMİK 20 ÜRÜN LİSTELEME ALANI */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {displayedProducts.length === 0 ? (
                 <div className="col-span-full bg-white p-12 rounded-2xl text-center shadow-inner border-2 border-dashed border-slate-300 font-extrabold text-slate-500">
@@ -530,7 +619,7 @@ export default function App() {
                     <div className="relative">
                       <span className="absolute top-2 left-2 bg-purple-700 text-white text-[10px] font-black px-2 py-1 rounded-md z-10 shadow-md uppercase">{product.tag}</span>
                       <div className="h-48 overflow-hidden bg-slate-100 border-b">
-                        <img src={`https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=500&q=80`} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                        <img src={product.image || `https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=500&q=80`} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                       </div>
                     </div>
                     <div className="p-4 flex-1 flex flex-col justify-between">
@@ -582,7 +671,7 @@ export default function App() {
             </div>
           </div>
         </div>
-        <div className="bg-slate-950 text-center py-4 text-[11px] text-slate-500 border-t border-slate-900 font-bold">&copy; 2026 HavuzMarket. Tüm hakları saklıdır.</div>
+        <div className="bg-slate-950 text-center py-4 text-[11px] text-slate-500 border-t border-slate-900 font-bold">&copy; 2026 HavuzMarket. Tüm Hakları Arpeta Yazılım Adına Saklıdır.</div>
       </footer>
 
     </div>
