@@ -85,7 +85,6 @@ export default function App() {
     setNotification("📦 Siparişiniz Alındı ve Hazırlanıyor! 3 Gün İçinde Kargoda.");
   };
 
-  // ASİSTAN AKILLI SORU SOR CEVAPLAMA VE FİLTRELEME MOTORU
   const handleAsistanSorgu = (e) => {
     e.preventDefault();
     if (!asistanSoru) return;
@@ -110,21 +109,11 @@ export default function App() {
       setAsistanOnerilenUrun(mock20Products.find(p => p.id === 201));
     } else if (soruLower.includes("şelale") || soruLower.includes("fıskiye")) {
       setSearchQuery("Şelale");
-      setAsistanCevap("🤖 Akıllı Asistan: Estetik bir su perdesi dokusu ve masaj keyfi için Paslanmaz Şelale Fıskiyesini öneririm. Mağazada anlık listelendi!");
-      setAsistanCevap("🤖 Akıllı Asistan: Havuzunuza estetik katacak Paslanmaz Şelale ve Jet Nozullarımızı listeledim bebek. Harika bir keyif modu sunar.");
-      setAsistanCevap("🤖 Akıllı Asistan: Havuzunuza modern bir mimari hava katacak olan Lüks Duvar Tipi Şelale Perdesi'ni listeledim canım, inceleyebilirsin.");
-      setAsistanCevap("🤖 Akıllı Asistan: Havuzunuza modern bir hava katacak Paslanmaz Şelale Fıskiyesi listelendi güzelim. Keyif modunuza tam uyum sağlar.");
       setAsistanCevap("🤖 Akıllı Asistan: Harika bir tercih! Lüks Şelale Fıskiyesi modelimiz havuzunuza modern bir hava katarken, su sesiyle harika bir dinginlik sağlar canım. Ürün arka planda listelendi!");
       setAsistanOnerilenUrun(mock20Products.find(p => p.id === 212));
     } else {
       setSearchQuery("");
-      setAsistanCevap("🤖 Akıllı Asistan: Sorunu duydum güzelim! Havuz otomasyon altyapınız, sepet akışınız ve ürünlerimizle ilgili aradığın her şeyi yukarıdaki arama motoruna yazarak veya sol panelden filtreleyerek anında listeyebilirsin.");
-      setAsistanCevap("🤖 Akıllı Asistan: Harika bir soru! Geliştirdiğimiz premium e-ticaret altyapısında sepet yönetimini, PayTR sanal pos simülasyonunu ve ürün akışını asenkron olarak yönetiyoruz güzelim. Arama çubuğuna kelimeler yazarak da ürün süzebilirsin!");
       setAsistanCevap("🤖 Akıllı Asistan: Sorunu anladım güzelim! İstediğin ürünü yukarıdaki arama motoruna yazarak ya da kategorilerden süzerek anında 20 premium ürün arasından bulabilirsin. Arpeta altyapısı hizmetinde!");
-      setAsistanCevap("🤖 Akıllı Asistan: Harika bir soru! Geliştirdiğimiz modern mimaride sepet yönetimini, PayTR sanal pos API simülasyonunu ve ürün akışını asenkron olarak yönetiyoruz güzelim!");
-      setAsistanCevap("🤖 Akıllı Asistan: Havuzunun berraklığı ve ekipman kalitesi için 'klor', 'robot', 'pompa' gibi kelimeleri arama motoruna yazarak akıllı eşleşmeleri görebilirsin canım!");
-      setAsistanCevap("🤖 Akıllı Asistan: Projede state yönetimini ve PayTR sanal pos akışlarını tamamen senkronize ettik güzelim. Merak ettiğin her havuz ürününe vitrinden anında ulaşabilirsin!");
-      setAsistanCevap("🤖 Akıllı Asistan: Havuz otomasyon altyapınız, sepet akışınız ve modern mimarimizle ilgili tüm sorularınızı yanıtlamaya hazırım güzelim. Teknolojiyi deneyimleyin.");
     }
   };
 
@@ -144,7 +133,10 @@ export default function App() {
     setNotification(`📝 Kayıt Başarılı! Hoş geldin ${registerForm.fullname}.`);
   };
 
-  const sepetToplamTutar = cart.reduce((sum, item) => sum + item.price, 0);
+  // Dinamik Kargo ve Toplam Tutar Hesaplama
+  const sepetUrunToplam = cart.reduce((sum, item) => sum + item.price, 0);
+  const kargoUcreti = sepetUrunToplam >= 1000 ? 0 : 75;
+  const sepetToplamTutar = sepetUrunToplam + kargoUcreti;
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-slate-900 flex flex-col justify-between relative antialiased">
@@ -192,9 +184,28 @@ export default function App() {
                             <span className="font-black text-xs text-purple-700 shrink-0">1 adet / ₺{item.price}</span>
                           </div>
                         ))}
-                        <div className="border-t pt-2 flex justify-between items-center font-black text-slate-900 text-sm">
-                          <span>Toplam Ödenecek Tutar:</span>
-                          <span className="text-xl text-purple-700">₺{sepetToplamTutar.toLocaleString('tr-TR')}</span>
+
+                        {/* DİNAMİK 1000TL ÜCRETSİZ KARGO DETAY ALANI */}
+                        <div className="border-t pt-3 flex flex-col gap-1.5 border-dashed">
+                          <div className="flex justify-between items-center text-xs font-bold text-slate-600">
+                            <span>Ürünler Toplamı:</span>
+                            <span>₺{sepetUrunToplam.toLocaleString('tr-TR')}</span>
+                          </div>
+                          <div className="flex justify-between items-center text-xs font-bold text-slate-600">
+                            <span>Kargo Ücreti (1000₺ Üzeri Bedava):</span>
+                            <span className={kargoUcreti === 0 ? "text-emerald-600 font-black" : "text-slate-800"}>
+                              {kargoUcreti === 0 ? "Ücretsiz Kargo" : `₺${kargoUcreti}`}
+                            </span>
+                          </div>
+                          {kargoUcreti === 0 && (
+                            <div className="text-[10px] bg-emerald-50 text-emerald-700 font-black p-2 rounded-xl border border-emerald-200 text-center uppercase tracking-wide mt-1">
+                              🎉 1000₺ Üzeri Alışverişlerde Ücretsiz Kargo Avantajı Uygulandı!
+                            </div>
+                          )}
+                          <div className="flex justify-between items-center font-black text-slate-900 text-base border-t pt-2 mt-1">
+                            <span>Genel Toplam Tutar:</span>
+                            <span className="text-xl text-purple-700">₺{sepetToplamTutar.toLocaleString('tr-TR')}</span>
+                          </div>
                         </div>
 
                         <form onSubmit={handleOrderSubmit} className="mt-2 bg-slate-50 p-4 rounded-2xl border-2 border-purple-200 flex flex-col gap-3">
@@ -236,15 +247,15 @@ export default function App() {
                       <div className="absolute left-6 right-6 top-4 h-1 bg-slate-200 -z-10"></div>
                       <div className="flex flex-col items-center gap-1 bg-white px-2">
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${simulatedOrderStatus === "Hazırlanıyor" || simulatedOrderStatus === "Yola Çıktı" || simulatedOrderStatus === "Tamamlandı" ? 'bg-purple-600 text-white' : 'bg-slate-200'}`}>1</div>
-                        <span className="text-[10px] font-black text-slate-700">Sipariş Hazır</span>
+                        <span className="text-[10px] font-black text-purple-700">Sipariş Alındı</span>
                       </div>
                       <div className="flex flex-col items-center gap-1 bg-white px-2">
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${simulatedOrderStatus === "Yola Çıktı" || simulatedOrderStatus === "Tamamlandı" ? 'bg-purple-600 text-white' : 'bg-slate-200'}`}>2</div>
-                        <span className="text-[10px] font-black text-purple-700">Kargo Yola Çıktı</span>
+                        <span className="text-[10px] font-black text-slate-700">Hazırlanıyor</span>
                       </div>
                       <div className="flex flex-col items-center gap-1 bg-white px-2">
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${simulatedOrderStatus === "Tamamlandı" ? 'bg-purple-600 text-white' : 'bg-slate-200'}`}>3</div>
-                        <span className="text-[10px] font-black text-slate-700">Tamamlandı</span>
+                        <span className="text-[10px] font-black text-slate-700">3 Günde Kargoda</span>
                       </div>
                     </div>
 
@@ -294,7 +305,7 @@ export default function App() {
                   </form>
                 )}
 
-                {/* SÜRECİ ANLATAN YENİ MUAZZAM BLOG YAZISI */}
+                {/* BLOG YAZISI */}
                 {activeModal === "blog" && (
                   <div className="flex flex-col gap-4 text-xs md:text-sm leading-relaxed font-medium text-slate-800">
                     <div className="bg-purple-50/70 border-2 border-purple-100 p-5 rounded-2xl">
@@ -314,11 +325,11 @@ export default function App() {
                     <p className="text-slate-950 font-bold italic bg-cyan-50 p-4 rounded-xl border-2 border-cyan-100 leading-relaxed">
                       "HavuzMarket, modern otomasyon çözümlerinden endüstriyel havuz kimyasallarına kadar uzanan 20 premium ürünüyle, kullanıcılarına uçtan uca kusursuz bir dijital tedarik deneyimi sunmak amacıyla Arpeta Yazılım bünyesinde geliştirilmiştir."
                     </p>
-                    <p className="mt-1">Yapay zeka destekli akıllı karar motorumuz, kullanıcıların anlık ruh hallerine ve havuz durum analizlerine göre en doğru ekipmanı listeler. Güvenli PayTR ödeme geçidi ve şeffaf 3 aşamalı sipariş takip modülümüzle sektörel standartları yeniden belirliyoruz.</p>
+                    <p className="mt-1">Yapay zeka destekli akıllı karar motorumuz, kullanıcıların anlık ruh hallerine and havuz durum analizlerine göre en doğru ekipmanı listeler. Güvenli PayTR ödeme geçidi ve şeffaf 3 aşamalı sipariş takip modülümüzle sektörel standartları yeniden belirliyoruz.</p>
                   </div>
                 )}
 
-                {/* ASİSTANA SORU SOR PANELİ (EKSİK KALAN KISIM TAMAMLANDI) */}
+                {/* ASİSTANA SORU SOR PANELİ */}
                 {activeModal === "asistan" && (
                   <div className="flex flex-col gap-4 text-sm">
                     <p className="text-xs text-slate-500 font-bold">Havuz bakımı, temizliği veya aydınlatma ihtiyaçlarınızı yazın, akıllı asistan anlık süzüp ürün önersin bebek.</p>
@@ -430,7 +441,7 @@ export default function App() {
               ))}
             </div>
 
-            {/* DİNAMİK 20 ÜRÜNLÜK VİTRİN */}
+            {/* DİNAMİK VİTRİN */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {displayedProducts.map(product => (
                 <div key={product.id} className="bg-white rounded-2xl overflow-hidden shadow-md border-2 border-slate-200 flex flex-col justify-between group">
