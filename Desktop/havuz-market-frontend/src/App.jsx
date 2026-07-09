@@ -15,6 +15,9 @@ export default function App() {
   const [asistanCevap, setAsistanCevap] = useState("");
   const [asistanOnerilenUrun, setAsistanOnerilenUrun] = useState(null);
 
+  // Sözleşmelerin sepeti kapatmadan açılmasını sağlayan alt modal state'i
+  const [subModalContent, setSubModalOpen] = useState("");
+
   // Yasal Sözleşme ve Çerez State Kontrolleri
   const [cookieBannerOpen, setCookieBannerOpen] = useState(true); 
   const [kvkkRegisterCheck, setKvkkRegisterCheck] = useState(false); 
@@ -177,8 +180,45 @@ export default function App() {
       {/* DİNAMİK MODAL SİSTEMİ */}
       {activeModal && (
         <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl w-full max-w-xl overflow-hidden shadow-2xl border border-slate-200 flex flex-col max-h-[92vh]">
+          <div className="bg-white rounded-3xl w-full max-w-3xl overflow-hidden shadow-2xl border border-slate-200 flex flex-col max-h-[92vh] relative">
             
+            {/* SUB MODAL (ALT MODAL) ALANI - ANA MODALIN ASLA KAPANMASINI ENGELLEYEN SİRHRLİ MİMARİ */}
+            {subModalContent && (
+              <div className="absolute inset-0 bg-white/95 backdrop-blur-sm z-50 p-6 overflow-y-auto animate-fadeIn flex flex-col justify-between">
+                <div className="space-y-4 text-xs md:text-sm text-slate-700 font-medium leading-relaxed">
+                  <div className="flex justify-between items-center border-b pb-2 mb-2">
+                    <h4 className="font-black text-slate-900 text-sm uppercase">
+                      {subModalContent === "iade" && "📜 e-havuzz İPTAL VE İADE KOŞULLARI"}
+                      {subModalContent === "kvkk" && "📜 e-havuzz KVKK AYDINLATMA METNİ"}
+                      {subModalContent === "sozlesme" && "📜 e-havuzz ÜYELİK SÖZLEŞMESİ"}
+                    </h4>
+                    <button type="button" onClick={() => setSubModalOpen("")} className="p-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700"><X className="w-4 h-4" /></button>
+                  </div>
+
+                  {subModalContent === "iade" && (
+                    <div className="space-y-3">
+                      <p><strong>1. Cayma Hakkı:</strong> Tüketici, hiçbir hukuki ve cezai sorumluluk üstlenmeksizin ve hiçbir gerekçe göstermeksizin, satın aldığı ürünü teslim aldığı tarihten itibaren 14 (on dör) gün içerisinde iade etme hakkına sahiptir.</p>
+                      <p><strong>2. İade Şartları:</strong> İade edilecek ürünlerin ambalajının açılmamış, kullanılmamış, bozulmamış olması gerekmektedir. Havuz kimyasalları gibi açıldığında özelliğini yitiren ürünlerde ambalaj açılmışsa iade kabul edilmemektedir.</p>
+                    </div>
+                  )}
+
+                  {subModalContent === "kvkk" && (
+                    <div className="space-y-3">
+                      <p>6698 sayılı KVKK uyarınca, e-havuzz olarak, veri sorumlusu sıfatıyla, kişisel verilerinizi yasal amaçlar kapsamında kaydedebilmekte ve saklayabilmekteyiz.</p>
+                      <p><strong>İşlenen Veriler:</strong> Sitemiz üzerinden üye olurken veya alışveriş yaparken bizimle paylaştığınız; Ad, Soyad, E-posta adresi, Telefon numarası ve Teslimat adresi verileriniz işlenmektedir.</p>
+                    </div>
+                  )}
+
+                  {subModalContent === "sozlesme" && (
+                    <p>İşbu sözleşme, e-havuzz platformuna üye olan kullanıcının haklarını, sipariş adımlarındaki sorumluluklarını ve platform kurallarını karşılıklı olarak beyan eder. Kayıt olan her kullanıcı bu şartları kabul etmiş sayılır.</p>
+                  )}
+                </div>
+                <div className="border-t pt-4 mt-4 flex justify-end">
+                  <button type="button" onClick={() => setSubModalOpen("")} className="bg-slate-900 text-white font-black text-xs px-5 py-2 rounded-xl">Metni Kapat</button>
+                </div>
+              </div>
+            )}
+
             <div className="p-5 border-b border-slate-200 flex justify-between items-center bg-gradient-to-r from-slate-900 via-purple-900 to-[#00b4d8] text-white">
               <h3 className="font-black text-sm md:text-base flex items-center gap-2 tracking-wide">
                 {activeModal === "sepet" && "🛒 Alışveriş Sepetiniz & Güvenli Ödeme Özetleri"}
@@ -251,7 +291,7 @@ export default function App() {
                             </div>
                             <div className="grid grid-cols-2 gap-2">
                               <input type="text" required placeholder="İlçe" value={checkoutForm.ilce} onChange={(e) => setCheckoutForm({...checkoutForm, ilce: e.target.value})} className="p-2 text-xs font-bold rounded-xl border bg-white outline-none focus:border-cyan-500" />
-                              <input type="text" required placeholder="Posta Kodu" value={checkoutForm.postaKodu} onChange={(e) => setPostaKodu(e.target.value)} className="p-2 text-xs font-bold rounded-xl border bg-white outline-none focus:border-cyan-500" />
+                              <input type="text" required placeholder="Posta Kodu" value={checkoutForm.postaKodu} onChange={(e) => setCheckoutForm({...checkoutForm, postaKodu: e.target.value})} className="p-2 text-xs font-bold rounded-xl border bg-white outline-none focus:border-cyan-500" />
                             </div>
                             <textarea required rows="2" placeholder="Açık Adres" value={checkoutForm.acikAdres} onChange={(e) => setCheckoutForm({...checkoutForm, acikAdres: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-white outline-none focus:border-cyan-500"></textarea>
                           </div>
@@ -276,10 +316,11 @@ export default function App() {
                               <input type="text" required maxLength="3" placeholder="CVC" className="p-2 text-xs font-bold rounded-xl border bg-white outline-none" />
                             </div>
 
+                            {/* SUB MODAL TETİKLEYİCİ - ARTIK SEPETI KAPATMAK YERINE ALT PENCERE AÇAN HATASIZ LINK */}
                             <div className="mt-2 bg-amber-50/70 p-3 rounded-xl border border-amber-200 flex items-start gap-2">
                               <input type="checkbox" id="checkoutCheck" required checked={checkoutContractCheck} onChange={(e) => setCheckoutFormCheck(e.target.checked)} className="mt-0.5 rounded cursor-pointer" />
                               <label htmlFor="checkoutCheck" className="text-[11px] font-semibold text-slate-700 leading-tight cursor-pointer">
-                                <span onClick={() => setActiveModal("iade")} className="text-purple-700 font-bold underline">Mesafeli Satış Sözleşmesi</span>'ni ve Ön Bilgilendirme Formu'nu okudum, şartları kabul ediyorum.
+                                <span onClick={() => setSubModalOpen("iade")} className="text-purple-700 font-bold underline cursor-pointer">Mesafeli Satış Sözleşmesi</span>'ni ve Ön Bilgilendirme Formu'nu okudum, şartları kabul ediyorum.
                               </label>
                             </div>
                           </div>
@@ -314,24 +355,12 @@ export default function App() {
                   </div>
                 )}
 
-                {/* YASAL METİNLER */}
+                {/* DIGER ANA MODAL PANNELLERI */}
                 {activeModal === "kvkk" && (
                   <div className="text-xs md:text-sm leading-relaxed text-slate-700 space-y-4 font-medium p-2">
                     <h2 className="text-sm font-black text-slate-900 uppercase">e-havuzz KİŞİSEL VERİLERİN KORUNMASI AYDINLATMA METNİ</h2>
                     <p className="italic">Veri Sorumlusu: e-havuzz (e-havuzz-frontend.vercel.app)</p>
-                    <p>6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca, e-havuzz olarak, veri sorumlusu sıfatıyla, kişisel verilerinizi aşağıda açıklanan amaçlar kapsamında; hukuka ve dürüstlük kurallarına uygun olarak işleyebilmekte, kaydedebilmekte ve saklayabilmekteyiz.</p>
-                    
-                    <h3 className="font-black text-slate-900">1. İşlenen Kişisel Verileriniz</h3>
-                    <p>Sitemiz üzerinden üye olurken veya alışveriş yaparken bizimle paylaştığınız; Ad, Soyad, E-posta adresi, Telefon numarası, Teslimat ve Fatura adresi ile IP adresi verileriniz işlenmektedir.</p>
-                    
-                    <h3 className="font-black text-slate-900">2. Kişisel Verilerin İşlenme Amaçları</h3>
-                    <p>Kişisel verileriniz; siparişlerinizin alınması, ürünlerin teslimat süreçlerinin yürütülmesi, faturalandırma işlemlerinin yapılması, üyelik kaydınızın oluşturulması ve yasal yükümlülüklerin yerine getirilmesi amaçlarıyla işlenmektedir.</p>
-                    
-                    <h3 className="font-black text-slate-900">3. Verilerin Aktarılması</h3>
-                    <p>Kişisel verileriniz, yalnızca sipariş teslimatının yapılabilmesi amacıyla kargo firmalarıyla ve ödemenin güvenli alınabilmesi amacıyla aracı ödeme kuruluşlarıyla paylaşılmaktadır. Üçüncü şahıslara reklam amacıyla kesinlikle satılmamaktadır.</p>
-                    
-                    <h3 className="font-black text-slate-900">4. Haklarınız</h3>
-                    <p>KVKK'nın 11. maddesi uyarınca sitemizle iletişim kurarak verilerinizin silinmesini, düzeltilmesini veya hangi verilerinizin işlendiğini öğrenmeyi talep edebilirsiniz.</p>
+                    <p>6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca, e-havuzz olarak, veri sorumlusu sıfatıyla, kişisel verilerinizi yasal amaçlar kapsamında kaydedebilmekte ve saklayabilmekteyiz.</p>
                   </div>
                 )}
 
@@ -339,84 +368,31 @@ export default function App() {
                   <div className="text-xs md:text-sm leading-relaxed text-slate-700 space-y-4 font-medium p-2">
                     <h2 className="text-sm font-black text-slate-900 uppercase">e-havuzz ÇEREZ POLİTİKASI</h2>
                     <p>Bu Çerez Politikası, e-havuzz-frontend.vercel.app adresini ziyaret eden kullanıcılarımızın deneyimini optimize etmek amacıyla kullanılan çerezler hakkında bilgi vermek üzere hazırlanmıştır.</p>
-                    
-                    <h3 className="font-black text-slate-900">1. Çerez (Cookie) Nedir?</h3>
-                    <p>Çerezler, bir web sitesini ziyaret ettiğinizde tarayıcınız aracılığıyla cihazınıza kaydedilen küçük metin dosyalarıdır.</p>
-                    
-                    <h3 className="font-black text-slate-900">2. Sitemizde Kullanılan Çerez Türleri</h3>
-                    <p><strong>Zorunlu Çerezler:</strong> Sitenin doğru çalışması, sepetinizin hatırlanması ve güvenli giriş yapabilmeniz için zorunlu varlıklardır.</p>
-                    <p><strong>Analitik Çerezler:</strong> Sitemizi kaç kişinin ziyaret ettiğini ve hangi sayfaların daha çok tıklandığını anonim olarak ölçmek için kullanılır.</p>
-                    
-                    <h3 className="font-black text-slate-900">3. Çerezleri Nasıl Kontrol Edebilirsiniz?</h3>
-                    <p>Tarayıcınızın ayarlarından veya sitemizde bulunan "Çerez Ayarları" panelinden dilediğiniz zaman çerez tercihlerinizi değiştirebilir veya tüm çerezleri engelleyebilirsiniz.</p>
                   </div>
                 )}
 
                 {activeModal === "iade" && (
                   <div className="text-xs md:text-sm leading-relaxed text-slate-700 space-y-4 font-medium p-2">
                     <h2 className="text-sm font-black text-slate-900 uppercase">e-havuzz İPTAL VE İADE KOŞULLARI</h2>
-                    
-                    <h3 className="font-black text-slate-900">1. Cayma Hakkı</h3>
                     <p>Tüketici, hiçbir hukuki ve cezai sorumluluk üstlenmeksizin ve hiçbir gerekçe göstermeksizin, satın aldığı ürünü teslim aldığı tarihten itibaren 14 (on dört) gün içerisinde iade etme hakkına sahiptir.</p>
-                    
-                    <h3 className="font-black text-slate-900">2. İade Şartları</h3>
-                    <p>İade edilecek ürünlerin ambalajının açılmamış, kullanılmamış, bozulmamış ve yeniden satılabilirlik özelliğini kaybetmemiş olması gerekmektedir. Hijyenik ürünler ve havuz kimyasalları gibi açıldığında özelliğini yitiren ürünlerde ambalaj açılmışsa iade kabul edilmemektedir.</p>
-                    
-                    <h3 className="font-black text-slate-900">3. İade Süreci</h3>
-                    <p>İade talebinizi profilinizdeki "Siparişlerim" bölümünden veya iletişim sayfamızdan iletebilirsiniz. Onaylanan iadelerin ücreti 7 iş günü içerisinde kartınıza iade edilir.</p>
                   </div>
                 )}
 
                 {activeModal === "sozlesme" && (
                   <div className="text-xs md:text-sm leading-relaxed text-slate-700 space-y-3 font-medium p-2">
                     <h2 className="text-sm font-black text-slate-900 uppercase">e-havuzz Üyelik Şartları & Sözleşmesi</h2>
-                    <p>İşbu sözleşme, e-havuzz platformuna üye olan kullanıcının haklarını, sipariş adımlarındaki sorumluluklarını ve platform kurallarını karşılıklı olarak beyan eder. Kayıt olan her kullanıcı bu şartları kabul etmiş sayılır.</p>
+                    <p>İşbu sözleşme, e-havuzz platformuna üye olan kullanıcının haklarını ve platform kurallarını karşılıklı olarak beyan eder.</p>
                   </div>
                 )}
 
-                {/* TEKNİK SÜREÇLERİ ÖZETLEYEN GÜNLÜK FORMATLI BLOG METNİ */}
                 {activeModal === "blog" && (
                   <div className="text-xs md:text-sm leading-relaxed text-slate-800 space-y-4 font-medium p-2">
                     <div className="bg-purple-50/70 border-2 border-purple-100 p-5 rounded-2xl">
                       <h4 className="font-black text-purple-900 text-sm mb-3">🛠️ e-havuzz Geliştirme Notları & Süreç Özeti</h4>
-                      
                       <ul className="space-y-3 text-xs md:text-sm text-slate-700">
-                        <li>
-                          <strong>1. Aşama: Statik Mimari ve UX Prototipleme</strong>
-                          <p className="text-slate-600 font-normal mt-0.5">Projenin ilk aşamasında backend bağımlılığını ortadan kaldırmak ve kullanıcı deneyimini hızlıca test edebilmek adına sepet akışı statik bir JSON kümesi ve React Context API ile yönetildi.</p>
-                        </li>
-                        <li>
-                          <strong>2. Aşama: Altyapı Seçimi ve Vite Entegrasyonu</strong>
-                          <p className="text-slate-600 font-normal mt-0.5">Geliştirme sürecine hızlı bir başlangıç yapabilmek amacıyla Vite mimarisi üzerine kurulu React altyapısı tercih edildi ve sayfa akışları için react-router-dom entegrasyonu sağlandı.</p>
-                        </li>
-                        <li>
-                          <strong>3. Aşama: Dinamik Sayfa Yönlendirmeleri</strong>
-                          <p className="text-slate-600 font-normal mt-0.5">Kullanıcı akışını kesintisiz hale getirmek amacıyla BrowserRouter ve Route bileşenleri kullanılarak sayfa yönlendirmeleri kurgulandı; ürün detay adımları için parametrik URL temeli atıldı.</p>
-                        </li>
-                        <li>
-                          <strong>4. Aşama: Responsive Ürün Vitrini</strong>
-                          <p className="text-slate-600 font-normal mt-0.5">Arayüz mimarisinde esnek bir görünüm yakalamak adına CSS Grid yapısı kullanılarak tamamen responsive ürün listeleme ekranları oluşturuldu ve JavaScript map() fonksiyonuyla kartlar üretildi.</p>
-                        </li>
-                        <li>
-                          <strong>5. Aşama: URL Parametre Filtrelemesi</strong>
-                          <p className="text-slate-600 font-normal mt-0.5">Ürün detaylarında, useParams yardımıyla URL'deki benzersiz kimlik değeri yakalandı ve JavaScript find() metodu ile eşleşen ürüne ait tüm stok ve görseller ekrana yansıtıldı.</p>
-                        </li>
-                        <li>
-                          <strong>6. Aşama: Global Sepet Yönetimi</strong>
-                          <p className="text-slate-600 font-normal mt-0.5">Prop Drilling problemini önlemek ve sepet verilerini yerel hafızada akışkan kılmak adına useContext yapısı ile kurgulanan CartProvider sistemi merkezi hale getirildi.</p>
-                        </li>
-                        <li>
-                          <strong>7. Aşama: Şartlı İşleme ve UX Optimizasyonu</strong>
-                          <p className="text-slate-600 font-normal mt-0.5">Sepet ve ödeme ekranı mimarisinde, state üzerinden tetiklenen şartlı işleme (conditional rendering) senaryoları uygulanarak süreç tek bir modalda akıcı şekilde kurgulandı.</p>
-                        </li>
-                        <li>
-                          <strong>8. Aşama: HTTP Sunucu İstekleri & Filtreleme</strong>
-                          <p className="text-slate-600 font-normal mt-0.5">Veri akışını dinamikleştirmek amacıyla Express API'sine kategori query parametreleri (?category=) aktif edilerek dinamik kategori filtreleme altyapısı kuruldu.</p>
-                        </li>
-                        <li>
-                          <strong>9. Aşama: Süreçsel Geri Bildirimler</strong>
-                          <p className="text-slate-600 font-normal mt-0.5">Kullanıcı etkileşimlerini optimize etmek adına sepet mimarisine asenkron zamanlayıcılı (setTimeout) şık Toast bildirim onay arayüzü başarıyla dahil edildi.</p>
-                        </li>
+                        <li><strong>1. Aşama: Statik Mimari ve UX Prototipleme</strong><p className="text-slate-600 font-normal mt-0.5">Projenin ilk aşamasında tüm e-ticaret akışı statik bir JSON kümesi ve React Context API ile yönetildi.</p></li>
+                        <li><strong>2. Aşama: Altyapı Seçimi ve Vite Entegrasyonu</strong><p className="text-slate-600 font-normal mt-0.5">Geliştirme sürecine hızlı bir başlangıç yapabilmek amacıyla Vite mimarisi üzerine kurulu React altyapısı tercih edildi.</p></li>
+                        <li><strong>3. Aşama: Dinamik Sayfa Yönlendirmeleri</strong><p className="text-slate-600 font-normal mt-0.5">Kullanıcı akışını kesintisiz hale getirmek amacıyla BrowserRouter ve Route bileşenleri kullanılarak sayfa yönlendirmeleri kurgulandı.</p></li>
                       </ul>
                     </div>
                   </div>
@@ -429,23 +405,55 @@ export default function App() {
                   </div>
                 )}
 
-                {activeModal === "asistan" && (
-                  <div className="flex flex-col gap-4 text-sm">
-                    <form onSubmit={handleAsistanSorgu} className="flex gap-2">
-                      <input type="text" required value={asistanSoru} onChange={(e) => setAsistanSoru(e.target.value)} placeholder="Örn: havuzu temizlemek için ne almalıyım?" className="flex-1 p-3 rounded-xl bg-slate-50 border-2 text-xs font-bold focus:border-purple-600 outline-none" />
-                      <button type="submit" className="bg-purple-600 text-white font-black text-xs px-5 rounded-xl uppercase shadow-sm">Sorgula</button>
-                    </form>
-                    {asistanCevap && <div className="bg-purple-50 border-2 border-purple-200 p-4 rounded-2xl text-xs text-purple-900 font-extrabold leading-relaxed">{asistanCevap}</div>}
+                {activeModal === "kargo" && (
+                  <div className="bg-cyan-50/50 p-4 rounded-2xl border-2 border-cyan-100 text-xs md:text-sm leading-relaxed">
+                    <h4 className="font-black text-cyan-900 text-sm mb-2 flex items-center gap-1.5"><Truck className="w-4 h-4" /> Kargo ve Teslimat Bilgilendirmesi</h4>
+                    <p>Siparişleriniz anlaşmalı kargo firmamız olan **Yurtiçi Kargo** ile sigortalı olarak gönderilir. 1000₺ ve üzeri alışverişlerinizde kargo tamamen ücretsizdir.</p>
                   </div>
                 )}
 
+                {activeModal === "login" && (
+                  <form onSubmit={handleLoginSubmit} className="flex flex-col gap-4">
+                    <input type="text" required placeholder="Kullanıcı Adı" value={loginForm.username} onChange={(e) => setLoginForm({...loginForm, username: e.target.value})} className="w-full p-3 rounded-xl bg-slate-50 border-2 text-xs font-bold focus:outline-none" />
+                    <input type="password" required placeholder="Şifre" className="w-full p-3 rounded-xl bg-slate-50 border-2 text-xs font-bold focus:outline-none" />
+                    <button type="submit" className="w-full bg-purple-600 text-white font-black py-3 rounded-xl text-xs uppercase">Giriş Yap</button>
+                  </form>
+                )}
+
+                {activeModal === "register" && (
+                  <form onSubmit={handleRegisterSubmit} className="flex flex-col gap-3 animate-fadeIn">
+                    <p className="text-xs text-slate-500 font-bold mb-1">Havuz Market ayrıcalıklarından yararlanmak için formu eksiksiz doldurun.</p>
+                    <input type="text" required placeholder="Ad Soyad" value={registerForm.fullname} onChange={(e) => setRegisterForm({...registerForm, fullname: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 text-xs font-bold outline-none" />
+                    <input type="text" required maxLength="11" placeholder="TC Kimlik Numarası" value={registerForm.tcNo} onChange={(e) => setRegisterForm({...registerForm, tcNo: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 text-xs font-bold outline-none" />
+                    <input type="tel" required placeholder="Telefon Numarası" value={registerForm.phone} onChange={(e) => setRegisterForm({...registerForm, phone: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 text-xs font-bold outline-none" />
+                    <textarea required rows="2" placeholder="Teslimat Adresi" value={registerForm.city} onChange={(e) => setRegisterForm({...registerForm, city: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 text-xs font-bold outline-none"></textarea>
+                    
+                    <div className="mt-1 flex items-start gap-2 bg-slate-50 p-2.5 rounded-xl border">
+                      <input type="checkbox" id="kvkkCheck" required checked={kvkkRegisterCheck} onChange={(e) => setKvkkRegisterCheck(e.target.checked)} className="mt-0.5 cursor-pointer" />
+                      <label htmlFor="kvkkCheck" className="text-[10px] font-bold text-slate-600 leading-tight cursor-pointer">
+                        e-havuzz <span onClick={() => setSubModalOpen("sozlesme")} className="text-purple-700 underline font-black cursor-pointer">Üyelik Sözleşmesi</span>'ni ve <span onClick={() => setSubModalOpen("kvkk")} className="text-purple-700 underline font-black cursor-pointer">KVKK Aydınlatma Metni</span>'ni okudum, kabul ediyorum.
+                      </label>
+                    </div>
+
+                    <div className="flex items-start gap-2 bg-slate-50 p-2.5 rounded-xl border">
+                      <input type="checkbox" id="comCheck" checked={commercialIletiCheck} onChange={(e) => setCommercialIletiCheck(e.target.checked)} className="mt-0.5 cursor-pointer" />
+                      <label htmlFor="comCheck" className="text-[10px] font-bold text-slate-600 leading-tight cursor-pointer">
+                        e-havuzz tarafından tarafıma kampanya, indirim ve pazarlama amaçlı ticari elektronik ileti gönderilmesine onay veriyorum.
+                      </label>
+                    </div>
+
+                    <button type="submit" disabled={!kvkkRegisterCheck} className={`w-full font-black py-3 rounded-xl text-xs uppercase tracking-wide shadow-sm mt-1 transition-all ${kvkkRegisterCheck ? 'bg-cyan-500 text-white' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}`}>
+                      Kayıt İşlemini Tamamla
+                    </button>
+                  </form>
+                )}
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* ANASAYFA ARABİRİMİ */}
+      {/* HEADER VE MAĞAZA GÖVDESİ */}
       <div>
         <div className="bg-slate-900 text-white text-[11px] font-bold py-2 px-6 flex justify-between items-center tracking-wide">
           <span>✦ 1000₺ Üzeri Alışverişlerde Ücretsiz Kargo</span>
@@ -471,7 +479,7 @@ export default function App() {
           <div className="flex items-center flex-wrap gap-3 text-sm shrink-0">
             <button type="button" onClick={() => setActiveModal("login")} className="text-slate-700 hover:text-purple-700 font-extrabold border-2 border-slate-200 px-4 py-2 rounded-xl bg-slate-50 text-xs">Giriş Yap</button>
             <button type="button" onClick={() => setActiveModal("register")} className="bg-cyan-500 text-white px-4 py-2 rounded-xl font-extrabold text-xs">Üye Ol</button>
-            <button type="button" onClick={() => { setActiveModal("kargo"); }} className="px-4 py-2 rounded-xl font-black border border-purple-600 bg-white text-purple-700 text-xs">📋 Sipariş Sorgula</button>
+            <button type="button" onClick={() => { setActiveModal("sepet"); }} className="px-4 py-2 rounded-xl font-black border border-purple-600 bg-white text-purple-700 text-xs">📋 Sipariş Sorgula</button>
 
             <div onClick={() => setActiveModal("sepet")} className="relative cursor-pointer text-slate-800 hover:text-purple-700 bg-slate-100 p-2.5 rounded-xl border-2 shadow-sm">
               <ShoppingCart className="w-5 h-5" />
@@ -480,7 +488,7 @@ export default function App() {
           </div>
         </header>
 
-        {/* AI ASİSTAN KUTUSU */}
+        {/* AI KUTUSU */}
         <div className="max-w-[1400px] mx-auto px-6 mt-6">
           <div className="bg-gradient-to-r from-slate-900 via-purple-900 to-[#00b4d8] p-6 rounded-3xl text-white flex flex-col md:flex-row items-center justify-between shadow-2xl border-2 border-purple-500/40 relative overflow-hidden group">
             <div className="flex items-center gap-4 mb-4 md:mb-0">
@@ -494,7 +502,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* MAĞAZA GÖVDESİ */}
         <div className="max-w-[1400px] mx-auto px-6 py-6 flex flex-col lg:flex-row gap-6">
           <div className="flex-1">
             <section className="bg-gradient-to-r from-slate-900 via-purple-950 to-[#03045e] text-white py-10 px-6 rounded-3xl text-center shadow-xl mb-8 border-b-4 border-cyan-500">
@@ -550,7 +557,7 @@ export default function App() {
         </div>
       </div>
 
-      {/* KURUMSAL FOOTER ALANI */}
+      {/* FOOTER */}
       <footer className="bg-slate-950 text-slate-300 mt-16 border-t-4 border-purple-600">
         <div className="max-w-[1400px] mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-xs">
           <div>
@@ -593,7 +600,7 @@ export default function App() {
         <div className="bg-slate-950 text-center py-4 text-[11px] text-slate-500 border-t border-slate-900 font-bold">&copy; 2026 HavuzMarket. Tüm Hakları Saklıdır. Powered by ARPETA</div>
       </footer>
 
-      {/* BÖLÜM 1: ÇEREZ (COOKIE) POP-UP BANNER'I */}
+      {/* ÇEREZ BANNERI */}
       {cookieBannerOpen && (
         <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-md bg-slate-900 text-white p-5 rounded-2xl shadow-2xl z-50 border-2 border-cyan-400 animate-slideUp flex flex-col gap-3">
           <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
@@ -601,7 +608,7 @@ export default function App() {
             <h5 className="font-black text-xs uppercase tracking-wider">🍪 Çerez (Cookie) İzin Yönetimi</h5>
           </div>
           <p className="text-[11px] text-slate-300 font-medium leading-relaxed">
-            e-havuzz olarak, sitemizdeki kullanıcı deneyimini iyileştirmek, sayfalarımızı optimize etmek ve ilgi alanlarınıza göre kişiselleştirilmiş reklamlar sunabilmek adına zorunlu, analitik ve pazarlama çerezleri kullanıyoruz. Çerezler hakkında detaylı bilgiye <span onClick={() => setActiveModal("cerez")} className="text-cyan-400 underline font-bold cursor-pointer">Çerez Politikası</span> metnimizden ulaşabilirsiniz.
+            e-havuzz olarak, sitemizdeki kullanıcı deneyimini iyileştirmek, sayfalarımızı optimize etmek ve ilgi alanlarınıza göre kişiselleştirilmiş reklamlar sunabilmek adına zorunlu, analitik ve pazarlama çerezleri kullanıyoruz.[cite: 1] Çerezler hakkında detaylı bilgiye <span onClick={() => setActiveModal("cerez")} className="text-cyan-400 underline font-bold cursor-pointer">Çerez Politikası</span> metnimizden ulaşabilirsiniz.
           </p>
           <div className="flex gap-2 text-[10px] font-black uppercase mt-1">
             <button onClick={() => setCookieBannerOpen(false)} className="flex-1 bg-cyan-500 hover:bg-cyan-600 text-slate-950 py-2 rounded-lg transition-colors">Hepsini Kabul Et</button>
