@@ -77,17 +77,13 @@ export default function App() {
     setNotification(`✅ ${product.name} sepete eklendi!`);
   };
 
-  // ÇÖKME RİSKİ SIFIRLANAN YENİ ÖDEME TETİKLEYİCİSİ
-  const handlePaymentSimulation = (status) => {
-    if (status === "success") {
-      setCart([]);
-      setSimulatedOrderStatus("Hazırlanıyor"); 
-      setActiveModal("kargo"); 
-      setNotification("💳 PayTR Ödemesi Başarılı! Siparişiniz Alındı ve Hazırlanıyor.");
-    } else {
-      alert("❌ PayTR Ödeme Hatası: Kart bakiyesi yetersiz veya geçersiz kart bilgisi!");
-      setNotification("❌ Ödeme başarısız oldu. Lütfen bilgilerinizi kontrol edin.");
-    }
+  // GERÇEK FORM ONSUBMIT YAPISINA BAĞLANAN VE CRASH RİSKİ OLMAYAN GÜVENLİ METHOD
+  const handleOrderSubmit = (e) => {
+    e.preventDefault(); // Sayfa yenilenmesini engeller
+    setCart([]);
+    setSimulatedOrderStatus("Hazırlanıyor"); 
+    setActiveModal("kargo"); 
+    setNotification("💳 PayTR Ödemesi Başarılı! Siparişiniz Alındı ve Hazırlanıyor.");
   };
 
   const handleLoginSubmit = (e) => {
@@ -210,30 +206,32 @@ export default function App() {
                           </div>
                         </div>
 
-                        <div className="mt-2 bg-slate-50 p-4 rounded-2xl border-2 border-purple-200 flex flex-col gap-3">
+                        {/* GERÇEK VE GÜVENLİ ONSUBMIT FORM ALANI */}
+                        <form onSubmit={handleOrderSubmit} className="mt-2 bg-slate-50 p-4 rounded-2xl border-2 border-purple-200 flex flex-col gap-3">
                           <span className="font-black text-xs text-purple-900 uppercase flex items-center gap-1">🔒 PayTR Güvenli Ödeme Altyapısı</span>
                           <div>
                             <label className="block text-[10px] font-black uppercase text-slate-500 mb-0.5">Kart Üzerindeki İsim</label>
-                            <input type="text" placeholder="NURAY MUTLU" value={cardInfo.name} onChange={(e) => setCardInfo({...cardInfo, name: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-white focus:border-purple-600 outline-none" />
+                            <input type="text" required placeholder="NURAY MUTLU" value={cardInfo.name} onChange={(e) => setCardInfo({...cardInfo, name: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-white focus:border-purple-600 outline-none" />
                           </div>
                           <div>
                             <label className="block text-[10px] font-black uppercase text-slate-500 mb-0.5">Kart Numarası</label>
-                            <input type="text" maxLength="16" placeholder="4000 1234 5678 9010" value={cardInfo.number} onChange={(e) => setCardInfo({...cardInfo, number: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-white focus:border-purple-600 outline-none" />
+                            <input type="text" required maxLength="16" placeholder="4000123456789010" value={cardInfo.number} onChange={(e) => setCardInfo({...cardInfo, number: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-white focus:border-purple-600 outline-none" />
                           </div>
                           <div className="grid grid-cols-2 gap-2">
-                            <input type="text" placeholder="MM/YY" className="w-full p-2 text-xs font-bold rounded-xl border bg-white focus:border-purple-600 outline-none" />
-                            <input type="text" maxLength="3" placeholder="CVC" className="w-full p-2 text-xs font-bold rounded-xl border bg-white focus:border-purple-600 outline-none" />
+                            <div>
+                              <label className="block text-[10px] font-black uppercase text-slate-500 mb-0.5">Son Kullanma</label>
+                              <input type="text" required placeholder="12/29" className="w-full p-2 text-xs font-bold rounded-xl border border-slate-300 bg-white" />
+                            </div>
+                            <div>
+                              <label className="block text-[10px] font-black uppercase text-slate-500 mb-0.5">CVC</label>
+                              <input type="text" required placeholder="000" className="w-full p-2 text-xs font-bold rounded-xl border border-slate-300 bg-white" />
+                            </div>
                           </div>
                           
-                          <div className="grid grid-cols-2 gap-2 mt-2">
-                            <button type="button" onClick={() => handlePaymentSimulation("success")} className="bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3 rounded-xl transition-all shadow-md text-xs uppercase tracking-wider flex items-center justify-center gap-1">
-                              ✔ Ödemeyi Onayla
-                            </button>
-                            <button type="button" onClick={() => handlePaymentSimulation("fail")} className="bg-rose-600 hover:bg-rose-700 text-white font-black py-3 rounded-xl transition-all shadow-md text-xs uppercase tracking-wider flex items-center justify-center gap-1">
-                              ❌ Ödemeyi Reddet
-                            </button>
-                          </div>
-                        </div>
+                          <button type="submit" className="w-full bg-purple-600 hover:bg-cyan-500 text-white font-black py-3 rounded-xl transition-all shadow-md text-xs uppercase tracking-wider mt-2 flex items-center justify-center gap-2">
+                            <CreditCard className="w-4 h-4" /> Siparişi Onayla ve Öde ➔
+                          </button>
+                        </form>
                       </div>
                     )}
                   </div>
@@ -426,7 +424,7 @@ export default function App() {
               ))}
             </div>
 
-            {/* DİNAMİK VİTRİN */}
+            {/* VİTRİN */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {displayedProducts.map(product => (
                 <div key={product.id} className="bg-white rounded-2xl overflow-hidden shadow-md border-2 border-slate-200 flex flex-col justify-between group">
