@@ -67,7 +67,7 @@ export default function App() {
   useEffect(() => {
     if (notification) {
       const timer = setTimeout(() => setNotification(""), 4000);
-      return () => setTimeout(timer);
+      return () => clearTimeout(timer);
     }
   }, [notification]);
 
@@ -177,7 +177,7 @@ export default function App() {
       {/* DİNAMİK MODAL SİSTEMİ */}
       {activeModal && (
         <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl w-full max-w-3xl overflow-hidden shadow-2xl border border-slate-200 flex flex-col max-h-[92vh]">
+          <div className="bg-white rounded-3xl w-full max-w-xl overflow-hidden shadow-2xl border border-slate-200 flex flex-col max-h-[92vh]">
             
             <div className="p-5 border-b border-slate-200 flex justify-between items-center bg-gradient-to-r from-slate-900 via-purple-900 to-[#00b4d8] text-white">
               <h3 className="font-black text-sm md:text-base flex items-center gap-2 tracking-wide">
@@ -205,7 +205,6 @@ export default function App() {
                 {activeModal === "sepet" && (
                   <div className="text-sm">
                     {paymentSuccess ? (
-                      /* SİPARİŞ BAŞARILI EKRANI (Bölüm 3 & image_c6e0b0.png) */
                       <div className="text-center py-6 flex flex-col items-center gap-5 animate-fadeIn">
                         <div className="w-14 h-14 bg-cyan-100 rounded-full flex items-center justify-center border-2 border-cyan-400">
                           <CheckCircle className="w-8 h-8 text-cyan-600" />
@@ -252,7 +251,7 @@ export default function App() {
                             </div>
                             <div className="grid grid-cols-2 gap-2">
                               <input type="text" required placeholder="İlçe" value={checkoutForm.ilce} onChange={(e) => setCheckoutForm({...checkoutForm, ilce: e.target.value})} className="p-2 text-xs font-bold rounded-xl border bg-white outline-none focus:border-cyan-500" />
-                              <input type="text" required placeholder="Posta Kodu" value={checkoutForm.postaKodu} onChange={(e) => setCheckoutForm({...checkoutForm, postaKodu: e.target.value})} className="p-2 text-xs font-bold rounded-xl border bg-white outline-none focus:border-cyan-500" />
+                              <input type="text" required placeholder="Posta Kodu" value={checkoutForm.postaKodu} onChange={(e) => setPostaKodu(e.target.value)} className="p-2 text-xs font-bold rounded-xl border bg-white outline-none focus:border-cyan-500" />
                             </div>
                             <textarea required rows="2" placeholder="Açık Adres" value={checkoutForm.acikAdres} onChange={(e) => setCheckoutForm({...checkoutForm, acikAdres: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-white outline-none focus:border-cyan-500"></textarea>
                           </div>
@@ -277,11 +276,10 @@ export default function App() {
                               <input type="text" required maxLength="3" placeholder="CVC" className="p-2 text-xs font-bold rounded-xl border bg-white outline-none" />
                             </div>
 
-                            {/* BÖLÜM 3: ÖDEME ÖNCESİ SÖZLEŞME ONAYI */}
                             <div className="mt-2 bg-amber-50/70 p-3 rounded-xl border border-amber-200 flex items-start gap-2">
                               <input type="checkbox" id="checkoutCheck" required checked={checkoutContractCheck} onChange={(e) => setCheckoutFormCheck(e.target.checked)} className="mt-0.5 rounded cursor-pointer" />
                               <label htmlFor="checkoutCheck" className="text-[11px] font-semibold text-slate-700 leading-tight cursor-pointer">
-                                <span onClick={() => setActiveModal("iade")} className="text-purple-700 font-bold underline">Mesafeli Satış Sözleşmesi</span>'ni ve Ön Bilgilendirme Formu'nu okudum, şartları kabul ediyorum. [cite: 42]
+                                <span onClick={() => setActiveModal("iade")} className="text-purple-700 font-bold underline">Mesafeli Satış Sözleşmesi</span>'ni ve Ön Bilgilendirme Formu'nu okudum, şartları kabul ediyorum.
                               </label>
                             </div>
                           </div>
@@ -316,56 +314,56 @@ export default function App() {
                   </div>
                 )}
 
-                {/* BÖLÜM 4: REHBERDEKİ KURUMSAL TASLAK METİNLER (MODAL GÖRÜNÜMÜ) */}
+                {/* YASAL METİNLER */}
                 {activeModal === "kvkk" && (
                   <div className="text-xs md:text-sm leading-relaxed text-slate-700 space-y-4 font-medium p-2">
-                    <h2 className="text-sm font-black text-slate-900 uppercase">e-havuzz KİŞİSEL VERİLERİN KORUNMASI AYDINLATMA METNİ</h2> [cite: 50]
-                    <p className="italic">Veri Sorumlusu: e-havuzz (e-havuzz-frontend.vercel.app)</p> [cite: 51]
-                    <p>6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca, e-havuzz olarak, veri sorumlusu sıfatıyla, kişisel verilerinizi aşağıda açıklanan amaçlar kapsamında; hukuka ve dürüstlük kurallarına uygun olarak işleyebilmekte, kaydedebilmekte ve saklayabilmekteyiz. [cite: 52, 53]</p>
+                    <h2 className="text-sm font-black text-slate-900 uppercase">e-havuzz KİŞİSEL VERİLERİN KORUNMASI AYDINLATMA METNİ</h2>
+                    <p className="italic">Veri Sorumlusu: e-havuzz (e-havuzz-frontend.vercel.app)</p>
+                    <p>6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca, e-havuzz olarak, veri sorumlusu sıfatıyla, kişisel verilerinizi aşağıda açıklanan amaçlar kapsamında; hukuka ve dürüstlük kurallarına uygun olarak işleyebilmekte, kaydedebilmekte ve saklayabilmekteyiz.</p>
                     
-                    <h3 className="font-black text-slate-900">1. İşlenen Kişisel Verileriniz</h3> [cite: 54]
-                    <p>Sitemiz üzerinden üye olurken veya alışveriş yaparken bizimle paylaştığınız; Ad, Soyad, E-posta adresi, Telefon numarası, Teslimat ve Fatura adresi ile IP adresi verileriniz işlenmektedir. [cite: 55]</p>
+                    <h3 className="font-black text-slate-900">1. İşlenen Kişisel Verileriniz</h3>
+                    <p>Sitemiz üzerinden üye olurken veya alışveriş yaparken bizimle paylaştığınız; Ad, Soyad, E-posta adresi, Telefon numarası, Teslimat ve Fatura adresi ile IP adresi verileriniz işlenmektedir.</p>
                     
-                    <h3 className="font-black text-slate-900">2. Kişisel Verilerin İşlenme Amaçları</h3> [cite: 56]
-                    <p>Kişisel verileriniz; siparişlerinizin alınması, ürünlerin teslimat süreçlerinin yürütülmesi, faturalandırma işlemlerinin yapılması, üyelik kaydınızın oluşturulması ve yasal yükümlülüklerin yerine getirilmesi amaçlarıyla işlenmektedir. [cite: 57]</p>
+                    <h3 className="font-black text-slate-900">2. Kişisel Verilerin İşlenme Amaçları</h3>
+                    <p>Kişisel verileriniz; siparişlerinizin alınması, ürünlerin teslimat süreçlerinin yürütülmesi, faturalandırma işlemlerinin yapılması, üyelik kaydınızın oluşturulması ve yasal yükümlülüklerin yerine getirilmesi amaçlarıyla işlenmektedir.</p>
                     
-                    <h3 className="font-black text-slate-900">3. Verilerin Aktarılması</h3> [cite: 58]
-                    <p>Kişisel verileriniz, yalnızca sipariş teslimatının yapılabilmesi amacıyla kargo firmalarıyla ve ödemenin güvenli alınabilmesi amacıyla aracı ödeme kuruluşlarıyla paylaşılmaktadır. Üçüncü şahıslara reklam amacıyla kesinlikle satılmamaktadır. [cite: 59, 60]</p>
+                    <h3 className="font-black text-slate-900">3. Verilerin Aktarılması</h3>
+                    <p>Kişisel verileriniz, yalnızca sipariş teslimatının yapılabilmesi amacıyla kargo firmalarıyla ve ödemenin güvenli alınabilmesi amacıyla aracı ödeme kuruluşlarıyla paylaşılmaktadır. Üçüncü şahıslara reklam amacıyla kesinlikle satılmamaktadır.</p>
                     
-                    <h3 className="font-black text-slate-900">4. Haklarınız</h3> [cite: 61]
-                    <p>KVKK'nın 11. maddesi uyarınca sitemizle iletişim kurarak verilerinizin silinmesini, düzeltilmesini veya hangi verilerinizin işlendiğini öğrenmeyi talep edebilirsiniz. [cite: 62]</p>
+                    <h3 className="font-black text-slate-900">4. Haklarınız</h3>
+                    <p>KVKK'nın 11. maddesi uyarınca sitemizle iletişim kurarak verilerinizin silinmesini, düzeltilmesini veya hangi verilerinizin işlendiğini öğrenmeyi talep edebilirsiniz.</p>
                   </div>
                 )}
 
                 {activeModal === "cerez" && (
                   <div className="text-xs md:text-sm leading-relaxed text-slate-700 space-y-4 font-medium p-2">
-                    <h2 className="text-sm font-black text-slate-900 uppercase">e-havuzz ÇEREZ POLİTİKASI</h2> [cite: 64]
-                    <p>Bu Çerez Politikası, e-havuzz-frontend.vercel.app adresini ziyaret eden kullanıcılarımızın deneyimini optimize etmek amacıyla kullanılan çerezler hakkında bilgi vermek üzere hazırlanmıştır. [cite: 65]</p>
+                    <h2 className="text-sm font-black text-slate-900 uppercase">e-havuzz ÇEREZ POLİTİKASI</h2>
+                    <p>Bu Çerez Politikası, e-havuzz-frontend.vercel.app adresini ziyaret eden kullanıcılarımızın deneyimini optimize etmek amacıyla kullanılan çerezler hakkında bilgi vermek üzere hazırlanmıştır.</p>
                     
-                    <h3 className="font-black text-slate-900">1. Çerez (Cookie) Nedir?</h3> [cite: 66]
-                    <p>Çerezler, bir web sitesini ziyaret ettiğinizde tarayıcınız aracılığıyla cihazınıza kaydedilen küçük metin dosyalarıdır. [cite: 67]</p>
+                    <h3 className="font-black text-slate-900">1. Çerez (Cookie) Nedir?</h3>
+                    <p>Çerezler, bir web sitesini ziyaret ettiğinizde tarayıcınız aracılığıyla cihazınıza kaydedilen küçük metin dosyalarıdır.</p>
                     
-                    <h3 className="font-black text-slate-900">2. Sitemizde Kullanılan Çerez Türleri</h3> [cite: 68]
-                    <p><strong>Zorunlu Çerezler:</strong> Sitenin doğru çalışması, sepetinizin hatırlanması ve güvenli giriş yapabilmeniz için zorunludur. [cite: 69]</p>
-                    <p><strong>Analitik Çerezler:</strong> Sitemizi kaç kişinin ziyaret ettiğini ve hangi sayfaların daha çok tıklandığını anonim olarak ölçmek için kullanılır. [cite: 70]</p>
+                    <h3 className="font-black text-slate-900">2. Sitemizde Kullanılan Çerez Türleri</h3>
+                    <p><strong>Zorunlu Çerezler:</strong> Sitenin doğru çalışması, sepetinizin hatırlanması ve güvenli giriş yapabilmeniz için zorunlu varlıklardır.</p>
+                    <p><strong>Analitik Çerezler:</strong> Sitemizi kaç kişinin ziyaret ettiğini ve hangi sayfaların daha çok tıklandığını anonim olarak ölçmek için kullanılır.</p>
                     
-                    <h3 className="font-black text-slate-900">3. Çerezleri Nasıl Kontrol Edebilirsiniz?</h3> [cite: 71]
-                    <p>Tarayıcınızın ayarlarından veya sitemizde bulunan "Çerez Ayarları" panelinden dilediğiniz zaman çerez tercihlerinizi değiştirebilir veya tüm çerezleri engelleyebilirsiniz. [cite: 72]</p>
+                    <h3 className="font-black text-slate-900">3. Çerezleri Nasıl Kontrol Edebilirsiniz?</h3>
+                    <p>Tarayıcınızın ayarlarından veya sitemizde bulunan "Çerez Ayarları" panelinden dilediğiniz zaman çerez tercihlerinizi değiştirebilir veya tüm çerezleri engelleyebilirsiniz.</p>
                   </div>
                 )}
 
                 {activeModal === "iade" && (
                   <div className="text-xs md:text-sm leading-relaxed text-slate-700 space-y-4 font-medium p-2">
-                    <h2 className="text-sm font-black text-slate-900 uppercase">e-havuzz İPTAL VE İADE KOŞULLARI</h2> [cite: 74]
+                    <h2 className="text-sm font-black text-slate-900 uppercase">e-havuzz İPTAL VE İADE KOŞULLARI</h2>
                     
-                    <h3 className="font-black text-slate-900">1. Cayma Hakkı</h3> [cite: 75]
-                    <p>Tüketici, hiçbir hukuki ve cezai sorumluluk üstlenmeksizin ve hiçbir gerekçe göstermeksizin, satın aldığı ürünü teslim aldığı tarihten itibaren 14 (on dört) gün içerisinde iade etme hakkına sahiptir. [cite: 76]</p>
+                    <h3 className="font-black text-slate-900">1. Cayma Hakkı</h3>
+                    <p>Tüketici, hiçbir hukuki ve cezai sorumluluk üstlenmeksizin ve hiçbir gerekçe göstermeksizin, satın aldığı ürünü teslim aldığı tarihten itibaren 14 (on dört) gün içerisinde iade etme hakkına sahiptir.</p>
                     
-                    <h3 className="font-black text-slate-900">2. İade Şartları</h3> [cite: 77]
-                    <p>İade edilecek ürünlerin ambalajının açılmamış, kullanılmamış, bozulmamış ve yeniden satılabilirlik özelliğini kaybetmemiş olması gerekmektedir. Hijyenik ürünler ve havuz kimyasalları gibi açıldığında özelliğini yitiren ürünlerde ambalaj açılmışsa iade kabul edilmemektedir. [cite: 78, 79]</p>
+                    <h3 className="font-black text-slate-900">2. İade Şartları</h3>
+                    <p>İade edilecek ürünlerin ambalajının açılmamış, kullanılmamış, bozulmamış ve yeniden satılabilirlik özelliğini kaybetmemiş olması gerekmektedir. Hijyenik ürünler ve havuz kimyasalları gibi açıldığında özelliğini yitiren ürünlerde ambalaj açılmışsa iade kabul edilmemektedir.</p>
                     
-                    <h3 className="font-black text-slate-900">3. İade Süreci</h3> [cite: 80]
-                    <p>İade talebinizi profilinizdeki "Siparişlerim" bölümünden veya iletişim sayfamızdan iletebilirsiniz. Onaylanan iadelerin ücreti 7 iş günü içerisinde kartınıza iade edilir. [cite: 81]</p>
+                    <h3 className="font-black text-slate-900">3. İade Süreci</h3>
+                    <p>İade talebinizi profilinizdeki "Siparişlerim" bölümünden veya iletişim sayfamızdan iletebilirsiniz. Onaylanan iadelerin ücreti 7 iş günü içerisinde kartınıza iade edilir.</p>
                   </div>
                 )}
 
@@ -376,7 +374,7 @@ export default function App() {
                   </div>
                 )}
 
-                {/* YENİ REDESIGN: MÜHENDİSLİK SÜRECİNİ ADIM ADIM ANLATAN DÜZENLİ BLOG METNİ */}
+                {/* TEKNİK SÜREÇLERİ ÖZETLEYEN GÜNLÜK FORMATLI BLOG METNİ */}
                 {activeModal === "blog" && (
                   <div className="text-xs md:text-sm leading-relaxed text-slate-800 space-y-4 font-medium p-2">
                     <div className="bg-purple-50/70 border-2 border-purple-100 p-5 rounded-2xl">
@@ -447,7 +445,7 @@ export default function App() {
         </div>
       )}
 
-      {/* ANA SAYFA TASARIMI */}
+      {/* ANASAYFA ARABİRİMİ */}
       <div>
         <div className="bg-slate-900 text-white text-[11px] font-bold py-2 px-6 flex justify-between items-center tracking-wide">
           <span>✦ 1000₺ Üzeri Alışverişlerde Ücretsiz Kargo</span>
@@ -473,7 +471,7 @@ export default function App() {
           <div className="flex items-center flex-wrap gap-3 text-sm shrink-0">
             <button type="button" onClick={() => setActiveModal("login")} className="text-slate-700 hover:text-purple-700 font-extrabold border-2 border-slate-200 px-4 py-2 rounded-xl bg-slate-50 text-xs">Giriş Yap</button>
             <button type="button" onClick={() => setActiveModal("register")} className="bg-cyan-500 text-white px-4 py-2 rounded-xl font-extrabold text-xs">Üye Ol</button>
-            <button type="button" onClick={() => { setActiveModal("sepet"); }} className="px-4 py-2 rounded-xl font-black border border-purple-600 bg-white text-purple-700 text-xs">📋 Sipariş Sorgula</button>
+            <button type="button" onClick={() => { setActiveModal("kargo"); }} className="px-4 py-2 rounded-xl font-black border border-purple-600 bg-white text-purple-700 text-xs">📋 Sipariş Sorgula</button>
 
             <div onClick={() => setActiveModal("sepet")} className="relative cursor-pointer text-slate-800 hover:text-purple-700 bg-slate-100 p-2.5 rounded-xl border-2 shadow-sm">
               <ShoppingCart className="w-5 h-5" />
@@ -482,20 +480,21 @@ export default function App() {
           </div>
         </header>
 
-        {/* AI MOTORU KUTUSU */}
+        {/* AI ASİSTAN KUTUSU */}
         <div className="max-w-[1400px] mx-auto px-6 mt-6">
           <div className="bg-gradient-to-r from-slate-900 via-purple-900 to-[#00b4d8] p-6 rounded-3xl text-white flex flex-col md:flex-row items-center justify-between shadow-2xl border-2 border-purple-500/40 relative overflow-hidden group">
             <div className="flex items-center gap-4 mb-4 md:mb-0">
               <div className="bg-gradient-to-br from-amber-400 to-purple-600 p-3 rounded-2xl shadow-lg shrink-0"><Sparkles className="w-6 h-6 text-white" /></div>
               <div>
                 <h4 className="font-black text-lg tracking-wide">Arpeta AI Akıllı Karar Motoru Aktif!</h4>
-                <p className="text-xs text-purple-100 font-bold max-w-xl mt-1 leading-relaxed">"Merhaba! Havuz otomasyon altyapınız, sepet akışınız ve modern mimarimizle ilgili tüm sorularınızı yanıtlamaya hazırım güzelim."</p>
+                <p className="text-xs text-purple-100 font-bold max-w-xl mt-1 leading-relaxed">"Merhaba! Havuz otomasyon altyapınız, sepet akışınız ve modern mimarimizle ilgili tüm sorularınızı yanıtlamaya hazırım."</p>
               </div>
             </div>
             <button onClick={() => setActiveModal("asistan")} className="w-full md:w-auto bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 font-black text-xs px-6 py-4 rounded-xl hover:scale-105 transition-all shadow-xl uppercase shrink-0">🚀 ASİSTANA SORU SOR</button>
           </div>
         </div>
 
+        {/* MAĞAZA GÖVDESİ */}
         <div className="max-w-[1400px] mx-auto px-6 py-6 flex flex-col lg:flex-row gap-6">
           <div className="flex-1">
             <section className="bg-gradient-to-r from-slate-900 via-purple-950 to-[#03045e] text-white py-10 px-6 rounded-3xl text-center shadow-xl mb-8 border-b-4 border-cyan-500">
@@ -551,7 +550,7 @@ export default function App() {
         </div>
       </div>
 
-      {/* YASAL KURALLARA TAM UYUMLU KURUMSAL FOOTER ALANI */}
+      {/* KURUMSAL FOOTER ALANI */}
       <footer className="bg-slate-950 text-slate-300 mt-16 border-t-4 border-purple-600">
         <div className="max-w-[1400px] mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-xs">
           <div>
@@ -573,13 +572,13 @@ export default function App() {
           </div>
 
           <div>
-            <h5 className="text-white font-black text-xs uppercase tracking-wider mb-3">Kurumsal & Yasal</h5> [cite: 47]
+            <h5 className="text-white font-black text-xs uppercase tracking-wider mb-3">Kurumsal & Yasal</h5>
             <ul className="space-y-2 font-semibold text-slate-400">
               <li onClick={() => setActiveModal("hakkimizda")} className="hover:text-cyan-400 cursor-pointer transition-colors">✦ Hakkımızda</li>
-              <li onClick={() => setActiveModal("kvkk")} className="hover:text-cyan-400 cursor-pointer transition-colors">✦ KVKK Aydınlatma Metni</li> [cite: 48]
-              <li onClick={() => setActiveModal("cerez")} className="hover:text-cyan-400 cursor-pointer transition-colors">✦ Çerez (Cookie) Politikası</li> [cite: 48]
+              <li onClick={() => setActiveModal("kvkk")} className="hover:text-cyan-400 cursor-pointer transition-colors">✦ KVKK Aydınlatma Metni</li>
+              <li onClick={() => setActiveModal("cerez")} className="hover:text-cyan-400 cursor-pointer transition-colors">✦ Çerez (Cookie) Politikası</li>
               <li onClick={() => setActiveModal("sozlesme")} className="hover:text-cyan-400 cursor-pointer transition-colors">✦ Üyelik Sözleşmesi</li>
-              <li onClick={() => setActiveModal("iade")} className="hover:text-cyan-400 cursor-pointer transition-colors">✦ Mesafeli Satış & İade Şartları</li> [cite: 48]
+              <li onClick={() => setActiveModal("iade")} className="hover:text-cyan-400 cursor-pointer transition-colors">✦ Mesafeli Satış & İade Şartları</li>
             </ul>
           </div>
 
@@ -594,20 +593,20 @@ export default function App() {
         <div className="bg-slate-950 text-center py-4 text-[11px] text-slate-500 border-t border-slate-900 font-bold">&copy; 2026 HavuzMarket. Tüm Hakları Saklıdır. Powered by ARPETA</div>
       </footer>
 
-      {/* BÖLÜM 1: DÖKÜMANDAKİ BİREBİR METİNLE KAPLI ÇEREZ POP-UP BANNER'I */}
+      {/* BÖLÜM 1: ÇEREZ (COOKIE) POP-UP BANNER'I */}
       {cookieBannerOpen && (
-        <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-md bg-slate-900 text-white p-5 rounded-2xl shadow-2xl z-50 border-2 border-cyan-400 animate-slideUp flex flex-col gap-3"> [cite: 6]
+        <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-md bg-slate-900 text-white p-5 rounded-2xl shadow-2xl z-50 border-2 border-cyan-400 animate-slideUp flex flex-col gap-3">
           <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
             <Cookie className="w-5 h-5 text-cyan-400 animate-pulse" />
-            <h5 className="font-black text-xs uppercase tracking-wider">🍪 Çerez (Cookie) İzin Yönetimi</h5> [cite: 4]
+            <h5 className="font-black text-xs uppercase tracking-wider">🍪 Çerez (Cookie) İzin Yönetimi</h5>
           </div>
           <p className="text-[11px] text-slate-300 font-medium leading-relaxed">
-            e-havuzz olarak, sitemizdeki kullanıcı deneyimini iyileştirmek, sayfalarimizi optimize etmek ve ilgi alanlarınıza göre kişiselleştirilmiş reklamlar sunabilmek adına zorunlu, analitik ve pazarlama çerezleri kullanıyoruz. [cite: 1, 9] Çerezler hakkında detaylı bilgiye <span onClick={() => setActiveModal("cerez")} className="text-cyan-400 underline font-bold cursor-pointer">Çerez Politikası</span> metnimizden ulaşabilirsiniz. [cite: 10]
+            e-havuzz olarak, sitemizdeki kullanıcı deneyimini iyileştirmek, sayfalarımızı optimize etmek ve ilgi alanlarınıza göre kişiselleştirilmiş reklamlar sunabilmek adına zorunlu, analitik ve pazarlama çerezleri kullanıyoruz. Çerezler hakkında detaylı bilgiye <span onClick={() => setActiveModal("cerez")} className="text-cyan-400 underline font-bold cursor-pointer">Çerez Politikası</span> metnimizden ulaşabilirsiniz.
           </p>
-          <div className="flex gap-2 text-[10px] font-black uppercase mt-1"> [cite: 7]
-            <button onClick={() => setCookieBannerOpen(false)} className="flex-1 bg-cyan-500 hover:bg-cyan-600 text-slate-950 py-2 rounded-lg transition-colors">Hepsini Kabul Et</button> [cite: 12]
-            <button onClick={() => setCookieBannerOpen(false)} className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 py-2 rounded-lg transition-colors">Reddet</button> [cite: 13]
-            <button onClick={() => { setActiveModal("cerez"); }} className="flex-1 text-slate-400 underline text-center font-bold">Çerez Ayarları</button> [cite: 14]
+          <div className="flex gap-2 text-[10px] font-black uppercase mt-1">
+            <button onClick={() => setCookieBannerOpen(false)} className="flex-1 bg-cyan-500 hover:bg-cyan-600 text-slate-950 py-2 rounded-lg transition-colors">Hepsini Kabul Et</button>
+            <button onClick={() => setCookieBannerOpen(false)} className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 py-2 rounded-lg transition-colors">Reddet</button>
+            <button onClick={() => { setActiveModal("cerez"); }} className="flex-1 text-slate-400 underline text-center font-bold">Çerez Ayarları</button>
           </div>
         </div>
       )}
