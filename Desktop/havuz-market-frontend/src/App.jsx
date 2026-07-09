@@ -182,7 +182,7 @@ export default function App() {
         <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl w-full max-w-3xl overflow-hidden shadow-2xl border border-slate-200 flex flex-col max-h-[92vh] relative">
             
-            {/* SUB MODAL (ALT MODAL) ALANI - ANA MODALIN ASLA KAPANMASINI ENGELLEYEN SİRHRLİ MİMARİ */}
+            {/* SUB MODAL (ALT MODAL) ALANI - SÖZLEŞMELERİN ARKA EKRANI KAPATMADAN GÖSTERİLMESİ */}
             {subModalContent && (
               <div className="absolute inset-0 bg-white/95 backdrop-blur-sm z-50 p-6 overflow-y-auto animate-fadeIn flex flex-col justify-between">
                 <div className="space-y-4 text-xs md:text-sm text-slate-700 font-medium leading-relaxed">
@@ -197,20 +197,32 @@ export default function App() {
 
                   {subModalContent === "iade" && (
                     <div className="space-y-3">
-                      <p><strong>1. Cayma Hakkı:</strong> Tüketici, hiçbir hukuki ve cezai sorumluluk üstlenmeksizin ve hiçbir gerekçe göstermeksizin, satın aldığı ürünü teslim aldığı tarihten itibaren 14 (on dör) gün içerisinde iade etme hakkına sahiptir.</p>
-                      <p><strong>2. İade Şartları:</strong> İade edilecek ürünlerin ambalajının açılmamış, kullanılmamış, bozulmamış olması gerekmektedir. Havuz kimyasalları gibi açıldığında özelliğini yitiren ürünlerde ambalaj açılmışsa iade kabul edilmemektedir.</p>
+                      <h3 className="font-bold text-slate-900">1. Cayma Hakkı</h3>
+                      <p>Tüketici, hiçbir hukuki ve cezai sorumluluk üstlenmeksizin ve hiçbir gerekçe göstermeksizin, satın aldığı ürünü teslim aldığı tarihten itibaren 14 (on dört) gün içerisinde iade etme hakkına sahiptir.</p>
+                      <h3 className="font-bold text-slate-900">2. İade Şartları</h3>
+                      <p>İade edilecek ürünlerin ambalajının açılmamış, kullanılmamış, bozulmamış ve yeniden satılabilirlik özelliğini kaybetmemiş olması gerekmektedir. Hijyenik ürünler ve havuz kimyasalları gibi açıldığında özelliğini yitiren ürünlerde ambalaj açılmışsa iade kabul edilmemektedir.</p>
+                      <h3 className="font-bold text-slate-900">3. İade Süreci</h3>
+                      <p>İade talebinizi profilinizdeki "Siparişlerim" bölümünden veya iletişim sayfamızdan iletebilirsiniz. Onaylanan iadelerin ücreti 7 iş günü içerisinde kartınıza iade edilir.</p>
                     </div>
                   )}
 
                   {subModalContent === "kvkk" && (
                     <div className="space-y-3">
-                      <p>6698 sayılı KVKK uyarınca, e-havuzz olarak, veri sorumlusu sıfatıyla, kişisel verilerinizi yasal amaçlar kapsamında kaydedebilmekte ve saklayabilmekteyiz.</p>
-                      <p><strong>İşlenen Veriler:</strong> Sitemiz üzerinden üye olurken veya alışveriş yaparken bizimle paylaştığınız; Ad, Soyad, E-posta adresi, Telefon numarası ve Teslimat adresi verileriniz işlenmektedir.</p>
+                      <p>6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca, e-havuzz olarak, veri sorumlusu sıfatıyla, kiisiel verilerinizi hukuka uygun olarak işleyebilmekteyiz.</p>
+                      <h3 className="font-bold text-slate-900">1. İşlenen Kişisel Verileriniz</h3>
+                      <p>Sitemiz üzerinden üye olurken veya alışveriş yaparken bizimle paylaştığınız; Ad, Soyad, E-posta adresi, Telefon numarası, Teslimat ve Fatura adresi ile IP adresi verileriniz işlenmektedir.</p>
+                      <h3 className="font-bold text-slate-900">2. Kişisel Verilerin İşlenme Amaçları</h3>
+                      <p>Kişisel verileriniz; siparişlerinizin alınması, ürünlerin teslimat süreçlerinin yürütülmesi, faturalandırma işlemlerinin yapılması, üyelik kaydınızın oluşturulması ve yasal yükümlülüklerin yerine getirilmesi amaçlarıyla işlenmektedir.</p>
+                      <h3 className="font-bold text-slate-900">3. Verilerin Aktarılması</h3>
+                      <p>Kişisel verileriniz, yalnızca sipariş teslimatının yapılabilmesi amacıyla kargo firmalarıyla ve ödemenin güvenli alınabilmesi amacıyla aracı ödeme kuruluşlarıyla paylaşılmaktadır.</p>
                     </div>
                   )}
 
                   {subModalContent === "sozlesme" && (
-                    <p>İşbu sözleşme, e-havuzz platformuna üye olan kullanıcının haklarını, sipariş adımlarındaki sorumluluklarını ve platform kurallarını karşılıklı olarak beyan eder. Kayıt olan her kullanıcı bu şartları kabul etmiş sayılır.</p>
+                    <div className="space-y-3">
+                      <h3 className="font-bold text-slate-900">e-havuzz Üyelik Şartları & Sözleşmesi</h3>
+                      <p>İşbu sözleşme, e-havuzz platformuna üye olan kullanıcının haklarını, sipariş adımlarındaki sorumluluklarını ve platform kurallarını karşılıklı olarak beyan eder. Kayıt olan her kullanıcı bu şartları kabul etmiş sayılır.</p>
+                    </div>
                   )}
                 </div>
                 <div className="border-t pt-4 mt-4 flex justify-end">
@@ -241,7 +253,7 @@ export default function App() {
             <div className="p-6 overflow-y-auto text-slate-700 flex-1 flex flex-col justify-between">
               <div>
                 
-                {/* SEPET VE TESLİMAT/KART FORM AKIŞI */}
+                {/* SEPET ADIMI */}
                 {activeModal === "sepet" && (
                   <div className="text-sm">
                     {paymentSuccess ? (
@@ -316,7 +328,7 @@ export default function App() {
                               <input type="text" required maxLength="3" placeholder="CVC" className="p-2 text-xs font-bold rounded-xl border bg-white outline-none" />
                             </div>
 
-                            {/* SUB MODAL TETİKLEYİCİ - ARTIK SEPETI KAPATMAK YERINE ALT PENCERE AÇAN HATASIZ LINK */}
+                            {/* SUB MODAL TETİKLEYİCİ - SEPETİ KAPATMADAN GÜVENLİ SÖZLEŞME AÇMA */}
                             <div className="mt-2 bg-amber-50/70 p-3 rounded-xl border border-amber-200 flex items-start gap-2">
                               <input type="checkbox" id="checkoutCheck" required checked={checkoutContractCheck} onChange={(e) => setCheckoutFormCheck(e.target.checked)} className="mt-0.5 rounded cursor-pointer" />
                               <label htmlFor="checkoutCheck" className="text-[11px] font-semibold text-slate-700 leading-tight cursor-pointer">
@@ -355,12 +367,24 @@ export default function App() {
                   </div>
                 )}
 
-                {/* DIGER ANA MODAL PANNELLERI */}
+                {/* DOĞRUDAN FOOTER'DAN TETİKLENEN DETAYLI TİCARİ YASAL METİNLER (TRENDYOL STANDARTLARI) */}
                 {activeModal === "kvkk" && (
                   <div className="text-xs md:text-sm leading-relaxed text-slate-700 space-y-4 font-medium p-2">
                     <h2 className="text-sm font-black text-slate-900 uppercase">e-havuzz KİŞİSEL VERİLERİN KORUNMASI AYDINLATMA METNİ</h2>
                     <p className="italic">Veri Sorumlusu: e-havuzz (e-havuzz-frontend.vercel.app)</p>
-                    <p>6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca, e-havuzz olarak, veri sorumlusu sıfatıyla, kişisel verilerinizi yasal amaçlar kapsamında kaydedebilmekte ve saklayabilmekteyiz.</p>
+                    <p>6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") uyarınca, e-havuzz olarak, veri sorumlusu sıfatıyla, kişisel verilerinizi aşağıda açıklanan amaçlar kapsamında; hukuka ve dürüstlük kurallarına uygun olarak işleyebilmekte, kaydedebilmekte ve saklayabilmekteyiz.</p>
+                    
+                    <h3 className="font-black text-slate-900">1. İşlenen Kişisel Verileriniz</h3>
+                    <p>Sitemiz üzerinden üye olurken veya alışveriş yaparken bizimle paylaştığınız; Ad, Soyad, E-posta adresi, Telefon numarası, Teslimat ve Fatura adresi ile IP adresi verileriniz işlenmektedir.</p>
+                    
+                    <h3 className="font-black text-slate-900">2. Kişisel Verilerin İşlenme Amaçları</h3>
+                    <p>Kişisel verileriniz; siparişlerinizin alınması, ürünlerin teslimat süreçlerinin yürütülmesi, faturalandırma işlemlerinin yapılması, üyelik kaydınızın oluşturulması ve yasal yükümlülüklerin yerine getirilmesi amaçlarıyla işlenmektedir.</p>
+                    
+                    <h3 className="font-black text-slate-900">3. Verilerin Aktarılması</h3>
+                    <p>Kişisel verileriniz, yalnızca sipariş teslimatının yapılabilmesi amacıyla kargo firmalarıyla ve ödemenin güvenli alınabilmesi amacıyla aracı ödeme kuruluşlarıyla paylaşılmaktadır. Üçüncü şahıslara reklam amacıyla kesinlikle satılmamaktadır.</p>
+                    
+                    <h3 className="font-black text-slate-900">4. Haklarınız</h3>
+                    <p>KVKK'nın 11. maddesi uyarınca sitemizle iletişim kurarak verilerinizin silinmesini, düzeltilmesini veya hangi verilerinizin işlendiğini öğrenmeyi talep edebilirsiniz.</p>
                   </div>
                 )}
 
@@ -368,20 +392,38 @@ export default function App() {
                   <div className="text-xs md:text-sm leading-relaxed text-slate-700 space-y-4 font-medium p-2">
                     <h2 className="text-sm font-black text-slate-900 uppercase">e-havuzz ÇEREZ POLİTİKASI</h2>
                     <p>Bu Çerez Politikası, e-havuzz-frontend.vercel.app adresini ziyaret eden kullanıcılarımızın deneyimini optimize etmek amacıyla kullanılan çerezler hakkında bilgi vermek üzere hazırlanmıştır.</p>
+                    
+                    <h3 className="font-black text-slate-900">1. Çerez (Cookie) Nedir?</h3>
+                    <p>Çerezler, bir web sitesini ziyaret ettiğinizde tarayıcınız aracılığıyla cihazınıza kaydedilen küçük metin dosyalarıdır.</p>
+                    
+                    <h3 className="font-black text-slate-900">2. Sitemizde Kullanılan Çerez Türleri</h3>
+                    <p><strong>Zorunlu Çerezler:</strong> Sitenin doğru çalışması, sepetinizin hatırlanması ve güvenli giriş yapabilmeniz için zorunludur.</p>
+                    <p><strong>Analitik Çerezler:</strong> Sitemizi kaç kişinin ziyaret ettiğini ve hangi sayfaların daha çok tıklandığını anonim olarak ölçmek için kullanılır.</p>
+                    
+                    <h3 className="font-black text-slate-900">3. Çerezleri Nasıl Kontrol Edebilirsiniz?</h3>
+                    <p>Tarayıcınızın ayarlarından veya sitemizde bulunan "Çerez Ayarları" panelinden dilediğiniz zaman çerez tercihlerinizi değiştirebilir veya tüm çerezleri engelleyebilirsiniz.</p>
                   </div>
                 )}
 
                 {activeModal === "iade" && (
                   <div className="text-xs md:text-sm leading-relaxed text-slate-700 space-y-4 font-medium p-2">
                     <h2 className="text-sm font-black text-slate-900 uppercase">e-havuzz İPTAL VE İADE KOŞULLARI</h2>
+                    
+                    <h3 className="font-black text-slate-900">1. Cayma Hakkı</h3>
                     <p>Tüketici, hiçbir hukuki ve cezai sorumluluk üstlenmeksizin ve hiçbir gerekçe göstermeksizin, satın aldığı ürünü teslim aldığı tarihten itibaren 14 (on dört) gün içerisinde iade etme hakkına sahiptir.</p>
+                    
+                    <h3 className="font-black text-slate-900">2. İade Şartları</h3>
+                    <p>İade edilecek ürünlerin ambalajının açılmamış, kullanılmamış, bozulmamış ve yeniden satılabilirlik özelliğini kaybetmemiş olması gerekmektedir. Hijyenik ürünler ve havuz kimyasalları gibi açıldığında özelliğini yitiren ürünlerde ambalaj açılmışsa iade kabul edilmemektedir.</p>
+                    
+                    <h3 className="font-black text-slate-900">3. İade Süreci</h3>
+                    <p>İade talebinizi profilinizdeki "Siparişlerim" bölümünden veya iletişim sayfamızdan iletebilirsiniz. Onaylanan iadelerin ücreti 7 iş günü içerisinde kartınıza iade edilir.</p>
                   </div>
                 )}
 
                 {activeModal === "sozlesme" && (
                   <div className="text-xs md:text-sm leading-relaxed text-slate-700 space-y-3 font-medium p-2">
                     <h2 className="text-sm font-black text-slate-900 uppercase">e-havuzz Üyelik Şartları & Sözleşmesi</h2>
-                    <p>İşbu sözleşme, e-havuzz platformuna üye olan kullanıcının haklarını ve platform kurallarını karşılıklı olarak beyan eder.</p>
+                    <p>İşbu sözleşme, e-havuzz platformuna üye olan kullanıcının haklarını, sipariş adımlarındaki sorumluluklarını ve platform kurallarını karşılıklı olarak beyan eder. Kayıt olan her kullanıcı bu şartları kabul etmiş sayılır.</p>
                   </div>
                 )}
 
@@ -420,6 +462,7 @@ export default function App() {
                   </form>
                 )}
 
+                {/* ÜYE OLMA BÖLÜMÜ (Bölüm 2) */}
                 {activeModal === "register" && (
                   <form onSubmit={handleRegisterSubmit} className="flex flex-col gap-3 animate-fadeIn">
                     <p className="text-xs text-slate-500 font-bold mb-1">Havuz Market ayrıcalıklarından yararlanmak için formu eksiksiz doldurun.</p>
@@ -428,6 +471,7 @@ export default function App() {
                     <input type="tel" required placeholder="Telefon Numarası" value={registerForm.phone} onChange={(e) => setRegisterForm({...registerForm, phone: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 text-xs font-bold outline-none" />
                     <textarea required rows="2" placeholder="Teslimat Adresi" value={registerForm.city} onChange={(e) => setRegisterForm({...registerForm, city: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 text-xs font-bold outline-none"></textarea>
                     
+                    {/* Onay Kutusu 1 (Zorunlu) - SUB MODAL AKIŞIYLA ENTEGRE */}
                     <div className="mt-1 flex items-start gap-2 bg-slate-50 p-2.5 rounded-xl border">
                       <input type="checkbox" id="kvkkCheck" required checked={kvkkRegisterCheck} onChange={(e) => setKvkkRegisterCheck(e.target.checked)} className="mt-0.5 cursor-pointer" />
                       <label htmlFor="kvkkCheck" className="text-[10px] font-bold text-slate-600 leading-tight cursor-pointer">
@@ -435,10 +479,11 @@ export default function App() {
                       </label>
                     </div>
 
+                    {/* Onay Kutusu 2 (İsteğe Bağlı Pazarlama İzni) */}
                     <div className="flex items-start gap-2 bg-slate-50 p-2.5 rounded-xl border">
                       <input type="checkbox" id="comCheck" checked={commercialIletiCheck} onChange={(e) => setCommercialIletiCheck(e.target.checked)} className="mt-0.5 cursor-pointer" />
                       <label htmlFor="comCheck" className="text-[10px] font-bold text-slate-600 leading-tight cursor-pointer">
-                        e-havuzz tarafından tarafıma kampanya, indirim ve pazarlama amaçlı ticari elektronik ileti gönderilmesine onay veriyorum.
+                        e-havuzz tarafından tarafıma kampanya, indirim, bülten ve pazarlama amaçlı ticari elektronik ileti (SMS, E-posta) gönderilmesine onay veriyorum.
                       </label>
                     </div>
 
@@ -453,7 +498,7 @@ export default function App() {
         </div>
       )}
 
-      {/* HEADER VE MAĞAZA GÖVDESİ */}
+      {/* HEADER VE ANA GÖVDE */}
       <div>
         <div className="bg-slate-900 text-white text-[11px] font-bold py-2 px-6 flex justify-between items-center tracking-wide">
           <span>✦ 1000₺ Üzeri Alışverişlerde Ücretsiz Kargo</span>
@@ -479,7 +524,7 @@ export default function App() {
           <div className="flex items-center flex-wrap gap-3 text-sm shrink-0">
             <button type="button" onClick={() => setActiveModal("login")} className="text-slate-700 hover:text-purple-700 font-extrabold border-2 border-slate-200 px-4 py-2 rounded-xl bg-slate-50 text-xs">Giriş Yap</button>
             <button type="button" onClick={() => setActiveModal("register")} className="bg-cyan-500 text-white px-4 py-2 rounded-xl font-extrabold text-xs">Üye Ol</button>
-            <button type="button" onClick={() => { setActiveModal("sepet"); }} className="px-4 py-2 rounded-xl font-black border border-purple-600 bg-white text-purple-700 text-xs">📋 Sipariş Sorgula</button>
+            <button type="button" onClick={() => { setActiveModal("kargo"); }} className="px-4 py-2 rounded-xl font-black border border-purple-600 bg-white text-purple-700 text-xs">📋 Sipariş Sorgula</button>
 
             <div onClick={() => setActiveModal("sepet")} className="relative cursor-pointer text-slate-800 hover:text-purple-700 bg-slate-100 p-2.5 rounded-xl border-2 shadow-sm">
               <ShoppingCart className="w-5 h-5" />
@@ -557,7 +602,7 @@ export default function App() {
         </div>
       </div>
 
-      {/* FOOTER */}
+      {/* YASAL KURALLARA TAM UYUMLU KURUMSAL FOOTER ALANI (Bölüm 4) */}
       <footer className="bg-slate-950 text-slate-300 mt-16 border-t-4 border-purple-600">
         <div className="max-w-[1400px] mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-xs">
           <div>
@@ -578,6 +623,7 @@ export default function App() {
             </ul>
           </div>
 
+          {/* SİTENİN HER YERİNDEN ERİŞİLEBİLİR YASAL FOOTER LINKLERI */}
           <div>
             <h5 className="text-white font-black text-xs uppercase tracking-wider mb-3">Kurumsal & Yasal</h5>
             <ul className="space-y-2 font-semibold text-slate-400">
@@ -600,7 +646,7 @@ export default function App() {
         <div className="bg-slate-950 text-center py-4 text-[11px] text-slate-500 border-t border-slate-900 font-bold">&copy; 2026 HavuzMarket. Tüm Hakları Saklıdır. Powered by ARPETA</div>
       </footer>
 
-      {/* ÇEREZ BANNERI */}
+      {/* BÖLÜM 1: ÇEREZ (COOKIE) POP-UP BANNER'I */}
       {cookieBannerOpen && (
         <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-md bg-slate-900 text-white p-5 rounded-2xl shadow-2xl z-50 border-2 border-cyan-400 animate-slideUp flex flex-col gap-3">
           <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
