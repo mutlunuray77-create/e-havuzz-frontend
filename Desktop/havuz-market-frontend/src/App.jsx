@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { ShoppingCart, Search, User, HelpCircle, FileText, Truck, Mail, MapPin, Sparkles, Filter, CheckCircle, X, LogIn, UserPlus, ArrowLeft, CreditCard } from 'lucide-react';
+import { ShoppingCart, Search, User, HelpCircle, FileText, Truck, Mail, MapPin, Sparkles, Filter, CheckCircle, X, LogIn, UserPlus, ArrowLeft, CreditCard, AlertTriangle } from 'lucide-react';
 
 export default function App() {
   const [cart, setCart] = useState([]);
@@ -77,43 +77,16 @@ export default function App() {
     setNotification(`✅ ${product.name} sepete eklendi!`);
   };
 
-  const handleOrderSubmit = (e) => {
-    e.preventDefault();
-    setCart([]);
-    setSimulatedOrderStatus("Hazırlanıyor"); 
-    setActiveModal("kargo"); 
-    setNotification("📦 Siparişiniz Alındı ve Hazırlanıyor! 3 Gün İçinde Kargoda.");
-  };
-
-  const handleAsistanSorgu = (e) => {
-    e.preventDefault();
-    if (!asistanSoru) return;
-
-    const soruLower = asistanSoru.toLowerCase('tr-TR');
-    
-    if (soruLower.includes("temiz") || soruLower.includes("robot") || soruLower.includes("süpürge")) {
-      setSearchQuery("Robot");
-      setAsistanCevap("🤖 Akıllı Asistan: Havuz temizliği için sana harika bir önerim var güzelim! Arka plandaki mağazada 'Temizlik' kategorisini senin için süzdüm. Özellikle v4 Pro Robot modelimizi incelemeni öneririm; duvar tırmanma sonar haritalama altyapısı muazzamdır!");
-      setAsistanOnerilenUrun(mock20Products.find(p => p.id === 213));
-    } else if (soruLower.includes("klor") || soruLower.includes("kimyasal")) {
-      setSearchQuery("Klor");
-      setAsistanCevap("🤖 Akıllı Asistan: Havuzun pırıl pırıl kalması ve dezenfeksiyonu için 'Kimyasallar' kategorisindeki stabilizatörlü Granül Klor ürünümüzü listeledim. Suyu yormadan koruma sağlar.");
-      setAsistanOnerilenUrun(mock20Products.find(p => p.id === 211));
-    } else if (soruLower.includes("pompa") || soruLower.includes("devirdaim")) {
-      setSearchQuery("Pompa");
-      setAsistanCevap("🤖 Akıllı Asistan: Sirkülasyon ve filtreleme döngüsü için 2 HP Yüksek Verimli Pompa modelimizi listeledim. Düşük desibel sessiz çalışma teknolojisi ile kurumsal standarttadır.");
-      setAsistanOnerilenUrun(mock20Products.find(p => p.id === 214));
-    } else if (soruLower.includes("ışık") || soruLower.includes("led") || soruLower.includes("aydınlatma")) {
-      setSearchQuery("LED");
-      setAsistanCevap("🤖 Akıllı Asistan: Gece keyfi ve ambiyans için kumandalı AquaGlow LED serimizi listeledim. Enerji tasarruflu 12V altyapıya sahiptir.");
-      setAsistanOnerilenUrun(mock20Products.find(p => p.id === 201));
-    } else if (soruLower.includes("şelale") || soruLower.includes("fıskiye")) {
-      setSearchQuery("Şelale");
-      setAsistanCevap("🤖 Akıllı Asistan: Harika bir tercih! Lüks Şelale Fıskiyesi modelimiz havuzunuza modern bir hava katarken, su sesiyle harika bir dinginlik sağlar canım. Ürün arka planda listelendi!");
-      setAsistanOnerilenUrun(mock20Products.find(p => p.id === 212));
+  // İREM HANIMIN İSTEDİĞİ BAŞARILI / BAŞARISIZ SEÇENEKLİ ÖDEME TETİKLEYİCİSİ
+  const handlePaymentSimulation = (status) => {
+    if (status === "success") {
+      setCart([]);
+      setSimulatedOrderStatus("Hazırlanıyor"); 
+      setActiveModal("kargo"); 
+      setNotification("💳 PayTR Ödemesi Başarılı! Siparişiniz Hazırlanıyor.");
     } else {
-      setSearchQuery("");
-      setAsistanCevap("🤖 Akıllı Asistan: Sorunu anladım güzelim! İstediğin ürünü yukarıdaki arama motoruna yazarak ya da kategorilerden süzerek anında 20 premium ürün arasından bulabilirsin. Arpeta altyapısı hizmetinde!");
+      alert("❌ PayTR Ödeme Hatası: Kart bakiyesi yetersiz veya geçersiz kart bilgisi! Lütfen tekrar deneyin.");
+      setNotification("❌ Ödeme başarısız oldu. Lütfen bilgilerinizi kontrol edin.");
     }
   };
 
@@ -133,7 +106,37 @@ export default function App() {
     setNotification(`📝 Kayıt Başarılı! Hoş geldin ${registerForm.fullname}.`);
   };
 
-  // Dinamik Kargo ve Toplam Tutar Hesaplama
+  const handleAsistanSorgu = (e) => {
+    e.preventDefault();
+    if (!asistanSoru) return;
+
+    const soruLower = asistanSoru.toLowerCase('tr-TR');
+    if (soruLower.includes("temiz") || soruLower.includes("robot") || soruLower.includes("süpürge")) {
+      setSearchQuery("Robot");
+      setAsistanCevap("🤖 Akıllı Asistan: Havuz temizliği için sana harika bir önerim var güzelim! Arka plandaki mağazada 'Temizlik' kategorisini senin için süzdüm. Özellikle v4 Pro Robot modelimizi incelemeni öneririm!");
+      setAsistanOnerilenUrun(mock20Products.find(p => p.id === 213));
+    } else if (soruLower.includes("klor") || soruLower.includes("kimyasal")) {
+      setSearchQuery("Klor");
+      setAsistanCevap("🤖 Akıllı Asistan: Havuzun pırıl pırıl kalması ve dezenfeksiyonu için 'Kimyasallar' kategorisindeki stabilizatörlü Granül Klor ürünümüzü listeledim.");
+      setAsistanOnerilenUrun(mock20Products.find(p => p.id === 211));
+    } else if (soruLower.includes("pompa") || soruLower.includes("devirdaim")) {
+      setSearchQuery("Pompa");
+      setAsistanCevap("🤖 Akıllı Asistan: Sirkülasyon ve filtreleme döngüsü için 2 HP Yüksek Verimli Pompa modelimizi listeledim. Düşük desibel sessiz çalışma teknolojisine sahiptir.");
+      setAsistanOnerilenUrun(mock20Products.find(p => p.id === 214));
+    } else if (soruLower.includes("ışık") || soruLower.includes("led") || soruLower.includes("aydınlatma")) {
+      setSearchQuery("LED");
+      setAsistanCevap("🤖 Akıllı Asistan: Gece keyfi ve ambiyans için kumandalı AquaGlow LED serimizi listeledim. Enerji tasarruflu 12V altyapıya sahiptir.");
+      setAsistanOnerilenUrun(mock20Products.find(p => p.id === 201));
+    } else if (soruLower.includes("şelale") || soruLower.includes("fıskiye")) {
+      setSearchQuery("Şelale");
+      setAsistanCevap("🤖 Akıllı Asistan: Harika bir tercih! Lüks Şelale Fıskiyesi modelimiz havuzunuza modern bir hava katarken, su sesiyle harika bir dinginlik sağlar canım. Ürün arka planda listelendi!");
+      setAsistanOnerilenUrun(mock20Products.find(p => p.id === 212));
+    } else {
+      setSearchQuery("");
+      setAsistanCevap("🤖 Akıllı Asistan: Sorunu anladım güzelim! İstediğin ürünü yukarıdaki arama motoruna yazarak ya da kategorilerden süzerek anında 20 premium ürün arasından bulabilirsin. Arpeta altyapısı hizmetinde!");
+    }
+  };
+
   const sepetUrunToplam = cart.reduce((sum, item) => sum + item.price, 0);
   const kargoUcreti = sepetUrunToplam >= 1000 ? 0 : 75;
   const sepetToplamTutar = sepetUrunToplam + kargoUcreti;
@@ -157,7 +160,7 @@ export default function App() {
               <h3 className="font-black text-sm md:text-base flex items-center gap-2 tracking-wide">
                 {activeModal === "sepet" && "🛒 Alışveriş Sepetiniz & PayTR Ödeme"}
                 {activeModal === "asistan" && "🤖 Akıllı Havuz Asistanı"}
-                {activeModal === "kargo" && "🚚 Sipariş Kargo Durumu"}
+                {activeModal === "kargo" && "🚚 Sipariş Alındı & Kargo Takip"}
                 {activeModal === "login" && "🔑 Üye Girişi"}
                 {activeModal === "register" && "📝 Yeni Üye Kaydı"}
                 {activeModal === "blog" && "📝 E-Havuz Market Blog"}
@@ -185,14 +188,13 @@ export default function App() {
                           </div>
                         ))}
 
-                        {/* DİNAMİK 1000TL ÜCRETSİZ KARGO DETAY ALANI */}
                         <div className="border-t pt-3 flex flex-col gap-1.5 border-dashed">
                           <div className="flex justify-between items-center text-xs font-bold text-slate-600">
-                            <span>Ürünler Toplamı:</span>
+                            <span>Templates Toplamı:</span>
                             <span>₺{sepetUrunToplam.toLocaleString('tr-TR')}</span>
                           </div>
                           <div className="flex justify-between items-center text-xs font-bold text-slate-600">
-                            <span>Kargo Ücreti (1000₺ Üzeri Bedava):</span>
+                            <span>Kargo Ücreti:</span>
                             <span className={kargoUcreti === 0 ? "text-emerald-600 font-black" : "text-slate-800"}>
                               {kargoUcreti === 0 ? "Ücretsiz Kargo" : `₺${kargoUcreti}`}
                             </span>
@@ -208,30 +210,32 @@ export default function App() {
                           </div>
                         </div>
 
-                        <form onSubmit={handleOrderSubmit} className="mt-2 bg-slate-50 p-4 rounded-2xl border-2 border-purple-200 flex flex-col gap-3">
+                        {/* ARTIK HTML FORM DEĞİL, CRASH ENGELLEYİCİ DİREKT SIMULATION ALANI */}
+                        <div className="mt-2 bg-slate-50 p-4 rounded-2xl border-2 border-purple-200 flex flex-col gap-3">
                           <span className="font-black text-xs text-purple-900 uppercase flex items-center gap-1">🔒 PayTR Güvenli Ödeme Altyapısı</span>
                           <div>
                             <label className="block text-[10px] font-black uppercase text-slate-500 mb-0.5">Kart Üzerindeki İsim</label>
-                            <input type="text" required placeholder="NURAY MUTLU" value={cardInfo.name} onChange={(e) => setCardInfo({...cardInfo, name: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-white focus:border-purple-600 outline-none" />
+                            <input type="text" placeholder="NURAY MUTLU" value={cardInfo.name} onChange={(e) => setCardInfo({...cardInfo, name: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-white focus:border-purple-600 outline-none" />
                           </div>
                           <div>
                             <label className="block text-[10px] font-black uppercase text-slate-500 mb-0.5">Kart Numarası</label>
-                            <input type="text" required maxLength="16" placeholder="4000123456789010" value={cardInfo.number} onChange={(e) => setCardInfo({...cardInfo, number: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-white focus:border-purple-600 outline-none" />
+                            <input type="text" maxLength="16" placeholder="4000 1234 5678 9010" value={cardInfo.number} onChange={(e) => setCardInfo({...cardInfo, number: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-white focus:border-purple-600 outline-none" />
                           </div>
                           <div className="grid grid-cols-2 gap-2">
-                            <div>
-                              <label className="block text-[10px] font-black uppercase text-slate-500">Son Kullanma</label>
-                              <input type="text" required placeholder="12/29" className="w-full p-2 text-xs font-bold rounded-xl border border-slate-300 bg-white" />
-                            </div>
-                            <div>
-                              <label className="block text-[10px] font-black uppercase text-slate-500">CVC</label>
-                              <input type="text" required placeholder="000" className="w-full p-2 text-xs font-bold rounded-xl border border-slate-300 bg-white" />
-                            </div>
+                            <input type="text" placeholder="MM/YY" className="w-full p-2 text-xs font-bold rounded-xl border bg-white focus:border-purple-600 outline-none" />
+                            <input type="text" maxLength="3" placeholder="CVC" className="w-full p-2 text-xs font-bold rounded-xl border bg-white focus:border-purple-600 outline-none" />
                           </div>
-                          <button type="submit" className="w-full bg-purple-600 hover:bg-cyan-500 text-white font-black py-3 rounded-xl transition-all shadow-md text-xs uppercase tracking-wider mt-2 flex items-center justify-center gap-2">
-                            <CreditCard className="w-4 h-4" /> Siparişi Onayla ve Öde ➔
-                          </button>
-                        </form>
+                          
+                          {/* İREM HANIMIN İSTEDİĞİ BAŞARILI VE BAŞARISIZ SEÇENEKLİ AKILLI BUTONLAR */}
+                          <div className="grid grid-cols-2 gap-2 mt-2">
+                            <button type="button" onClick={() => handlePaymentSimulation("success")} className="bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3 rounded-xl transition-all shadow-md text-xs uppercase tracking-wider flex items-center justify-center gap-1">
+                              ✔ Ödemeyi Onayla
+                            </button>
+                            <button type="button" onClick={() => handlePaymentSimulation("fail")} className="bg-rose-600 hover:bg-rose-700 text-white font-black py-3 rounded-xl transition-all shadow-md text-xs uppercase tracking-wider flex items-center justify-center gap-1">
+                              ❌ Ödemeyi Reddet
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -281,31 +285,17 @@ export default function App() {
                   </form>
                 )}
 
-                {/* ÜYE OL FORMU */}
                 {activeModal === "register" && (
                   <form onSubmit={handleRegisterSubmit} className="flex flex-col gap-3 animate-fadeIn">
-                    <p className="text-xs text-slate-500 font-bold mb-1">Havuz Market ayrıcalıklarından yararlanmak için formu eksiksiz doldurun bebek.</p>
-                    <div>
-                      <label className="block text-[10px] font-black uppercase text-slate-700 mb-0.5">Ad Soyad</label>
-                      <input type="text" required placeholder="Örn: Nuray Mutlu" value={registerForm.fullname} onChange={(e) => setRegisterForm({...registerForm, fullname: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 text-xs font-bold" />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-black uppercase text-slate-700 mb-0.5">TC Kimlik Numarası</label>
-                      <input type="text" required maxLength="11" placeholder="11 Haneli TC Kimlik No" value={registerForm.tcNo} onChange={(e) => setRegisterForm({...registerForm, tcNo: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 text-xs font-bold" />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-black uppercase text-slate-700 mb-0.5">Telefon Numarası</label>
-                      <input type="tel" required placeholder="0555 XXXXXXX" value={registerForm.phone} onChange={(e) => setRegisterForm({...registerForm, phone: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 text-xs font-bold" />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-black uppercase text-slate-700 mb-0.5">Teslimat Adresi</label>
-                      <textarea required rows="2" placeholder="Açık adresinizi buraya yazın..." value={registerForm.city} onChange={(e) => setRegisterForm({...registerForm, city: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 text-xs font-bold"></textarea>
-                    </div>
+                    <p className="text-xs text-slate-500 font-bold mb-1">Havuz Market ayrıcalıklarından yararlanmak için formu eksikosiz doldurun bebek.</p>
+                    <input type="text" required placeholder="Ad Soyad" value={registerForm.fullname} onChange={(e) => setRegisterForm({...registerForm, fullname: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 text-xs font-bold" />
+                    <input type="text" required maxLength="11" placeholder="11 Haneli TC Kimlik No" value={registerForm.tcNo} onChange={(e) => setRegisterForm({...registerForm, tcNo: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 text-xs font-bold" />
+                    <input type="tel" required placeholder="0555 XXXXXXX" value={registerForm.phone} onChange={(e) => setRegisterForm({...registerForm, phone: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 text-xs font-bold" />
+                    <textarea required rows="2" placeholder="Açık adresinizi buraya yazın..." value={registerForm.city} onChange={(e) => setRegisterForm({...registerForm, city: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 text-xs font-bold"></textarea>
                     <button type="submit" className="w-full bg-cyan-500 text-white font-black py-3 rounded-xl text-xs uppercase tracking-wide shadow-sm mt-1">Kayıt İşlemini Tamamla</button>
                   </form>
                 )}
 
-                {/* BLOG YAZISI */}
                 {activeModal === "blog" && (
                   <div className="flex flex-col gap-4 text-xs md:text-sm leading-relaxed font-medium text-slate-800">
                     <div className="bg-purple-50/70 border-2 border-purple-100 p-5 rounded-2xl">
@@ -318,7 +308,6 @@ export default function App() {
                   </div>
                 )}
 
-                {/* HAKKIMIZDA YAZISI */}
                 {activeModal === "hakkimizda" && (
                   <div className="flex flex-col gap-3 text-xs md:text-sm text-slate-800 font-medium">
                     <h4 className="text-base font-black text-purple-800 uppercase tracking-tight">✨ Platformumuz Hakkında</h4>
@@ -329,7 +318,6 @@ export default function App() {
                   </div>
                 )}
 
-                {/* ASİSTANA SORU SOR PANELİ */}
                 {activeModal === "asistan" && (
                   <div className="flex flex-col gap-4 text-sm">
                     <p className="text-xs text-slate-500 font-bold">Havuz bakımı, temizliği veya aydınlatma ihtiyaçlarınızı yazın, akıllı asistan anlık süzüp ürün önersin bebek.</p>
@@ -341,7 +329,6 @@ export default function App() {
                     {asistanCevap && (
                       <div className="bg-purple-50 border-2 border-purple-200 p-4 rounded-2xl text-xs text-purple-900 font-extrabold leading-relaxed flex flex-col gap-3 animate-fadeIn">
                         <p>{asistanCevap}</p>
-                        
                         {asistanOnerilenUrun && (
                           <div className="mt-1 bg-white p-3 rounded-xl border border-purple-200 flex items-center justify-between gap-3 shadow-sm">
                             <div className="flex flex-col">
