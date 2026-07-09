@@ -15,12 +15,21 @@ export default function App() {
   const [asistanCevap, setAsistanCevap] = useState("");
   const [asistanOnerilenUrun, setAsistanOnerilenUrun] = useState(null);
 
-  // Form ve Takip State Yapıları
+ 
+  const [checkoutForm, setCheckoutForm] = useState({
+    ad: '', soyad: '', email: '', telefon: '', sehir: '', ilce: '', postaKodu: '', acikAdres: ''
+  });
   const [loginForm, setLoginForm] = useState({ username: '', password: '' });
   const [registerForm, setRegisterForm] = useState({ fullname: '', city: '', phone: '', email: '', tcNo: '' });
-  const [cardInfo, setCardInfo] = useState({ name: '', number: '', date: '', cvc: '' });
-  const [simulatedOrderStatus, setSimulatedOrderStatus] = useState("Hazırlanıyor"); 
-  const [paymentSuccess, setPaymentSuccess] = useState(false); // Beyaz ekranı önleyen can kurtaran state!
+  
+  
+  const [cardName, setCardName] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const [cardDate, setCardDate] = useState("");
+  const [cardCvc, setCardCvc] = useState("");
+  
+  const [simulatedOrderCode, setSimulatedOrderCode] = useState("");
+  const [paymentSuccess, setPaymentSuccess] = useState(false); 
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
@@ -36,7 +45,7 @@ export default function App() {
     { id: 207, name: "ThermoComfort Dijital Havuz Suyu Isı Ölçer", category: "Aydınlatma", price: 420, image: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=500&q=80", tag: "Yeni", moods: ["teknolojik"], aiInsight: "📉 Fiyat analizine göre şu an satın almak için en ideal dönem." },
     { id: 208, name: "Premium Paslanmaz Havuz Giriş Merdiveni (4 Basamak)", category: "Ekipmanlar", price: 4750, image: "https://images.unsplash.com/photo-1572331507600-664123d1115e?w=500&q=80", tag: "Lüks", moods: ["sakin"], aiInsight: "🔥 Son 3 günün en düşük fiyatı fırsatını yakalayın." },
     { id: 209, name: "Anti-Yosun Concentre Havuz Bakım Sıvısı 10 L", category: "Kimyasallar", price: 780, image: "https://images.unsplash.com/photo-1527156279143-6cd52a32c2a1?w=500&q=80", tag: "Etkili Formül", moods: ["titiz"], aiInsight: "💡 Kimyasal ürünlerde kur dalgalanması öncesi bugün almanız önerilir." },
-    { id: 210, name: "SolarTarpaulin Isı Koruyucu Havuz Temizlik Brbrandası", category: "Temizlik", price: 3200, image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=500&q=80", tag: "Çevre Dostu", moods: ["keyifli"], aiInsight: "📈 Yapay zeka talebin arttığını öngörüyor, fiyat %8 yükselebilir!" },
+    { id: 210, name: "SolarTarpaulin Isı Koruyucu Havuz Temizlik Brbrandası", category: "Temizlik", price: 3200, image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6/photo-1564013799919-ab600027ffc6?w=500&q=80", tag: "Çevre Dostu", moods: ["keyifli"], aiInsight: "📈 Yapay zeka talebin arttığını öngörüyor, fiyat %8 yükselebilir!" },
     { id: 211, name: "Granül Havuz Kloru %56 Stabilizatörlü 25 KG", category: "Kimyasallar", price: 2300, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=500&q=80", tag: "Fırsat Ürünü", moods: ["titiz"], aiInsight: "💡 Su dezenfeksiyonu için haftalık periyotta en kararlı klor bileşiğidir." },
     { id: 212, name: "Lüks Duvar Tipi Havuz Şelalesi Şelale Perdesi", category: "Ekipmanlar", price: 15400, image: "https://images.unsplash.com/photo-1562184560-a11b7cf7c847?w=500&q=80", tag: "Özel Tasarım", moods: ["sakin", "yorgun"], aiInsight: "🌊 Mimari şelale tasarımı ortamdaki gürültüyü absorbe ederek sakinlik verir." },
     { id: 213, name: "Otomatik Havuz Dip Süpürme Robotu Klasik", category: "Temizlik", price: 34500, image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=500&q=80", tag: "Premium Altyapı", moods: ["teknolojik", "titiz"], aiInsight: "🤖 Yapay Zeka Öngörüsü: Rutin temizlik saatlerinde %40 energy tasarrufu sunar." },
@@ -74,23 +83,25 @@ export default function App() {
   }, [selectedCategory, selectedMood, searchQuery, dbProducts]);
 
   const addToCart = (product) => {
-    if (paymentSuccess) setPaymentSuccess(false); // Yeni sipariş için ekranı temizler
+    if (paymentSuccess) setPaymentSuccess(false); 
     setCart([...cart, product]);
     setNotification(`✅ ${product.name} sepete eklendi!`);
   };
 
- 
   const handleOrderSubmit = (e) => {
     e.preventDefault(); 
-    setPaymentSuccess(true); // Başarı ekranını modalın içinde tetikler
-    setSimulatedOrderStatus("Hazırlanıyor");
-    setNotification("📦 PayTR Ödemesi Başarılı! Siparişiniz Alındı.");
+    const randomCode = "HM-" + Math.random().toString(36).substring(2, 9).toUpperCase();
+    setSimulatedOrderCode(randomCode);
+    setPaymentSuccess(true); 
+    setNotification("📦 PayTR Ödemesi Onaylandı! Siparişiniz Alındı.");
   };
 
   const clearCartAfterSuccess = () => {
     setCart([]);
     setPaymentSuccess(false);
     setActiveModal("");
+    setCheckoutForm({ ad: '', soyad: '', email: '', telefon: '', sehir: '', ilce: '', postaKodu: '', acikAdres: '' });
+    setCardName(""); setCardNumber(""); setCardDate(""); setCardCvc("");
   };
 
   const handleLoginSubmit = (e) => {
@@ -157,17 +168,18 @@ export default function App() {
       {/* DİNAMİK MODAL SİSTEMİ */}
       {activeModal && (
         <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl w-full max-w-xl overflow-hidden shadow-2xl border border-slate-200 flex flex-col max-h-[85vh]">
+          <div className="bg-white rounded-3xl w-full max-w-3xl overflow-hidden shadow-2xl border border-slate-200 flex flex-col max-h-[92vh]">
             
             <div className="p-5 border-b border-slate-200 flex justify-between items-center bg-gradient-to-r from-slate-900 via-purple-900 to-[#00b4d8] text-white">
               <h3 className="font-black text-sm md:text-base flex items-center gap-2 tracking-wide">
-                {activeModal === "sepet" && "🛒 Alışveriş Sepetiniz & PayTR Ödeme"}
+                {activeModal === "sepet" && "🛒 Alavuz Alışveriş Sepetiniz & Güvenli Ödeme Özetleri"}
                 {activeModal === "asistan" && "🤖 Akıllı Havuz Asistanı"}
-                {activeModal === "kargo" && "🚚 Sipariş Takip Paneli"}
+                {activeModal === "kargo" && "🚚 Kargo Takip & Teslimat Durumu"}
                 {activeModal === "login" && "🔑 Üye Girişi"}
                 {activeModal === "register" && "📝 Yeni Üye Kaydı"}
                 {activeModal === "blog" && "📝 E-Havuz Market Blog"}
                 {activeModal === "hakkimizda" && "✨ Hakkımızda"}
+                {activeModal === "iade" && "🔄 İade & Değişim Politikası"}
               </h3>
               <button onClick={() => { if (paymentSuccess) { clearCartAfterSuccess(); } else { setActiveModal(""); } }} className="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 transition-colors">
                 <X className="w-5 h-5" />
@@ -177,141 +189,186 @@ export default function App() {
             <div className="p-6 overflow-y-auto text-slate-700 flex-1 flex flex-col justify-between">
               <div>
                 
-                {/* SEPET + PAYTR ÖDEME FORMU ALANI */}
+                {}
                 {activeModal === "sepet" && (
                   <div className="text-sm">
                     {paymentSuccess ? (
                      
                       <div className="text-center py-6 flex flex-col items-center gap-5 animate-fadeIn">
-                        <div className="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center border-2 border-emerald-400">
-                          <CheckCircle className="w-8 h-8 text-emerald-600" />
+                        <div className="w-14 h-14 bg-cyan-100 rounded-full flex items-center justify-center border-2 border-cyan-400">
+                          <CheckCircle className="w-8 h-8 text-cyan-600" />
                         </div>
                         <div>
-                          <h4 className="font-black text-slate-900 text-base">🎉 PayTR Ödemesi Başarıyla Alındı!</h4>
-                          <p className="text-xs text-slate-500 font-bold mt-1">Siparişiniz sistemimize kaydedilmiştir ve hazırlanmaktadır bebek.</p>
+                          <h2 className="text-2xl font-black text-slate-900">Siparişiniz Alındı</h2>
+                          <p className="text-xs text-slate-500 font-bold mt-1">Siparişiniz başarıyla oluşturuldu. Siparişiniz en kısa sürede hazırlanacaktır.</p>
                         </div>
                         
-                        {}
-                        <div className="w-full flex justify-between items-center px-4 mt-2 relative">
-                          <div className="absolute left-6 right-6 top-4 h-1 bg-slate-200 -z-10"></div>
-                          <div className="flex flex-col items-center gap-1 bg-white px-2">
-                            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${simulatedOrderStatus === "Hazırlanıyor" || simulatedOrderStatus === "Yola Çıktı" || simulatedOrderStatus === "Tamamlandı" ? 'bg-purple-600 text-white' : 'bg-slate-200'}`}>1</div>
-                            <span className="text-[10px] font-black text-purple-700">Sipariş Alındı</span>
-                          </div>
-                          <div className="flex flex-col items-center gap-1 bg-white px-2">
-                            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${simulatedOrderStatus === "Yola Çıktı" || simulatedOrderStatus === "Tamamlandı" ? 'bg-purple-600 text-white' : 'bg-slate-200'}`}>2</div>
-                            <span className="text-[10px] font-black text-slate-700">Hazırlanıyor</span>
-                          </div>
-                          <div className="flex flex-col items-center gap-1 bg-white px-2">
-                            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${simulatedOrderStatus === "Tamamlandı" ? 'bg-purple-600 text-white' : 'bg-slate-200'}`}>3</div>
-                            <span className="text-[10px] font-black text-slate-700">3 Günde Kargoda</span>
-                          </div>
-                        </div>
-
-                        <div className="flex gap-2 mt-2 w-full">
-                          <button type="button" onClick={() => setSimulatedOrderStatus("Hazırlanıyor")} className="flex-1 bg-purple-100 text-purple-800 text-[9px] font-black py-1.5 rounded-md uppercase">Sipariş Alındı</button>
-                          <button type="button" onClick={() => setSimulatedOrderStatus("Yola Çıktı")} className="flex-1 bg-slate-100 text-slate-800 text-[9px] font-black py-1.5 rounded-md uppercase">Hazırlanıyor</button>
-                          <button type="button" onClick={() => setSimulatedOrderStatus("Tamamlandı")} className="flex-1 bg-emerald-100 text-emerald-800 text-[9px] font-black py-1.5 rounded-md uppercase">3 Günde Kargoda</button>
-                        </div>
-
-                        <button type="button" onClick={clearCartAfterSuccess} className="w-full bg-slate-900 hover:bg-slate-800 text-white font-black py-3 rounded-xl text-xs uppercase mt-2">
-                          Alışverişe Devam Et
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="flex flex-col gap-4">
-                        {cart.map((item, index) => (
-                          <div key={index} className="flex items-center justify-between bg-slate-50 p-3 rounded-2xl border">
-                            <span className="font-bold text-xs text-slate-900 line-clamp-1">{item.name}</span>
-                            <span className="font-black text-xs text-purple-700 shrink-0">1 adet / ₺{item.price}</span>
-                          </div>
-                        ))}
-
-                        <div className="border-t pt-3 flex flex-col gap-1.5 border-dashed">
-                          <div className="flex justify-between items-center text-xs font-bold text-slate-600">
-                            <span>Ürünler Toplamı:</span>
-                            <span>₺{sepetUrunToplam.toLocaleString('tr-TR')}</span>
-                          </div>
-                          <div className="flex justify-between items-center text-xs font-bold text-slate-600">
-                            <span>Kargo Ücreti:</span>
-                            <span className={kargoUcreti === 0 ? "text-emerald-600 font-black" : "text-slate-800"}>
-                              {kargoUcreti === 0 ? "Ücretsiz Kargo" : `₺${kargoUcreti}`}
-                            </span>
-                          </div>
-                          {kargoUcreti === 0 && (
-                            <div className="text-[10px] bg-emerald-50 text-emerald-700 font-black p-2 rounded-xl border border-emerald-200 text-center uppercase tracking-wide mt-1">
-                              🎉 1000₺ Üzeri Alışverişlerde Ücretsiz Kargo Avantajı Uygulandı!
-                            </div>
-                          )}
-                          <div className="flex justify-between items-center font-black text-slate-900 text-base border-t pt-2 mt-1">
-                            <span>Genel Toplam Tutar:</span>
-                            <span className="text-xl text-purple-700">₺{sepetToplamTutar.toLocaleString('tr-TR')}</span>
-                          </div>
-                        </div>
-
-                        {/* GERÇEK VE GÜVENLİ FORM METODU */}
-                        <form onSubmit={handleOrderSubmit} className="mt-2 bg-slate-50 p-4 rounded-2xl border-2 border-purple-200 flex flex-col gap-3">
-                          <span className="font-black text-xs text-purple-900 uppercase flex items-center gap-1">🔒 PayTR Güvenli Ödeme Altyapısı</span>
-                          <div>
-                            <label className="block text-[10px] font-black uppercase text-slate-500 mb-0.5">Kart Üzerindeki İsim</label>
-                            <input type="text" required placeholder="NURAY MUTLU" value={cardInfo.name} onChange={(e) => setCardInfo({...cardInfo, name: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-white focus:border-purple-600 outline-none" />
-                          </div>
-                          <div>
-                            <label className="block text-[10px] font-black uppercase text-slate-500 mb-0.5">Kart Numarası</label>
-                            <input type="text" required maxLength="16" placeholder="4000123456789010" value={cardInfo.number} onChange={(e) => setCardInfo({...cardInfo, number: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-white focus:border-purple-600 outline-none" />
-                          </div>
-                          <div className="grid grid-cols-2 gap-2">
+                        <div className="bg-white border border-slate-200 p-5 rounded-2xl w-full text-left shadow-sm max-w-md">
+                          <div className="flex items-center gap-3 border-b pb-3 mb-3">
+                            <div className="p-2 bg-slate-100 rounded-xl"><Truck className="w-5 h-5 text-slate-700" /></div>
                             <div>
-                              <label className="block text-[10px] font-black uppercase text-slate-500 mb-0.5">AA/YY</label>
-                              <input type="text" required placeholder="12/29" className="w-full p-2 text-xs font-bold rounded-xl border border-slate-300 bg-white outline-none" />
-                            </div>
-                            <div>
-                              <label className="block text-[10px] font-black uppercase text-slate-500 mb-0.5">CVC</label>
-                              <input type="text" required maxLength="3" placeholder="000" className="w-full p-2 text-xs font-bold rounded-xl border border-slate-300 bg-white outline-none" />
+                              <span className="text-[10px] text-slate-400 font-bold block">Sipariş Kodu</span>
+                              <span className="font-black text-sm text-slate-900">{simulatedOrderCode}</span>
                             </div>
                           </div>
                           
-                          <button type="submit" className="w-full bg-purple-600 hover:bg-cyan-500 text-white font-black py-3 rounded-xl transition-all shadow-md text-xs uppercase tracking-wider mt-2 flex items-center justify-center gap-2">
-                            <CreditCard className="w-4 h-4" /> Siparişi Onayla ve Öde ➔
+                          <div className="grid grid-cols-2 gap-4 text-xs">
+                            <div>
+                              <span className="text-[10px] text-slate-400 font-bold block">Tahmini Teslimat</span>
+                              <span className="font-extrabold text-slate-800">2-4 İş Günü</span>
+                            </div>
+                            <div>
+                              <span className="text-[10px] text-slate-400 font-bold block">Kargo Firması</span>
+                              <span className="font-extrabold text-slate-800">Yurtiçi Kargo</span>
+                            </div>
+                            <div className="mt-1">
+                              <span className="text-[10px] text-slate-400 font-bold block">Ödeme Durumu</span>
+                              <span className="font-black text-emerald-600">✓ Onaylandı</span>
+                            </div>
+                            <div className="mt-1">
+                              <span className="text-[10px] text-slate-400 font-bold block">Sipariş Durumu</span>
+                              <span className="font-black text-purple-700 bg-purple-50 px-2 py-0.5 rounded-md w-fit">Hazırlanıyor</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <p className="text-[11px] text-slate-400 font-bold">Sipariş detayları ve kargo takip numarası e-posta adresinize gönderildi.</p>
+
+                        <button type="button" onClick={clearCartAfterSuccess} className="w-full max-w-md bg-[#00b4d8] hover:bg-[#0096c7] text-white font-black py-3.5 rounded-xl text-xs uppercase mt-2 flex items-center justify-center gap-1.5 shadow-md">
+                          Alışverişe Devam Et ➔
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        
+                        {/* ADRES VE KART FORMLARI (SOL ALAN) */}
+                        <form onSubmit={handleOrderSubmit} className="lg:col-span-7 flex flex-col gap-4">
+                          
+                          {/* ADIM 1: Teslimat Adresi (image_c6e3f2.png) */}
+                          <div className="flex flex-col gap-2">
+                            <h4 className="font-black text-xs text-slate-900 border-b pb-1 flex items-center gap-1.5 uppercase tracking-wide">
+                              <span className="w-4 h-4 rounded-full bg-slate-900 text-white flex items-center justify-center text-[9px]">1</span>
+                              Teslimat Adresi
+                            </h4>
+                            <div className="grid grid-cols-2 gap-2">
+                              <input type="text" required placeholder="Ad" value={checkoutForm.ad} onChange={(e) => setCheckoutForm({...checkoutForm, ad: e.target.value})} className="p-2 text-xs font-bold rounded-xl border bg-white focus:border-cyan-500 outline-none" />
+                              <input type="text" required placeholder="Soyad" value={checkoutForm.soyad} onChange={(e) => setCheckoutForm({...checkoutForm, soyad: e.target.value})} className="p-2 text-xs font-bold rounded-xl border bg-white focus:border-cyan-500 outline-none" />
+                            </div>
+                            <input type="email" required placeholder="E-posta" value={checkoutForm.email} onChange={(e) => setCheckoutForm({...checkoutForm, email: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-white focus:border-cyan-500 outline-none" />
+                            <div className="grid grid-cols-2 gap-2">
+                              <input type="tel" required placeholder="Telefon" value={checkoutForm.telefon} onChange={(e) => setCheckoutForm({...checkoutForm, telefon: e.target.value})} className="p-2 text-xs font-bold rounded-xl border bg-white focus:border-cyan-500 outline-none" />
+                              <input type="text" required placeholder="Şehir" value={checkoutForm.sehir} onChange={(e) => setCheckoutForm({...checkoutForm, sehir: e.target.value})} className="p-2 text-xs font-bold rounded-xl border bg-white focus:border-cyan-500 outline-none" />
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                              <input type="text" required placeholder="İlçe" value={checkoutForm.ilce} onChange={(e) => setCheckoutForm({...checkoutForm, ilce: e.target.value})} className="p-2 text-xs font-bold rounded-xl border bg-white focus:border-cyan-500 outline-none" />
+                              <input type="text" required placeholder="Posta Kodu" value={checkoutForm.postaKodu} onChange={(e) => setCheckoutForm({...checkoutForm, postaKodu: e.target.value})} className="p-2 text-xs font-bold rounded-xl border bg-white focus:border-cyan-500 outline-none" />
+                            </div>
+                            <textarea required rows="2" placeholder="Açık Adres (Mahalle, sokak, no...)" value={checkoutForm.acikAdres} onChange={(e) => setCheckoutForm({...checkoutForm, acikAdres: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-white focus:border-cyan-500 outline-none"></textarea>
+                          </div>
+
+                          {/* ADIM 2: ÖDENECEK KART BİLGİLERİ (Özelleştirilmiş, Farklılaştırılmış Tasarım!) */}
+                          <div className="flex flex-col gap-2 mt-1">
+                            <h4 className="font-black text-xs text-slate-900 border-b pb-1 flex items-center gap-1.5 uppercase tracking-wide">
+                              <span className="w-4 h-4 rounded-full bg-purple-900 text-white flex items-center justify-center text-[9px]">2</span>
+                              Ödeme Bilgileri
+                            </h4>
+                            
+                            {/* ÖZGÜN MOR/CYAN GEÇİŞLİ PREMIUM KART VİZÖRÜ (image_c6e455'ten tamamen farklılaştırıldı!) */}
+                            <div className="w-full max-w-sm bg-gradient-to-br from-purple-800 via-indigo-900 to-cyan-700 p-5 rounded-2xl text-white shadow-lg flex flex-col justify-between h-40 relative overflow-hidden tracking-wider self-center mb-2">
+                              <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full blur-xl"></div>
+                              <div className="flex justify-between items-center">
+                                <span className="text-[10px] font-black tracking-widest text-cyan-300 uppercase">PREMIUM HAVUZ KART</span>
+                                <Sparkles className="w-5 h-5 text-amber-400" />
+                              </div>
+                              <div className="text-base font-mono my-2 tracking-widest text-slate-100">
+                                {cardNumber ? cardNumber.replace(/(\d{4})/g, '$1 ').trim() : "•••• •••• •••• ••••"}
+                              </div>
+                              <div className="flex justify-between items-center text-[10px]">
+                                <div>
+                                  <span className="text-slate-400 text-[8px] block uppercase font-bold">Kart Sahibi</span>
+                                  <span className="font-bold tracking-wide uppercase line-clamp-1">{cardName || "NURAY MUTLU"}</span>
+                                </div>
+                                <div className="text-right">
+                                  <span className="text-slate-400 text-[8px] block uppercase font-bold">AA/YY</span>
+                                  <span className="font-bold font-mono">{cardDate || "12/29"}</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Kart Inputları */}
+                            <div className="flex flex-col gap-2">
+                              <div>
+                                <label className="block text-[9px] font-black uppercase text-slate-500 mb-0.5">Kart Üzerindeki İsim</label>
+                                <input type="text" required placeholder="NURAY MUTLU" value={cardName} onChange={(e) => setCardName(e.target.value)} className="w-full p-2 text-xs font-bold rounded-xl border bg-white focus:border-purple-600 outline-none" />
+                              </div>
+                              <div>
+                                <label className="block text-[9px] font-black uppercase text-slate-500 mb-0.5">Kart Numarası</label>
+                                <input type="text" required maxLength="16" placeholder="4000123456789010" value={cardNumber} onChange={(e) => setCardNumber(e.target.value)} className="w-full p-2 text-xs font-bold rounded-xl border bg-white focus:border-purple-600 outline-none" />
+                              </div>
+                              <div className="grid grid-cols-2 gap-2">
+                                <div>
+                                  <label className="block text-[9px] font-black uppercase text-slate-500 mb-0.5">Son Kullanma Tarihi</label>
+                                  <input type="text" required placeholder="12/29" value={cardDate} onChange={(e) => setCardDate(e.target.value)} className="p-2 text-xs font-bold rounded-xl border bg-white focus:border-purple-600 outline-none" />
+                                </div>
+                                <div>
+                                  <label className="block text-[9px] font-black uppercase text-slate-500 mb-0.5">CVV</label>
+                                  <input type="text" required maxLength="3" placeholder="***" value={cardCvc} onChange={(e) => setCardCvc(e.target.value)} className="p-2 text-xs font-bold rounded-xl border bg-white focus:border-purple-600 outline-none" />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <button type="submit" className="w-full bg-[#00b4d8] hover:bg-[#0096c7] text-white font-black py-3.5 rounded-xl transition-all text-xs uppercase tracking-wider mt-1 flex items-center justify-center gap-2 shadow-md">
+                            <CreditCard className="w-4 h-4" /> Siparişi Tamamla
                           </button>
                         </form>
+
+                        {/* SAĞ SÜTUN - SİPARİŞ ÖZETİ PANELİ */}
+                        <div className="lg:col-span-5 bg-slate-50 p-4 rounded-2xl border flex flex-col justify-between max-h-[460px]">
+                          <div>
+                            <h4 className="font-black text-xs text-slate-800 uppercase border-b pb-2 mb-3">Sipariş Özeti</h4>
+                            <div className="flex flex-col gap-3 overflow-y-auto max-h-[180px] pr-1">
+                              {cart.map((item, idx) => (
+                                <div key={idx} className="flex items-center gap-2 text-xs border-b pb-2">
+                                  <div className="flex-1">
+                                    <span className="font-extrabold text-slate-900 block line-clamp-1">{item.name}</span>
+                                    <span className="text-[10px] text-slate-400 font-bold">1 adet</span>
+                                  </div>
+                                  <span className="font-black text-slate-900">₺{item.price}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="pt-3 border-t border-dashed mt-4 flex flex-col gap-1.5 text-xs font-bold text-slate-600">
+                            <div className="flex justify-between"><span>Ara Toplam:</span><span>₺{sepetUrunToplam.toLocaleString('tr-TR')}</span></div>
+                            <div className="flex justify-between"><span>Kargo:</span><span>{kargoUcreti === 0 ? "Ücretsiz" : `₺${kargoUcreti}`}</span></div>
+                            <div className="flex justify-between items-center text-slate-900 text-sm font-black border-t pt-2 mt-1">
+                              <span>Toplam:</span><span className="text-lg text-purple-700">₺{sepetToplamTutar.toLocaleString('tr-TR')}</span>
+                            </div>
+                          </div>
+                        </div>
+
                       </div>
                     )}
                   </div>
                 )}
 
-                {/* PASİF KARGO MODAL PANELİ (Sadece Üst Menü Sipariş Sorgula İçin) */}
+                {/* DIGER MODALLAR (AYNEN KORUNDU) */}
                 {activeModal === "kargo" && (
-                  <div className="text-center py-4 flex flex-col items-center gap-4">
-                    <Truck className="w-10 h-10 text-purple-600 animate-bounce" />
-                    <h4 className="font-black text-slate-900 text-base">🚚 Sipariş Takip Paneli</h4>
-                    
-                    <div className="w-full flex justify-between items-center px-4 mt-2 relative">
-                      <div className="absolute left-6 right-6 top-4 h-1 bg-slate-200 -z-10"></div>
-                      <div className="flex flex-col items-center gap-1 bg-white px-2">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${simulatedOrderStatus === "Hazırlanıyor" || simulatedOrderStatus === "Yola Çıktı" || simulatedOrderStatus === "Tamamlandı" ? 'bg-purple-600 text-white' : 'bg-slate-200'}`}>1</div>
-                        <span className="text-[10px] font-black text-purple-700">Sipariş Alındı</span>
-                      </div>
-                      <div className="flex flex-col items-center gap-1 bg-white px-2">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${simulatedOrderStatus === "Yola Çıktı" || simulatedOrderStatus === "Tamamlandı" ? 'bg-purple-600 text-white' : 'bg-slate-200'}`}>2</div>
-                        <span className="text-[10px] font-black text-slate-700">Hazırlanıyor</span>
-                      </div>
-                      <div className="flex flex-col items-center gap-1 bg-white px-2">
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${simulatedOrderStatus === "Tamamlandı" ? 'bg-purple-600 text-white' : 'bg-slate-200'}`}>3</div>
-                        <span className="text-[10px] font-black text-slate-700">3 Günde Kargoda</span>
-                      </div>
+                  <div className="flex flex-col gap-4 text-xs md:text-sm leading-relaxed">
+                    <div className="bg-cyan-50/50 p-4 rounded-2xl border-2 border-cyan-100">
+                      <h4 className="font-black text-slate-900 text-sm mb-2 flex items-center gap-1.5 text-cyan-900"><Truck className="w-4 h-4" /> Kargo ve Teslimat Altyapı Şartları</h4>
+                      <p className="mb-2">HavuzMarket üzerinden gerçekleştirdiğiniz tüm kurumsal ve bireysel siparişler, yüksek güvenlikli Arpeta lojistik merkezinde uzman ekiplerimizce paketlenmektedir. Anlaşmalı kargo firmamız olan **Yurtiçi Kargo** ile 1000₺ ve üzeri tüm alışverişlerinizde kargo masrafları tamamen şirketimiz tarafından karşılanmaktadır bebek.</p>
                     </div>
+                  </div>
+                )}
 
-                    <div className="mt-4 p-4 bg-purple-50 rounded-2xl border border-purple-100 text-xs font-bold text-purple-900 w-full leading-relaxed">
-                      {simulatedOrderStatus === "Hazırlanıyor" && "✅ Harika! Siparişiniz başarıyla sistemimize ulaştı. Havuz uzmanlarımız ürünlerinizi hazırlamaya başladı bile bebek. En geç 3 gün içinde kargoya teslim edilecektir."}
-                      {simulatedOrderStatus === "Yola Çıktı" && "📦 Siparişiniz şu an Arpeta Dağıtım Merkezi'nde paketlenme aşamasındadır."}
-                      {simulatedOrderStatus === "Tamamlandı" && "🚀 Kargonuz başarıyla yola çıktı, teslimat adresine doğru ilerliyor!"}
-                    </div>
-
-                    <div className="flex gap-2 mt-2 w-full">
-                      <button type="button" onClick={() => setSimulatedOrderStatus("Hazırlanıyor")} className="flex-1 bg-purple-100 text-purple-800 text-[9px] font-black py-1 rounded-md uppercase">Sipariş Alındı</button>
-                      <button type="button" onClick={() => setSimulatedOrderStatus("Yola Çıktı")} className="flex-1 bg-slate-100 text-slate-800 text-[9px] font-black py-1 rounded-md uppercase">Hazırlanıyor</button>
-                      <button type="button" onClick={() => setSimulatedOrderStatus("Tamamlandı")} className="flex-1 bg-emerald-100 text-emerald-800 text-[9px] font-black py-1 rounded-md uppercase">3 Günde Kargoda</button>
+                {activeModal === "iade" && (
+                  <div className="flex flex-col gap-4 text-xs md:text-sm leading-relaxed">
+                    <div className="bg-purple-50/50 p-4 rounded-2xl border-2 border-purple-100">
+                      <h4 className="font-black text-slate-900 text-sm mb-2 text-purple-900">🔄 İade ve Değişim Politikası</h4>
+                      <p>Müşteri memnuniyeti standartlarımız gereğince, satın almış olduğunuz ambalajı açılmamış, kullanılmamış havuz ekipmanlarını **14 iş günü** içerisinde hiçbir mazeret göstermeksizin iade edebilir veya değiştirebilirsiniz canım.</p>
                     </div>
                   </div>
                 )}
@@ -341,7 +398,7 @@ export default function App() {
                       <h4 className="font-black text-slate-900 text-sm mb-1 text-purple-900">📝 Bir Bilgisayar Mühendisliği Öğrencisinin E-Ticaret Geliştirme Günlüğü</h4>
                       <span className="text-[10px] text-slate-500 font-black block mb-3">Yazar: Arpeta R&D Stajyeri Nuray | Temmuz 2026</span>
                       <p className="mb-3">Merhaba! Bir bilgisayar mühendisliği 2. sınıf öğrencisi olarak bu projeye başladığımda amacım sadece bir arayüz tasarlamak değil, gerçek bir e-ticaret akışını sıfırdan kurmaktı. Geliştirme sürecinde en çok zevk aldığım ama bir o kadar da zorlandığım an, dinamik filtreleme state'leri ile canlı backend entegrasyonunu sağlamaktı.</p>
-                      <p className="mb-3">Ufak tefek Git çakışmaları, terminaldeki LF/CRLF satır sonu uyarıları ve 'sepetToplamTutar' değişkenindeki görünmez boşluk hataları bana kod yazarken ne kadar titiz olunması gerektiğini bir kez daha öğretti. Her hatayı adım adım çözüp, İrem Hanım'ın ve ekibin değerli yönlendirmeleriyle platformu PayTR sanal POS simülasyonu ve 3 kademeli sipariş takip sistemine kadar genişletmeyi başardık.</p>
+                      <p className="mb-3">Ufak tefek Git çakışmaları, terminaldeki LF/CRLF satır sonu uyarıları ve 'sepetToplamTutar' değişkenindeki görünmez boşluk hataları bana kod yazarken ne kadar titiz olunması gerektiğini bir kez daha öğretti. Her hatayı adım adım çözüp, İrem Hanım'ın ve ekibin değerli yönlendirmeleriyle platformu PayTR sanal POS simülasyonu ve teslimat adresli sipariş takip sistemine kadar genişletmeyi başardık.</p>
                       <p>Bu süreç, teorik bilgilerimi sektörel bir premium altyapıya dönüştürme yolunda benim için harika bir dönüm noktası oldu. Teknolojiyi ve kod yazmayı çok seviyorum!</p>
                     </div>
                   </div>
@@ -351,9 +408,9 @@ export default function App() {
                   <div className="flex flex-col gap-3 text-xs md:text-sm text-slate-800 font-medium">
                     <h4 className="text-base font-black text-purple-800 uppercase tracking-tight">✨ Platformumuz Hakkında</h4>
                     <p className="text-slate-950 font-bold italic bg-cyan-50 p-4 rounded-xl border-2 border-cyan-100 leading-relaxed">
-                      "HavuzMarket, modern otomasyon çözümlerinden endüstriyel havuz kimyasallarına kadar uzanan 20 premium ürünüyle, kullanıcılarına uçtan uca kusursuz bir dijital tedarik deneyimi sunmak amacıyla Arpeta Yazılım bünyesinde geliştirilmiştir."
+                      "HavuzMarket, modern otomasyon çözümlerinden endüstriyel havuz kimyasallarına kadar uzanan 20 premium ürünüyle, kullanıcılarına uçtan uca kusursuz bir dijital tedarial deneyimi sunmak amacıyla Arpeta Yazılım bünyesinde geliştirilmiştir."
                     </p>
-                    <p className="mt-1">Yapay zeka destekli akıllı karar motorumuz, kullanıcıların anlık ruh hallerine and havuz durum analizlerine göre en doğru ekipmanı listeler. Güvenli PayTR ödeme geçidi ve şeffaf 3 aşamalı sipariş takip modülümüzle sektörel standartları yeniden belirliyoruz.</p>
+                    <p className="mt-1">Yapay zeka destekli akıllı karar motorumuz, kullanıcıların anlık ruh hallerine and havuz durum analizlerine göre en doğru ekipmanı listeler. Güvenli PayTR ödeme geçidi ve şeffaf teslimat adresli sipariş takip modülümüzle standartları yeniden belirliyoruz.</p>
                   </div>
                 )}
 
@@ -423,7 +480,7 @@ export default function App() {
           <div className="flex items-center flex-wrap gap-3 text-sm shrink-0">
             <button type="button" onClick={() => setActiveModal("login")} className="text-slate-700 hover:text-purple-700 flex items-center gap-1 font-extrabold border-2 border-slate-200 px-4 py-2 rounded-xl bg-slate-50 text-xs shadow-sm">Giriş Yap</button>
             <button type="button" onClick={() => setActiveModal("register")} className="bg-cyan-500 text-white px-4 py-2 rounded-xl font-extrabold text-xs">Üye Ol</button>
-            <button type="button" onClick={() => { setActiveModal("kargo"); }} className="px-4 py-2 rounded-xl font-black border border-purple-600 bg-white text-purple-700 text-xs">📋 Sipariş Sorgula</button>
+            <button type="button" onClick={() => { setActiveModal("sepet"); }} className="px-4 py-2 rounded-xl font-black border border-purple-600 bg-white text-purple-700 text-xs">📋 Sipariş Sorgula</button>
 
             <div onClick={() => setActiveModal("sepet")} className="relative cursor-pointer text-slate-800 hover:text-purple-700 bg-slate-100 p-2.5 rounded-xl border-2 shadow-sm">
               <ShoppingCart className="w-5 h-5" />
@@ -498,12 +555,14 @@ export default function App() {
             <div className="flex flex-col gap-2">
               <button onClick={() => setActiveModal("blog")} className="flex items-center gap-3 p-3 rounded-xl text-xs font-black text-slate-700 border hover:bg-purple-50 w-full text-left"><FileText className="w-4 h-4 text-purple-600" /> Blog Yazıları</button>
               <button onClick={() => setActiveModal("hakkimizda")} className="flex items-center gap-3 p-3 rounded-xl text-xs font-black text-slate-700 border hover:bg-cyan-50 w-full text-left"><HelpCircle className="w-4 h-4 text-cyan-500" /> Hakkımızda</button>
+              <button onClick={() => setActiveModal("kargo")} className="flex items-center gap-3 p-3 rounded-xl text-xs font-black text-slate-700 border hover:bg-emerald-50 w-full text-left"><Truck className="w-4 h-4 text-emerald-500" /> Kargo & Teslimat</button>
+              <button onClick={() => setActiveModal("iade")} className="flex items-center gap-3 p-3 rounded-xl text-xs font-black text-slate-700 border hover:bg-rose-50 w-full text-left"><X className="w-4 h-4 text-rose-500" /> İade & Değişim</button>
             </div>
           </aside>
         </div>
       </div>
 
-      <footer className="bg-slate-950 text-slate-300 mt-16 border-t-4 border-purple-600 text-center py-6 text-[11px] font-bold">&copy; 2026 HavuzMarket. Tüm Hakları Saklıdır.</footer>
+      <footer className="bg-slate-950 text-slate-300 mt-16 border-t-4 border-purple-600 text-center py-6 text-[11px] font-bold">&copy; 2026 HavuzMarket. Tüm Hakları Saklıdır. Powered by ARPETA</footer>
     </div>
   );
 }
