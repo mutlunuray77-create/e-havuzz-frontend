@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { ShoppingCart, Search, User, HelpCircle, FileText, Truck, Mail, MapPin, Sparkles, Filter, CheckCircle, X, LogIn, UserPlus, ArrowLeft, CreditCard, AlertTriangle } from 'lucide-react';
+import { ShoppingCart, Search, User, HelpCircle, FileText, Truck, Mail, MapPin, Sparkles, Filter, CheckCircle, X, LogIn, UserPlus, ArrowLeft, CreditCard } from 'lucide-react';
 
 export default function App() {
   const [cart, setCart] = useState([]);
@@ -77,15 +77,15 @@ export default function App() {
     setNotification(`✅ ${product.name} sepete eklendi!`);
   };
 
-  // İREM HANIMIN İSTEDİĞİ BAŞARILI / BAŞARISIZ SEÇENEKLİ ÖDEME TETİKLEYİCİSİ
+  // ÇÖKME RİSKİ SIFIRLANAN YENİ ÖDEME TETİKLEYİCİSİ
   const handlePaymentSimulation = (status) => {
     if (status === "success") {
       setCart([]);
       setSimulatedOrderStatus("Hazırlanıyor"); 
       setActiveModal("kargo"); 
-      setNotification("💳 PayTR Ödemesi Başarılı! Siparişiniz Hazırlanıyor.");
+      setNotification("💳 PayTR Ödemesi Başarılı! Siparişiniz Alındı ve Hazırlanıyor.");
     } else {
-      alert("❌ PayTR Ödeme Hatası: Kart bakiyesi yetersiz veya geçersiz kart bilgisi! Lütfen tekrar deneyin.");
+      alert("❌ PayTR Ödeme Hatası: Kart bakiyesi yetersiz veya geçersiz kart bilgisi!");
       setNotification("❌ Ödeme başarısız oldu. Lütfen bilgilerinizi kontrol edin.");
     }
   };
@@ -190,7 +190,7 @@ export default function App() {
 
                         <div className="border-t pt-3 flex flex-col gap-1.5 border-dashed">
                           <div className="flex justify-between items-center text-xs font-bold text-slate-600">
-                            <span>Templates Toplamı:</span>
+                            <span>Ürünler Toplamı:</span>
                             <span>₺{sepetUrunToplam.toLocaleString('tr-TR')}</span>
                           </div>
                           <div className="flex justify-between items-center text-xs font-bold text-slate-600">
@@ -210,7 +210,6 @@ export default function App() {
                           </div>
                         </div>
 
-                        {/* ARTIK HTML FORM DEĞİL, CRASH ENGELLEYİCİ DİREKT SIMULATION ALANI */}
                         <div className="mt-2 bg-slate-50 p-4 rounded-2xl border-2 border-purple-200 flex flex-col gap-3">
                           <span className="font-black text-xs text-purple-900 uppercase flex items-center gap-1">🔒 PayTR Güvenli Ödeme Altyapısı</span>
                           <div>
@@ -226,7 +225,6 @@ export default function App() {
                             <input type="text" maxLength="3" placeholder="CVC" className="w-full p-2 text-xs font-bold rounded-xl border bg-white focus:border-purple-600 outline-none" />
                           </div>
                           
-                          {/* İREM HANIMIN İSTEDİĞİ BAŞARILI VE BAŞARISIZ SEÇENEKLİ AKILLI BUTONLAR */}
                           <div className="grid grid-cols-2 gap-2 mt-2">
                             <button type="button" onClick={() => handlePaymentSimulation("success")} className="bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3 rounded-xl transition-all shadow-md text-xs uppercase tracking-wider flex items-center justify-center gap-1">
                               ✔ Ödemeyi Onayla
@@ -287,7 +285,7 @@ export default function App() {
 
                 {activeModal === "register" && (
                   <form onSubmit={handleRegisterSubmit} className="flex flex-col gap-3 animate-fadeIn">
-                    <p className="text-xs text-slate-500 font-bold mb-1">Havuz Market ayrıcalıklarından yararlanmak için formu eksikosiz doldurun bebek.</p>
+                    <p className="text-xs text-slate-500 font-bold mb-1">Havuz Market ayrıcalıklarından yararlanmak için formu eksiksiz doldurun bebek.</p>
                     <input type="text" required placeholder="Ad Soyad" value={registerForm.fullname} onChange={(e) => setRegisterForm({...registerForm, fullname: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 text-xs font-bold" />
                     <input type="text" required maxLength="11" placeholder="11 Haneli TC Kimlik No" value={registerForm.tcNo} onChange={(e) => setRegisterForm({...registerForm, tcNo: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 text-xs font-bold" />
                     <input type="tel" required placeholder="0555 XXXXXXX" value={registerForm.phone} onChange={(e) => setRegisterForm({...registerForm, phone: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 text-xs font-bold" />
