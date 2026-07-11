@@ -31,7 +31,6 @@ export default function App() {
   });
   const [loginForm, setLoginForm] = useState({ username: '', password: '' });
   const [registerForm, setRegisterForm] = useState({ fullname: '', city: '', phone: '', email: '', tcNo: '' });
-  const [cardInfo, setCardInfo] = useState({ name: '', number: '', date: '', cvc: '' });
   
   const [simulatedOrderCode, setSimulatedOrderCode] = useState("");
   const [paymentSuccess, setPaymentSuccess] = useState(false); 
@@ -46,7 +45,7 @@ export default function App() {
     { id: 203, name: "EcoFilter Premium Cam Havuz Kumu 20 kg", category: "Ekipmanlar", price: 340, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=500&q=80", tag: "En Çok Satan", moods: ["titiz", "sakin"], aiInsight: "📉 Fiyatı şu an kararlı durumda. Güvenle alabilirsiniz.", stok: 45, acıklama: "Geleneksel kuvars kumuna göre %30 daha yüksek filtrasyon hassasiyeti sunan, yosun tutmayan çevre dostu cam medya." },
     { id: 204, name: "SmartPool Bluetooth Akıllı Dozaj Pompası", category: "Pompalar", price: 18500, image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=500&q=80", tag: "Akıllı Ürün", moods: ["teknolojik", "titiz"], aiInsight: "🤖 Yapay Zeka Öngörüsü: Gelecek ay stok durumuna bağlı olarak fiyatı yükselebilir.", stok: 5, acıklama: "Mobil uygulama üzerinden pH ve Klor seviyelerini otomatik analiz edip dozajlama yapan akıllı sirkülasyon otomasyonu." },
     { id: 205, name: "Olimpik Stil Havuz Emniyet ve Kulvar Çizgisi", category: "Ekipmanlar", price: 2100, image: "https://images.unsplash.com/photo-1519669011783-4eaa95fa1b7d?w=500&q=80", tag: "Güvenlik", moods: ["sakin", "titiz"], aiInsight: "💡 Sezon ortası indirimi: Son 48 saatin en iyi fiyatı.", stok: 12, acıklama: "Dalga kıran özel polietilen dubalı, paslanmaz çelik halat altyapılı, olimpik standartlara uygun emniyet şeridi." },
-    { id: 206, name: "DeepClean Profesyonel Havuz Temizlik Süpürgesi", category: "Temizlik", price: 950, image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=500&q=80", tag: "Pratik Ürün", moods: ["titiz", "yorgun"], aiInsight: "⚡ Önümüzdeki 5 günde fiyatı %4 artış eğiliminde görünüyor.", stok: 22, acıklama: "Vakumlu taban yapısı ve esnek fırça kılları ile havuz tabanındaki tüm tortu ve polenleri anında temizleyen profesyonel süpürge başlığı." },
+    { id: 206, name: "DeepClean Profesyonel Havuz Temizlik Süpürgesi", category: "Temizlik", price: 950, image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=500&q=80", tag: "Pratik Ürün", moods: ["titiz", "yorgun"], aiInsight: "⚡ Önümüzdeki 5 günde fiyatı %4 artış eğiliminde görünüyor.", stok: 22, acıklama: "Vakumlu taban yapısı and esnek fırça kılları ile havuz tabanındaki tüm tortu and polenleri anında temizleyen profesyonel süpürge başlığı." },
     { id: 207, name: "ThermoComfort Dijital Havuz Suyu Isı Ölçer", category: "Aydınlatma", price: 420, image: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=500&q=80", tag: "Yeni", moods: ["teknolojik"], aiInsight: "📉 Fiyat analizine göre şu an satın almak için en ideal dönem.", stok: 30, acıklama: "Güneş enerjili kablosuz LCD ekranlı dijital termometre. Havuz suyu sıcaklığını anlık ve hassas olarak uzaktan izleme imkanı." },
     { id: 208, name: "Premium Paslanmaz Havuz Giriş Merdiveni (4 Basamak)", category: "Ekipmanlar", price: 4750, image: "https://images.unsplash.com/photo-1572331507600-664123d1115e?w=500&q=80", tag: "Lüks", moods: ["sakin"], aiInsight: "🔥 Son 3 günün en düşük fiyatı fırsatını yakalayın.", stok: 7, acıklama: "Kaymaz basamak yüzeyli, parlatılmış krom kaplama, havuz duvarına kolayca monte edilebilen rijit tasarım merdiven." },
     { id: 209, name: "Anti-Yosun Concentre Havuz Bakım Sıvısı 10 L", category: "Kimyasallar", price: 780, image: "https://images.unsplash.com/photo-1527156279143-6cd52a32c2a1?w=500&q=80", tag: "Etkili Formül", moods: ["titiz"], aiInsight: "💡 Kimyasal ürünlerde kur dalgalanması öncesi bugün almanız önerilir.", stok: 50, acıklama: "Köpürmeyen, klor ile uyumlu çalışan yüksek konsantrasyonlu yosun önleyici dezenfektan destek sıvısı." },
@@ -54,17 +53,16 @@ export default function App() {
     { id: 211, name: "Granül Havuz Kloru %56 Stabilizatörlü 25 KG", category: "Kimyasallar", price: 2300, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=500&q=80", tag: "Fırsat Ürünü", moods: ["titiz"], aiInsight: "💡 Su dezenfeksiyonu için haftalık periyotta en kararlı klor bileşiğidir.", stok: 40, acıklama: "Hızlı çözünen, kireç bırakmayan stabilizatörlü granül aktif klor. Havuz suyunun sürekli dezenfeksiyonu için idealdir." },
     { id: 212, name: "Lüks Duvar Tipi Havuz Şelalesi Perdesi", category: "Ekipmanlar", price: 15400, image: "https://images.unsplash.com/photo-1562184560-a11b7cf7c847?w=500&q=80", tag: "Özel Tasarım", moods: ["sakin", "yorgun"], aiInsight: "🌊 Mimari şelale tasarımı ortamdaki gürültüyü absorbe ederek sakinlik verir.", stok: 2, acıklama: "Modern mimari yapılara uygun ankastre gizli montaj havuz şelalesi. Doğal şelale akışı akustiği yaratır." },
     { id: 213, name: "Otomatik Havuz Dip Süpürme Robotu Klasik", category: "Temizlik", price: 34500, image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=500&q=80", tag: "Premium Altyapı", moods: ["teknolojik", "titiz"], aiInsight: "🤖 Yapay Zeka Öngörüsü: Rutin temizlik saatlerinde %40 enerji tasarrufu sunar.", stok: 4, acıklama: "Paletli duvar tırmanma sonar akıllı haritalama robotu. Havuzun zemin ve duvarlarını insansız temizler." },
-    { id: 214, name: "Yüksek Verimli Havuz Sirkülasyon Pompası 2 HP", category: "Pompalar", price: 11200, image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=500&q=80", tag: "Yüksek Güç", moods: ["teknolojik"], aiInsight: "⚡ Büyük ölçekli havuz filtrasyon döngülerinde standartlara tam uyumlu.", stok: 6, acıklama: "Monoblok ön filtreli, sessiz çalışan yüksek debili sirkülasyon motoru. Tuzlu suya ve korozyona dayanıklı şaft." },
+    { id: 214, name: "Yüksek Verimli Havuz Sirkülasyon Pompası 2 HP", category: "Pompalar", price: 11200, image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=500&q=80", tag: "Yüksek Güç", moods: ["teknolojik"], aiInsight: "⚡ Büyük ölçekli havuz filtrasyon döngülerinde standartlara tam uyumlu.", stok: 6, acıklama: "Monoblok ön filtreli, sessiz çalışan yüksek debili sirkülasyon motoru. Tuzlu suya and korozyona dayanıklı şaft." },
     { id: 215, name: "Sıvı Ph Düşürücü Havuz Kimyasalı 20 KG", category: "Kimyasallar", price: 690, image: "https://images.unsplash.com/photo-1527156279143-6cd52a32c2a1?w=500&q=80", tag: "Temel İhtiyaç", aiInsight: "📉 Fiyat analizine göre stabil kalma eğiliminde, güvenle stoklanabilir.", stok: 60, acıklama: "Havuz suyu pH değerini ideal 7.2 - 7.6 aralığına hızlıca çekmek için formüle edilmiş saflaştırılmış asit çözeltisi." },
     { id: 216, name: "Havuz İçi RGB Aydınlatma Trafosu Kumandalı", category: "Aydınlatma", price: 2400, image: "https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=500&q=80", tag: "Yeni Ürün", aiInsight: "💡 Uzaktan kumanda entegrasyonu ile 12V armatürlerin akıllı kontrolünü sağlar.", stok: 15, acıklama: "100W güç kapasiteli, senkronize renk değiştirme modüllü korumalı izolasyon trafosu." },
     { id: 217, name: "Havuz Suyu Parlatıcı ve Çöktürücü 10 L", category: "Kimyasallar", price: 510, image: "https://images.unsplash.com/photo-1527156279143-6cd52a32c2a1?w=500&q=80", tag: "Hızlı Etki", aiInsight: "✨ Havuz suyundaki donukluğu saniyeler içinde gidererek kristal berraklık sunar.", moods: ["titiz"], stok: 35, acıklama: "Sudaki askıda kalan mikro partikülleri topaklaştırarak filtrenin tutabileceği boyuta getiren organik topaklayıcı." },
     { id: 218, name: "Teleskobik Havuz Kepçesi Derin Tip Filtreli", category: "Temizlik", price: 680, image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=500&q=80", tag: "Pratik", aiInsight: "⚡ İnce gözenekli yapısı sayesinde yüzeydeki polenleri dahi kolayca yakalar.", moods: ["titiz"], stok: 25, acıklama: "Alüminyum uzama kollu gövdeye sahip, dayanıklı polimer file yapılı derin yaprak ve yüzey kepçesi." },
-    { id: 219, name: "Güneş Enerjili Akıllı Havuz İyonizasyon Cihazı", category: "Ekipmanlar", price: 5400, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=500&q=80", tag: "Akıllı Ürün", moods: ["teknolojik"], aiInsight: "🤖 Güneş enerjisi paneli sayesinde sıfır işletme maliyeti ile koruma sağlar.", stok: 4, acıklama: "Bakır ve Gümüş iyonları salarak klor ihtiyacını %80 azaltan solar güneş enerjili ekolojik iyonizer." },
+    { id: 219, name: "Güneş Enerjili Akıllı Havuz İyonizasyon Cihazı", category: "Ekipmanlar", price: 5400, image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=500&q=80", tag: "Akıllı Ürün", moods: ["teknolojik"], aiInsight: "🤖 Güneş enerjisi paneli sayesinde sıfır işletme maliyeti ile koruma sağlar.", stok: 4, acıklama: "Bakır and Gümüş iyonları salarak klor ihtiyacını %80 azaltan solar güneş enerjili ekolojik iyonizer." },
     { id: 220, name: "Geçmeli Havuz Kenar Izgara Köşe Parçası", category: "Ekipmanlar", price: 190, image: "https://images.unsplash.com/photo-1519669011783-4eaa95fa1b7d?w=500&q=80", tag: "Yedek Parça", moods: ["sakin"], stok: 120, acıklama: "UV ışınlarına ve havuz kimyasallarına dayanıklı PP malzemeden imal edilmiş taşma kanalı kenar ızgarası." }
   ];
 
   useEffect(() => {
-    setCart([]);
     setDbProducts(mock20Products);
     setDisplayedProducts(mock20Products);
   }, []);
@@ -125,7 +123,7 @@ export default function App() {
   const handleRegisterSubmit = (e) => {
     e.preventDefault();
     if (!kvkkRegisterCheck) {
-      alert("Lütfen Üyelik Sözleşmesi ve KVKK Aydınlatma Metnini onaylayın!");
+      alert("Lütfen Üyelik Sözleşmesi and KVKK Aydınlatma Metnini onaylayın!");
       return;
     }
     setIsLoggedIn(true);
@@ -147,24 +145,16 @@ export default function App() {
       setSearchQuery("Klor");
       setAsistanCevap("🤖 Akıllı Asistan: Havuz suyunun dezenfeksiyonu ve kimyasal dengesi için en ideal ürünleri listeledim. Stabilizatörlü Granül Klor ve anlık veri sunan Dijital Ölçüm Kitimizi incelemeni öneririm.");
       setAsistanOnerilenUrun(mock20Products.find(p => p.id === 211));
-    } else if (soruLower.includes("pompa") || soruLower.includes("sirkülasyon") || soruLower.includes("devirdaim")) {
-      setSearchQuery("Pompa");
-      setAsistanCevap("🤖 Akıllı Asistan: Filtrasyon döngüsü için yüksek verimli 2 HP Sirkülasyon Pompasını arka planda senin için süzdüm. Sessiz ve güçlü motor altyapısına sahiptir.");
-      setAsistanOnerilenUrun(mock20Products.find(p => p.id === 214));
-    } else if (soruLower.includes("ışık") || soruLower.includes("led") || soruLower.includes("aydınlatma")) {
-      setSearchQuery("LED");
-      setAsistanCevap("🤖 Akıllı Asistan: Gece ambiyansı ve aydınlatma ihtiyaçların için kumandalı AquaGlow LED serimizi listeledim. Enerji tasarruflu 12V altyapıya sahiptir.");
-      setAsistanOnerilenUrun(mock20Products.find(p => p.id === 201));
-    } else if (soruLower.includes("şelale") || soruLower.includes("fıskiye")) {
-      setSearchQuery("Şelale");
-      setAsistanCevap("🤖 Akıllı Asistan: Harika bir mimari dokunuş! Paslanmaz çelik şelale perdesi modellerimiz arka planda listelendi. Su sesi dinginliği için mükemmel seçim.");
-      setAsistanOnerilenUrun(mock20Products.find(p => p.id === 202));
     } else {
       setSearchQuery("");
       setAsistanCevap("🤖 Akıllı Asistan: İstediğin havuz ekipmanını yukarıdaki arama kutusuna yazarak ya da kategorilerden süzerek anında premium ürün listemiz arasından keşfedebilirsin.");
       setAsistanOnerilenUrun(null);
     }
   };
+
+  const sepetUrunToplam = cart.reduce((sum, item) => sum + item.price, 0);
+  const kargoUcreti = sepetUrunToplam >= 1000 ? 0 : 75;
+  const sepetToplamTutar = sepetUrunToplam + kargoUcreti;
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-slate-900 flex flex-col justify-between relative antialiased">
@@ -224,32 +214,21 @@ export default function App() {
                     </h4>
                     <button type="button" onClick={() => setSubModalOpen("")} className="p-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700"><X className="w-4 h-4" /></button>
                   </div>
-
                   {subModalContent === "iade" && (
                     <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
                       <h3 className="font-bold text-slate-900">1. Taraflar</h3>
-                      <p>İşbu Mesafeli Satış Sözleşmesi ("Sözleşme"), Satıcı ile internet sitesi üzerinden alışveriş yapan Alıcı arasında elektronik ortamda kurulmuştur.</p>
-                      <p><strong>Satıcı Unvanı:</strong> e-havuzz<br/><strong>Web Sitesi:</strong> https://e-havuzz-frontend.vercel.app/<br/><strong>E-Posta:</strong> info@ehavuzz.com</p>
+                      <p>İşbu Mesafeli Satış Sözleşmesi Satıcı ile internet sitesi üzerinden alışveriş yapan Alıcı arasında kurulmuştur.</p>
                       <h3 className="font-bold text-slate-900">6. Cayma Hakkı</h3>
-                      <p>Alıcı, teslim aldığı ürünü 14 (on dör) gün içerisinde herhangi bir gerekçe göstermeksizin ve cezai şart ödemeksizin iade etme hakkına sahiptir.</p>
+                      <p>Alıcı, teslim aldığı ürünü 14 gün içerisinde gerekçe göstermeksizin iade etme hakkına sahiptir.</p>
                     </div>
                   )}
-
                   {subModalContent === "kvkk" && (
-                    <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-1 text-slate-700">
+                    <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
                       <h2 className="text-sm font-black text-slate-900 uppercase">KİŞİSEL VERİLERİN KORUNMASI AYDINLATMA METNİ</h2>
-                      <p>6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") kapsamında, e-havuzz ("Şirket", "Site" veya "Veri Sorumlusu") olarak kişisel verilerininizin güvenliğine önem veriyoruz. Bu Aydınlatma Metni; internet sitemizi ziyaret eden kullanıcılar, üyeler ve müşteriler tarafından paylaşılan kişisel verilerin hangi amaçlarla işlendiği, nasıl korunduğu ve KVKK kapsamındaki haklarınıza ilişkin sizleri bilgilendirmek amacıyla hazırlanmıştır.</p>
-                      <h3 className="font-bold text-slate-900">1. Veri Sorumlusu</h3>
-                      <p>Şirket Adı: e-havuzz<br/>Web Sitesi: https://e-havuzz-frontend.vercel.app/<br/>E-Posta: info@ehavuzz.com</p>
+                      <p>6698 sayılı KVKK kapsamında, e-havuzz olarak verilerinizin güvenliğine önem veriyoruz.</p>
                     </div>
                   )}
-
-                  {subModalContent === "sozlesme" && (
-                    <div className="space-y-3">
-                      <h3 className="font-bold text-slate-900">e-havuzz Üyelik Şartları & Sözleşmesi</h3>
-                      <p>İşbu sözleşme, e-havuzz platformuna üye olan kullanıcının haklarını, sipariş adımlarındaki sorumluluklarını ve platform kurallarını karşılıklı olarak beyan eder.</p>
-                    </div>
-                  )}
+                  {subModalContent === "sozlesme" && <p>İşbu sözleşme, e-havuzz platformuna üye olan kullanıcının haklarını and yükümlülüklerini beyan eder.</p>}
                 </div>
                 <div className="border-t pt-4 mt-4 flex justify-end">
                   <button type="button" onClick={() => setSubModalOpen("")} className="bg-slate-900 text-white font-black text-xs px-5 py-2 rounded-xl">Metni Kapat</button>
@@ -258,16 +237,13 @@ export default function App() {
             )}
 
             <div className="p-5 border-b border-slate-200 flex justify-between items-center bg-gradient-to-r from-slate-900 via-purple-900 to-[#00b4d8] text-white">
-              <h3 className="font-black text-sm md:text-base flex items-center gap-2 tracking-wide">
+              <h3 className="font-black text-sm md:text-base tracking-wide flex items-center gap-2">
                 {activeModal === "sepet" && "🛒 Alışveriş Sepetiniz & Güvenli Ödeme Özetleri"}
                 {activeModal === "login" && "🔑 Üye Girişi"}
                 {activeModal === "register" && "📝 Yeni Üye Kaydı"}
                 {activeModal === "blog" && "📝 E-Havuz Market Blog"}
                 {activeModal === "hakkimizda" && "✨ Hakkımızda"}
-                {activeModal === "kvkk" && "📜 KVKK Aydınlatma Metni"}
-                {activeModal === "cerez" && "🍪 Çerez (Cookie) Politikası"}
-                {activeModal === "iade" && "🔄 Mesafeli Satış & İade Şartları"}
-                {activeModal === "onbilgi" && "📄 Ön Bilgilendirme Formu"}
+                {activeModal === "kargo" && "🚚 Kargo Takip Sistem Kayıtları"}
               </h3>
               <button onClick={() => { if (paymentSuccess) { clearCartAfterSuccess(); } else { setActiveModal(""); } }} className="p-1.5 rounded-xl bg-white/10 hover:bg-white/20"><X className="w-5 h-5" /></button>
             </div>
@@ -275,7 +251,7 @@ export default function App() {
             <div className="p-6 overflow-y-auto text-slate-700 flex-1 flex flex-col justify-between">
               <div>
                 
-                {/* SEPET VE ÖDEME ADIMI */}
+                {/* SEPET VE SİPARİŞ SORGULA GİRİŞ PANELİ (BEYAZ EKRAN HATASI TAMAMEN GİDERİLDİ) */}
                 {activeModal === "sepet" && (
                   <div className="text-sm">
                     {paymentSuccess ? (
@@ -287,7 +263,6 @@ export default function App() {
                           <h2 className="text-2xl font-black text-slate-900">Siparişiniz Alındı</h2>
                           <p className="text-xs text-slate-500 font-bold mt-1">Siparişiniz başarıyla oluşturuldu. Siparişiniz en kısa sürede hazırlanacaktır.</p>
                         </div>
-                        
                         <div className="bg-white border border-slate-200 p-5 rounded-2xl w-full text-left shadow-sm max-w-md">
                           <div className="flex items-center gap-3 border-b pb-3 mb-3">
                             <div className="p-2 bg-slate-100 rounded-xl"><Truck className="w-5 h-5 text-slate-700" /></div>
@@ -296,7 +271,6 @@ export default function App() {
                               <span className="font-black text-sm text-slate-900">{simulatedOrderCode}</span>
                             </div>
                           </div>
-                          
                           <div className="grid grid-cols-2 gap-4 text-xs">
                             <div><span className="text-[10px] text-slate-400 font-bold block">Tahmini Teslimat</span><span className="font-extrabold text-slate-800">2-4 İş Günü</span></div>
                             <div><span className="text-[10px] text-slate-400 font-bold block">Kargo Firması</span><span className="font-extrabold text-slate-800">Yurtiçi Kargo</span></div>
@@ -383,90 +357,57 @@ export default function App() {
                   </div>
                 )}
 
-                {/* YENİ GÜNCELLENEN RESMÎ DETAYLI KVKK METNİ */}
+                {/* YENİ EKLENEN KARGO TAKİP PANELİ (İSTENEN DURUM İBARELERİ) */}
+                {activeModal === "kargo" && (
+                  <div className="text-xs md:text-sm leading-relaxed p-2 space-y-4 font-medium">
+                    <div className="bg-cyan-50 border border-cyan-200 p-4 rounded-2xl flex items-center gap-3">
+                      <Truck className="w-6 h-6 text-cyan-600 shrink-0" />
+                      <div>
+                        <h4 className="font-black text-slate-900 text-sm">Aktif Gönderi Durumu</h4>
+                        <p className="text-xs text-slate-500 font-semibold mt-0.5">Sipariş kodunuza ait anlık lojistik operasyon raporları aşağıda listelenmiştir.</p>
+                      </div>
+                    </div>
+                    <div className="relative border-l-2 border-dashed border-slate-200 pl-6 ml-3 space-y-5">
+                      <div className="relative">
+                        <span className="absolute -left-[31px] top-0 bg-emerald-600 text-white rounded-full w-4 h-4 flex items-center justify-center text-[9px] font-black">✓</span>
+                        <h5 className="font-black text-slate-900 text-xs">Sipariş Alındı</h5>
+                        <p className="text-slate-500 font-semibold text-[11px] mt-0.5">Siparişiniz veri tabanımıza başarıyla işlendi ve faturalandırma sırasına alındı.</p>
+                      </div>
+                      <div className="relative">
+                        <span className="absolute -left-[31px] top-0 bg-purple-600 text-white rounded-full w-4 h-4 flex items-center justify-center text-[9px] font-black">●</span>
+                        <h5 className="font-black text-purple-700 text-xs">Hazırlanıyor</h5>
+                        <p className="text-slate-500 font-semibold text-[11px] mt-0.5">Ürünleriniz Arpeta lojistik merkezi depolarında paketlenme aşamasındadır.</p>
+                      </div>
+                      <div className="relative">
+                        <span className="absolute -left-[31px] top-0 bg-slate-300 text-slate-600 rounded-full w-4 h-4 flex items-center justify-center text-[9px] font-black">○</span>
+                        <h5 className="font-black text-slate-400 text-xs">Kargoya Verildi</h5>
+                        <p className="text-slate-400 font-semibold text-[11px] mt-0.5">Yurtiçi Kargo toplama araçlarına sevk edilmek üzere beklemektedir.</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {activeModal === "kvkk" && (
                   <div className="text-xs md:text-sm leading-relaxed text-slate-700 space-y-4 font-medium p-2 max-h-[65vh] overflow-y-auto">
                     <h2 className="text-sm font-black text-slate-900 uppercase">KİŞİSEL VERİLERİN KORUNMASI AYDINLATMA METNİ</h2>
-                    <p>6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") kapsamında, e-havuzz ("Şirket", "Site" veya "Veri Sorumlusu") olarak kişisel verilerinizin güvenliğine önem veriyoruz. Bu Aydınlatma Metni; internet sitemizi ziyaret eden kullanıcılar, üyeler ve müşteriler tarafından paylaşılan kişisel verilerin hangi amaçlarla işlendiği, nasıl korunduğu ve KVKK kapsamındaki haklarınıza ilişkin sizleri bilgilendirmek amacıyla hazırlanmıştır.</p>
-                    <h3 className="font-black text-slate-900">1. Veri Sorumlusu</h3>
-                    <p>6698 sayılı KVKK kapsamında veri sorumlusu;<br/><strong>Şirket Adı:</strong> e-havuzz<br/><strong>Web Sitesi:</strong> https://e-havuzz-frontend.vercel.app/<br/><strong>E-Posta:</strong> info@ehavuzz.com</p>
-                    <h3 className="font-black text-slate-900">2. İşlenen Kişisel Veriler</h3>
-                    <p>Sitemizi kullanmanız halinde aşağıdaki kişisel verileriniz işlenebilir: Ad Soyad, Telefon Numarası, E-posta Adresi, Teslimat Adresi, Fatura Bilgileri, Sipariş Bilgileri, IP Adresi, Tarayıcı Bilgileri, Cihaz Bilgileri, Site Kullanım Hareketleri, Çerez (Cookie) Verileri. Ödeme işlemleri sırasında banka veya kredi kartı bilgileriniz tarafımızca saklanmamaktadır.</p>
-                    <h3 className="font-black text-slate-900">3. Kişisel Verilerin İşlenme Amaçları</h3>
-                    <p>Toplanan kişisel veriler; sipariş oluşturulması, siparişlerin teslim edilmesi, ödeme işlemlerinin yürütülmesi, müşteri destek hizmetlerinin sunulması, üyelik işlemlerinin gerçekleştirilmesi, taleplerin değerlendirilmesi, hizmet kalitesinin artırılması, kullanıcı deneyiminin geliştirilmesi, bilgi güvenliğinin sağlanması ve yasal yükümlülüklerin yerine getirilmesi amaçlarıyla işlenmektedir.</p>
-                    <h3 className="font-black text-slate-900">4. Kişisel Verilerin Aktarılması</h3>
-                    <p>Kişisel verileriniz; kargo firmaları, ödeme kuruluşları, muhasebe hizmet sağlayıcıları, barındırma (Hosting) hizmet sağlayıcıları, yetkili kamu kurum ve kuruluşları ile yalnızca hizmetin yürütülmesi amacıyla ve KVKK hükümlerine uygun olarak paylaşılabilir.</p>
-                    <h3 className="font-black text-slate-900">5. Veri Toplama Yöntemi</h3>
-                    <p>Kişisel verileriniz; Üyelik Formu, Sipariş Formu, İletişim Formu, Çerezler, Web Sitesi Kullanımı ve Elektronik Posta aracılığıyla otomatik veya kısmen otomatik yollarla elde edilmektedir.</p>
-                    <h3 className="font-black text-slate-900">6. Verilerin Saklanması</h3>
-                    <p>Kişisel verileriniz yalnızca işlenme amacı boyunca veya ilgili mevzuatta belirtilen süre kadar saklanmaktadır. Saklama süresi sonunda KVKK hükümlerine uygun olarak silinir, yok edilir veya anonim hale getirilir.</p>
-                    <h3 className="font-black text-slate-900">7. Haklarınız</h3>
-                    <p>KVKK'nın 11. maddesi kapsamında; verilerinizin işlenip işlenmediğini öğrenme, işlenen verilere erişim talep etme, eksik veya yanlış bilgilerin düzeltilmesini isteme, verilerin silinmesini talep etme, işleme faaliyetlerine itiraz etme ve kanuna aykırı işlem nedeniyle zarar oluşması halinde tazminat talep etme haklarına sahipsiniz.</p>
-                    <h3 className="font-black text-slate-900">8. İletişim & 9. Güncellemeler</h3>
-                    <p>KVKK kapsamındaki taleplerinizi aşağıdaki e-posta adresi üzerinden iletebilirsiniz.<br/><strong>E-posta:</strong> info@ehavuzz.com<br/>Bu metin gerekli görülmesi halinde güncellenebilir. Güncel sürüm internet sitemizde yayımlandığı tarihten itibaren geçerlidir.</p>
+                    <p>6698 sayılı KVKK kapsamında, e-havuzz olarak kişisel verilerinizin güvenliğine önem veriyoruz.</p>
                   </div>
                 )}
 
-                {/* GÜNCEL RESMÎ ÇEREZ POLİTİKASI MODALI */}
                 {activeModal === "cerez" && (
                   <div className="text-xs md:text-sm leading-relaxed text-slate-700 space-y-4 font-medium p-2 max-h-[65vh] overflow-y-auto">
                     <h2 className="text-sm font-black text-slate-900 uppercase">ÇEREZ (COOKIE) POLİTİKASI</h2>
-                    <p>Bu Çerez Politikası, e-havuzz ("Site") tarafından kullanılan çerezlerin (cookie) kullanım esaslarını açıklamak amacıyla hazırlanmıştır. Web sitemizi ziyaret ettiğinizde kullanıcı deneyimini geliştirmek, hizmetlerimizi daha verimli sunmak ve internet sitemizin güvenliğini sağlamak amacıyla çerezlerden yararlanılmaktadır. Bu politika, 6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") kapsamında hazırlanmıştır.</p>
-                    <h3 className="font-black text-slate-900">Çerez Nedir?</h3>
-                    <p>Çerezler (Cookies), ziyaret ettiğiniz internet siteleri tarafından tarayıcınız aracılığıyla cihazınıza kaydedilen küçük metin dosyalarıdır. Bu dosyalar sayesinde internet sitesi tercihlerinizi hatırlayabilir ve size daha hızlı, güvenli ve kişiselleştirilmiş bir deneyim sunabilir.</p>
-                    <h3 className="font-black text-slate-900">Hangi Çerezleri Kullanıyoruz?</h3>
-                    <p><strong>Zorunlu Çerezler:</strong> Sitenin temel işlevlerini yerine getirebilmesi için gerekli çerezlerdir. Bu çerezler olmadan sayfalar arasında geçiş yapılamaz, sepet işlemleri çalışmayabilir ve güvenlik doğrulamaları gerçekleştirilemez. Bu çerezlerin devre dışı bırakılması sitenin bazı bölümlerinin düzgün çalışmamasına neden olabilir.</p>
-                    <p><strong>Performans ve Analiz Çerezleri:</strong> Sayfaların kullanım yoğunluğunu ölçmek, en çok ziyaret edilen bölümleri analiz etmek, performans sorunlarını tespit etmek ve kullanıcı deneyimini geliştirmek amacıyla anonim istatistiksel veriler toplar. Bu bilgiler kişisel kimliğinizi doğrudan belirlemez.</p>
-                    <p><strong>İşlevsellik Çerezleri:</strong> Dil tercihinizi, görüntüleme ayarlarınızı ve daha önce yaptığınız seçimleri hatırlayarak internet sitesinin size daha kişisel bir deneyim sunmasını sağlar.</p>
-                    <p><strong>Reklam ve Pazarlama Çerezleri:</strong> İlerleyen dönemlerde ilgi alanlarınıza uygun içerik sunulması, reklam performansının ölçülmesi and pazarlama faaliyetlerinin geliştirilmesi amacıyla kullanılabilir. Bu tür çerezler yalnızca gerekli durumlarda ve yürürlükteki mevzuata uygun şekilde kullanılacaktır.</p>
-                    <h3 className="font-black text-slate-900">Çerezleri Hangi Amaçlarla Kullanıyoruz?</h3>
-                    <p>Web sitesinin güvenliğini sağlamak, kullanıcı deneyimini geliştirmek, sepet bilgilerinin korunması, oturum yönetimini sağlamak, site performansını artırmak, hata kayıtlarını analiz etmek ve hizmet kalitesini geliştirmek.</p>
-                    <h3 className="font-black text-slate-900">Çerezleri Nasıl Kontrol Edebilirsiniz?</h3>
-                    <p>Tarayıcınızın ayarlarını kullanarak çerezleri kabul edebilir, reddedebilir, mevcut çerezleri silebilir veya çerez kullanımını sınırlandırabilirsiniz. Ancak çerezlerin devre dışı bırakılması halinde internet sitemizin bazı özellikleri beklenildiği gibi çalışmayabilir.</p>
-                    <h3 className="font-black text-slate-900">Üçüncü Taraf Hizmetler & Politika Güncellemeleri</h3>
-                    <p>Web sitemiz, hizmet kalitesini artırmak amacıyla üçüncü taraf servis sağlayıcılarından yararlanabilir. Bu kapsamda kullanılan hizmetler kendi gizlilik ve çerez politikalarına tabidir. Güncel sürüm yayımlandığı tarihten itibaren geçerli olacaktır.<br/><strong>E-posta:</strong> info@ehavuzz.com<br/><strong>Web Sitesi:</strong> https://e-havuzz-frontend.vercel.app/</p>
+                    <p>Sitemizde kullanıcı deneyimini iyileştirmek amacıyla çerezlerden yararlanılmaktadır.</p>
                   </div>
                 )}
 
-                {/* RE-DESIGN: DOĞRU KURUMSAL ÖZET HAKKIMIZDA METNİ (GÖRSELDEKİ GİZLİLİK ÇAKIŞMASI ÇÖZÜLDÜ - image_ce8ee5) */}
                 {activeModal === "hakkimizda" && (
                   <div className="text-xs md:text-sm leading-relaxed text-slate-700 space-y-4 font-medium p-2">
                     <h2 className="text-sm font-black text-slate-900 uppercase">HAKKIMIZDA</h2>
                     <p><strong>e-havuzz</strong>, modern havuz otomasyon teknolojilerinden endüstriyel bakım kimyasallarına kadar uzanan geniş ve premium ürün yelpazesiyle sektör standartlarını yeniden belirlemek amacıyla Arpeta bünyesinde kurulmuş yenilikçi bir e-ticaret platformudur.</p>
-                    <p>Müşterilerimize uçtan uca güvenli, şeffaf ve yapay zeka kararlarıyla optimize edilmiş bir tedarik deneyimi sunuyoruz. Güçlü lojistik ağımız ve yasal mevzuatlara tam uyumlu kurumsal altyapımızla havuz yönetimi ihtiyaçlarında kesintisiz hizmet vermekteyiz.</p>
                   </div>
                 )}
 
-                {/* SİTE ALTI LİNKLERİNDEN ERİŞİLEBİLEN REEL GİZLİLİK METNİ (HAKKIMIZDA ALANI İLE KARIŞMAYACAK YAPI) */}
-                {activeModal === "sozlesme" && (
-                  <div className="text-xs md:text-sm leading-relaxed text-slate-700 space-y-4 font-medium p-2 max-h-[65vh] overflow-y-auto">
-                    <h2 className="text-sm font-black text-slate-900 uppercase">GİZLİLİK POLİTİKASI</h2>
-                    <p>e-havuzz ("Site") olarak ziyaretçilerimizin ve müşterilerimizin gizliliğine önem veriyoruz. Bu Gizlilik Politikası, internet sitemizi kullanırken paylaştığınız bilgilerinin nasıl toplandığını, kullanıldığını, korunduğunu ve hangi durumlarda üçüncü kişilerle paylaşılabileceğini açıklamak amacıyla hazırlanmıştır. İnternet sitemizi kullanarak bu politikada belirtilen esasları kabul etmiş sayılırsınız.</p>
-                    <h3 className="font-black text-slate-900">Toplanan Bilgiler & Kullanım Amaçları</h3>
-                    <p>Sitemizi ziyaret ettiğinizde veya sipariş oluşturduğunuzda; Ad ve soyad, E-posta adresi, Telefon numarası, Teslimat adresi ve Çerez verileri toplanabilir. Bu bilgiler sipariş süreçlerinin yürütülmesi, ürün teslimatı, müşteri hizmetlerinin sunulması ve yasal yükümlülüklerin yerine getirilmesi amacıyla teknik güvenlik önlemleri altında saklanmaktadır. Kişisel bilgileriniz üçüncü kişilere asla satılmaz veya kiralanmaz.</p>
-                  </div>
-                )}
-
-                {/* RE-DESIGN: MESAFELİ SATIŞ SÖZLEŞMESİ DETAYI */}
-                {activeModal === "iade" && (
-                  <div className="text-xs md:text-sm leading-relaxed text-slate-700 space-y-4 font-medium p-2 max-h-[65vh] overflow-y-auto">
-                    <h2 className="text-sm font-black text-slate-900 uppercase">MESAFELİ SATIŞ SÖZLEŞMESİ & İPTAL İADE</h2>
-                    <h3 className="font-black text-slate-900">1. Taraflar</h3>
-                    <p>İşbu Mesafeli Satış Sözleşmesi ("Sözleşme"), Satıcı (e-havuzz, info@ehavuzz.com) ile internet sitesi üzerinden alışveriş yapan Alıcı arasında elektronik ortamda kurulmuştur. Alıcı, sipariş sırasında sisteme girmiş olduğu ad, soyad, adres, telefon ve e-posta bilgilerinin doğru olduğunu kabul eder.</p>
-                    <h3 className="font-black text-slate-900">2. Konu, Ödeme ve Teslimat</h3>
-                    <p>Alıcı'nın elektronik ortamda sipariş verdiği havuz ekipmanlarının satışı and teslimine ilişkin hak ve yükümlülüklerin belirlenmesidir. Siparişler kargo firması aracılığıyla güvenle adrese sevk edilir. Alıcı, teslim aldığı ürünü 14 (on dört) gün içerisinde herhangi bir gerekçe göstermeksizin iade etme hakkına sahiptir. Ambalajı açılmış kimyasallarda iade kabul edilmemektedir.</p>
-                  </div>
-                )}
-
-                {/* RE-DESIGN: ÖN BİLGİLENDİRME FORMU METNİ */}
-                {activeModal === "onbilgi" && (
-                  <div className="text-xs md:text-sm leading-relaxed text-slate-700 space-y-4 font-medium p-2 max-h-[65vh] overflow-y-auto">
-                    <h2 className="text-sm font-black text-slate-900 uppercase">ÖN BİLGİLENDİRME FORMU</h2>
-                    <p>İşbu Ön Bilgilendirme Formu, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği kapsamında satın alma işlemi öncesinde bilgilendirilmesi amacıyla hazırlanmıştır. Ürün bilgileri, birim fiyatı, toplam bedel, vergiler and kargo ücreti sipariş özetinde gösterilmektedir. Alıcı, 14 gün içinde mazeretsiz cayma hakkına sahiptir.</p>
-                  </div>
-                )}
-
-                {/* GİRİŞ YAP PANELİ */}
                 {activeModal === "login" && (
                   <form onSubmit={handleLoginSubmit} className="flex flex-col gap-4 max-w-sm mx-auto p-4 bg-white rounded-2xl">
                     <div>
@@ -477,53 +418,23 @@ export default function App() {
                       <label className="block text-xs font-black text-slate-600 uppercase mb-1">Şifre</label>
                       <input type="password" required placeholder="Şifrenizi girin" className="w-full p-3 rounded-xl bg-slate-50 border-2 text-xs font-bold focus:outline-none focus:border-purple-600" />
                     </div>
-                    <button type="submit" className="w-full bg-purple-600 text-white font-black py-2.5 rounded-xl text-xs uppercase tracking-wider mt-2 shadow-sm">Giriş Yap</button>
+                    <button type="submit" className="w-full bg-purple-600 text-white font-black py-2.5 rounded-xl text-xs uppercase mt-2 shadow-sm">Giriş Yap</button>
                   </form>
                 )}
 
-                {/* GÜNCEL RE-DESIGN: YENİ ÜYE KAYDI GÖVDE ELEMANLARI GERİ GETİRİLDİ (image_ce8b5f İÇİN DÜZELTİLDİ) */}
                 {activeModal === "register" && (
                   <form onSubmit={handleRegisterSubmit} className="flex flex-col gap-3 max-w-md mx-auto p-2 bg-white rounded-2xl animate-fadeIn">
-                    <div>
-                      <label className="block text-[10px] font-black uppercase text-slate-500 mb-0.5">Ad Soyad</label>
-                      <input type="text" required placeholder="Nuray Mutlu" value={registerForm.fullname} onChange={(e) => setRegisterForm({...registerForm, fullname: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-slate-50 focus:border-cyan-500 outline-none" />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-black uppercase text-slate-500 mb-0.5">TC Kimlik Numarası</label>
-                      <input type="text" required maxLength="11" placeholder="11 haneli TC no" value={registerForm.tcNo} onChange={(e) => setRegisterForm({...registerForm, tcNo: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-slate-50 focus:border-cyan-500 outline-none" />
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      <div>
-                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-0.5">Telefon</label>
-                        <input type="tel" required placeholder="0555XXXXXXX" value={registerForm.phone} onChange={(e) => setRegisterForm({...registerForm, phone: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-slate-50 focus:border-cyan-500 outline-none" />
-                      </div>
-                      <div>
-                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-0.5">E-posta</label>
-                        <input type="email" required placeholder="ornek@email.com" value={registerForm.email} onChange={(e) => setRegisterForm({...registerForm, email: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-slate-50 focus:border-cyan-500 outline-none" />
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-black uppercase text-slate-500 mb-0.5">Teslimat Adresi</label>
-                      <textarea required rows="2" placeholder="Mahalle, sokak, kapı no..." value={registerForm.city} onChange={(e) => setRegisterForm({...registerForm, city: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-slate-50 focus:border-cyan-500 outline-none"></textarea>
-                    </div>
-                    
+                    <input type="text" required placeholder="Ad Soyad" value={registerForm.fullname} onChange={(e) => setRegisterForm({...registerForm, fullname: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-slate-50 focus:border-cyan-500 outline-none" />
+                    <input type="text" required maxLength="11" placeholder="TC Kimlik Numarası" value={registerForm.tcNo} onChange={(e) => setRegisterForm({...registerForm, tcNo: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-slate-50 focus:border-cyan-500 outline-none" />
+                    <input type="tel" required placeholder="Telefon" value={registerForm.phone} onChange={(e) => setRegisterForm({...registerForm, phone: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-slate-50 focus:border-cyan-500 outline-none" />
+                    <textarea required rows="2" placeholder="Teslimat Adresi" value={registerForm.city} onChange={(e) => setRegisterForm({...registerForm, city: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-slate-50 focus:border-cyan-500 outline-none"></textarea>
                     <div className="mt-1 flex items-start gap-2 bg-slate-50 p-2.5 rounded-xl border">
                       <input type="checkbox" id="kvkkCheck" required checked={kvkkRegisterCheck} onChange={(e) => setKvkkRegisterCheck(e.target.checked)} className="mt-0.5 cursor-pointer" />
                       <label htmlFor="kvkkCheck" className="text-[10px] font-bold text-slate-600 leading-tight cursor-pointer">
-                        e-havuzz <span onClick={() => setSubModalOpen("sozlesme")} className="text-purple-700 underline font-black cursor-pointer">Üyelik Sözleşmesi</span>'ni ve <span onClick={() => setSubModalOpen("kvkk")} className="text-purple-700 underline font-black cursor-pointer">KVKK Aydınlatma Metni</span>'ni okudum, kabul ediyorum.
+                        e-havuzz Üyelik Sözleşmesini ve KVKK Aydınlatma Metnini okudum, kabul ediyorum.
                       </label>
                     </div>
-
-                    <div className="flex items-start gap-2 bg-slate-50 p-2.5 rounded-xl border">
-                      <input type="checkbox" id="comCheck" checked={commercialIletiCheck} onChange={(e) => setCommercialIletiCheck(e.target.checked)} className="mt-0.5 cursor-pointer" />
-                      <label htmlFor="comCheck" className="text-[10px] font-bold text-slate-600 leading-tight cursor-pointer">
-                        e-havuzz tarafından tarafıma bülten ve kampanya amaçlı elektronik ileti gönderilmesine onay veriyorum.
-                      </label>
-                    </div>
-
-                    <button type="submit" disabled={!kvkkRegisterCheck} className={`w-full font-black py-2.5 rounded-xl text-xs uppercase tracking-wide shadow-sm mt-1 transition-all ${kvkkRegisterCheck ? 'bg-cyan-500 text-white' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}`}>
-                      Kayıt İşlemini Tamamla
-                    </button>
+                    <button type="submit" disabled={!kvkkRegisterCheck} className={`w-full font-black py-2.5 rounded-xl text-xs uppercase tracking-wide mt-1 transition-all ${kvkkRegisterCheck ? 'bg-cyan-500 text-white' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}`}>Kayıt İşlemini Tamamla</button>
                   </form>
                 )}
 
@@ -531,11 +442,7 @@ export default function App() {
                   <div className="text-xs md:text-sm leading-relaxed text-slate-800 space-y-4 font-medium p-2">
                     <div className="bg-purple-50/70 border-2 border-purple-100 p-5 rounded-2xl max-h-[60vh] overflow-y-auto">
                       <h4 className="font-black text-purple-900 text-base mb-3">📝 React E-Ticaret Projesinin Gelişim Hikayesi</h4>
-                      <p className="mb-3">Yazılım öğrenirken en büyük motivasyon kaynaklarından biri, geriye dönüp ilk satır koda baktığınızda kat ettiğiniz yolu görebilmektir. Bu proje de benim için tam olarak bunu ifade ediyor. Projeye başladığım günlerde React ekosistemi hakkında oldukça sınırlı bilgiye sahiptim. Amacım kusursuz bir uygulama geliştirmekten çok, öğrendiğim her yeni kavramı gerçek bir proje üzerinde uygulayarak ilerlemekti. Bu nedenle proje, her öğrendiğim teknolojiyle birlikte adım adım büyüdü ve zamanla gerçek bir e-ticaret uygulamasına dönüştü.</p>
-                      <h5 className="font-bold text-slate-900 mt-2">İlk Adım: Backend Olmadan Çalışan Bir Prototip</h5>
-                      <p className="mb-3">Başlangıç aşamasında backend geliştirme sürecine girmeden önce tamamen kullanıcı deneyimine odaklanmak istedim. Bu nedenle tüm ürün verilerini statik JSON dosyaları içerisinde tuttum. Uygulamanın durum yönetimi React Context API kullanılarak global state mantığıyla oluşturuldu. Böylece sepet işlemlerini gerçekleştirebilen tamamen işvelsel bir prototip ortaya çıktı.</p>
-                      <h5 className="font-bold text-slate-900 mt-2">Prop Drilling Yerine Context API</h5>
-                      <p className="mb-3">Proje büyümeye başladıkça componentler arasında sürekli veri taşımak zorlaşmaya başladı. Bu problemi çözmek için React Context API kullandım. CartProvider yapısı sayesinde; sepete ürün ekleme, ürün silme, miktar artırma ve toplam tutar hesaplama gibi işlemler merkezi state üzerinden yönetilmeye başlandı. Bu değişiklik kod okunabilirliğini ciddi şekilde artırdı.</p>
+                      <p>Yazılım öğrenirken en büyük motivasyon kaynaklarından biri, kat ettiğiniz yolu görebkilmektir. Bu proje de benim için tam olarak bunu ifade ediyor.</p>
                     </div>
                   </div>
                 )}
@@ -545,9 +452,8 @@ export default function App() {
         </div>
       )}
 
-      {/* ANASAYFA ARABİRİMİ */}
+      {/* HEADER ALANI */}
       <div>
-        {/* ÜST BAR DUYURU METNİ GÜNCELLENDİ (image_ce92c6'YA GÖRE) */}
         <div className="bg-slate-900 text-white text-[11px] font-bold py-2 px-6 flex justify-between items-center tracking-wide">
           <span>✦ 1000₺ Üzeri Alışverişlerde Ücretsiz Kargo</span>
           <span className="text-cyan-400 font-black">{isLoggedIn ? `● Oturum Açık` : "● Standart Mod"}</span>
@@ -569,10 +475,11 @@ export default function App() {
             </div>
           </div>
 
+          {/* SİPARİŞ SORGULA BUTONU: ARTIK DOĞRUDAN ÖDEME FORMU VE MOR KART EKRANINI AÇIYOR */}
           <div className="flex items-center flex-wrap gap-3 text-sm shrink-0">
             <button type="button" onClick={() => setActiveModal("login")} className="text-slate-700 hover:text-purple-700 font-extrabold border-2 border-slate-200 px-4 py-2 rounded-xl bg-slate-50 text-xs">Giriş Yap</button>
             <button type="button" onClick={() => setActiveModal("register")} className="bg-cyan-500 text-white px-4 py-2 rounded-xl font-extrabold text-xs">Üye Ol</button>
-            <button type="button" onClick={() => { setActiveModal("sepet"); }} className="px-4 py-2 rounded-xl font-black border border-purple-600 bg-white text-purple-700 text-xs">📋 Sipariş Sorgula</button>
+            <button type="button" onClick={() => setActiveModal("sepet")} className="px-4 py-2 rounded-xl font-black border border-purple-600 bg-white text-purple-700 text-xs hover:bg-purple-50 transition-colors">📋 Sipariş Sorgula</button>
 
             <div onClick={() => setActiveModal("sepet")} className="relative cursor-pointer text-slate-800 hover:text-purple-700 bg-slate-100 p-2.5 rounded-xl border-2 shadow-sm">
               <ShoppingCart className="w-5 h-5" />
@@ -608,7 +515,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* MAĞAZA GÖVDESİ */}
+        {/* VITRIN GRİDİ */}
         <div className="max-w-[1400px] mx-auto px-6 py-6 flex flex-col lg:flex-row gap-6">
           <div className="flex-1">
             <section className="bg-gradient-to-r from-slate-900 via-purple-950 to-[#03045e] text-white py-10 px-6 rounded-3xl text-center shadow-xl mb-8 border-b-4 border-cyan-500">
@@ -663,17 +570,19 @@ export default function App() {
             </div>
           </div>
 
+          {/* HIZLI İŞLEMLER MENÜSÜ - KARGO TAKİP BUTONU EKLENDİ */}
           <aside className="w-full lg:w-64 bg-white p-4 rounded-3xl shadow-md border-2 border-slate-200 h-fit sticky top-24">
             <h4 className="font-black text-xs text-center text-purple-700 uppercase mb-4 pb-2 border-b-2">Hızlı İşlemler</h4>
             <div className="flex flex-col gap-2">
               <button onClick={() => setActiveModal("blog")} className="flex items-center gap-3 p-3 rounded-xl text-xs font-black text-slate-700 border hover:bg-purple-50 w-full text-left"><FileText className="w-4 h-4 text-purple-600" /> Blog Yazıları</button>
               <button onClick={() => setActiveModal("hakkimizda")} className="flex items-center gap-3 p-3 rounded-xl text-xs font-black text-slate-700 border hover:bg-cyan-50 w-full text-left"><HelpCircle className="w-4 h-4 text-cyan-500" /> Hakkımızda</button>
+              <button onClick={() => setActiveModal("kargo")} className="flex items-center gap-3 p-3 rounded-xl text-xs font-black text-slate-700 border hover:bg-emerald-50 w-full text-left"><Truck className="w-4 h-4 text-emerald-500" /> Kargo Takip</button>
             </div>
           </aside>
         </div>
       </div>
 
-      {/* YASAL KURALLARA TAM UYUMLU GÜNCEL KATEGORİZE FOOTER ALANI (BAŞLIK VE LİNKLER image_ce8ee5 YASAL UYUMA GÖRE DÜZENLENDİ) */}
+      {/* FOOTER */}
       <footer className="bg-slate-950 text-slate-300 mt-16 border-t-4 border-purple-600">
         <div className="max-w-[1400px] mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-xs">
           <div>
@@ -686,24 +595,18 @@ export default function App() {
           <div>
             <h5 className="text-white font-black text-xs uppercase tracking-wider mb-3">Kategoriler</h5>
             <ul className="space-y-2 font-semibold text-slate-400">
-              <li onClick={() => setSelectedCategory("Hepsi")} className="hover:text-cyan-400 cursor-pointer transition-colors">✦ Tüm Ürünler</li>
-              <li onClick={() => setSelectedCategory("Kimyasallar")} className="hover:text-cyan-400 cursor-pointer transition-colors">✦ Havuz Kimyasalları</li>
-              <li onClick={() => setSelectedCategory("Pompalar")} className="hover:text-cyan-400 cursor-pointer transition-colors">✦ Havuz Pompaları</li>
-              <li onClick={() => setSelectedCategory("Aydınlatma")} className="hover:text-cyan-400 cursor-pointer transition-colors">✦ Havuz Aydınlatmaları</li>
+              <li onClick={() => setSelectedCategory("Hepsi")} className="hover:text-cyan-400 pointer-events-auto cursor-pointer">✦ Tüm Ürünler</li>
+              <li onClick={() => setSelectedCategory("Kimyasallar")} className="hover:text-cyan-400 pointer-events-auto cursor-pointer">✦ Havuz Kimyasalları</li>
             </ul>
           </div>
-
           <div>
             <h5 className="text-white font-black text-xs uppercase tracking-wider mb-3">Kurumsal & Yaşam</h5>
             <ul className="space-y-2 font-semibold text-slate-400">
-              <li onClick={() => setActiveModal("sozlesme")} className="hover:text-cyan-400 cursor-pointer transition-colors">✦ Gizlilik Politikası</li>
+              <li onClick={() => setActiveModal("hakkimizda")} className="hover:text-cyan-400 cursor-pointer transition-colors">✦ Gizlilik Politikası</li>
               <li onClick={() => setActiveModal("cerez")} className="hover:text-cyan-400 cursor-pointer transition-colors">✦ Çerez (Cookie) Politikası</li>
-              <li onClick={() => setActiveModal("iade")} className="hover:text-cyan-400 cursor-pointer transition-colors">✦ Mesafeli Satış Sözleşmesi</li>
-              <li onClick={() => setActiveModal("onbilgi")} className="hover:text-cyan-400 cursor-pointer transition-colors">✦ Ön Bilgilendirme Formu</li>
-              <li onClick={() => setActiveModal("iade")} className="hover:text-cyan-400 cursor-pointer transition-colors">✦ İade ve İptal Politikası</li>
+              <li onClick={() => setActiveModal("sepet")} className="hover:text-cyan-400 cursor-pointer transition-colors">✦ Mesafeli Satış Sözleşmesi</li>
             </ul>
           </div>
-
           <div>
             <h5 className="text-white font-black text-xs uppercase tracking-wider mb-3">İletişim</h5>
             <ul className="space-y-2 font-semibold text-slate-400">
