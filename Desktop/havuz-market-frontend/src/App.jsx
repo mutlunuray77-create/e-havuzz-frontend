@@ -228,35 +228,19 @@ export default function App() {
                   {subModalContent === "iade" && (
                     <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
                       <h3 className="font-bold text-slate-900">1. Taraflar</h3>
-                      <p>İşbu Mesafeli Satış Sözleşmesi ("Sözleşme"), aşağıda bilgileri bulunan Satıcı ile internet sitesi üzerinden alışveriş yapan Alıcı arasında elektronik ortamda kurulmuştur.</p>
+                      <p>İşbu Mesafeli Satış Sözleşmesi ("Sözleşme"), Satıcı ile internet sitesi üzerinden alışveriş yapan Alıcı arasında elektronik ortamda kurulmuştur.</p>
                       <p><strong>Satıcı Unvanı:</strong> e-havuzz<br/><strong>Web Sitesi:</strong> https://e-havuzz-frontend.vercel.app/<br/><strong>E-Posta:</strong> info@ehavuzz.com</p>
-                      <p><strong>Alıcı:</strong> Alıcı, sipariş sırasında sisteme girmiş olduğu ad, soyad, adres, telefon ve e-posta bilgilerinin doğru olduğunu kabul eder.</p>
-                      <h3 className="font-bold text-slate-900">2. Konu</h3>
-                      <p>İşbu sözleşmenin konusu, Alıcı'nın Satıcı'ya ait internet sitesi üzerinden elektronik ortamda sipariş verdiği ürün veya hizmetin satışı ve teslimine ilişkin tarafların hak ve yükümlülüklerinin belirlenmesidir.</p>
-                      <h3 className="font-bold text-slate-900">3. Ürün ve Sipariş Bilgileri</h3>
-                      <p>Siparişe ilişkin; ürün adı, adedi, birim fiyatı, toplam tutar, kargo ücreti, vergiler ve ödeme yöntemi onay ekranında belirtilmektedir.</p>
-                      <h3 className="font-bold text-slate-900">4. Ödeme</h3>
-                      <p>Alıcı, sipariş sırasında seçmiş olduğu ödeme yöntemi ile ödemeyi gerçekleştireceğini kabul eder. Ödeme işlemleri, güvenli ödeme altyapısı üzerinden gerçekleştirilmektedir. Satıcı, kredi kartı veya banka kartı bilgilerini saklamaz.</p>
-                      <h3 className="font-bold text-slate-900">5. Teslimat</h3>
-                      <p>Siparişler, stok durumuna bağlı olarak en kısa sürede hazırlanır and anlaşmalı kargo firması aracılığıyla teslim edilir.</p>
                       <h3 className="font-bold text-slate-900">6. Cayma Hakkı</h3>
-                      <p>Alıcı, teslim aldığı ürünü 14 (on dört) gün içerisinde herhangi bir gerekçe göstermeksizin ve cezai şart ödemeksizin iade etme hakkına sahiptir.</p>
-                      <h3 className="font-bold text-slate-900">7. Cayma Hakkının Kullanılamayacağı Durumlar</h3>
-                      <p>Kullanıcının isteği doğrultusunda hazırlanan kişiye özel ürünler, ambalajı açılmış hijyen ürünleri, tek kullanımlık ürünler, hızlı bozulabilen ürünler ve ambalajı açılmış havuz kimyasallarında cayma hakkı kullanılamaz.</p>
-                      <h3 className="font-bold text-slate-900">8. İade Süreci</h3>
-                      <p>İade şartlarının sağlanması durumunda ürün bedeli, ödeme yapılan yöntem esas alınarak yasal süre içerisinde Alıcı'ya iade edilir.</p>
+                      <p>Alıcı, teslim aldığı ürünü 14 (on dör) gün içerisinde herhangi bir gerekçe göstermeksizin ve cezai şart ödemeksizin iade etme hakkına sahiptir.</p>
                     </div>
                   )}
 
                   {subModalContent === "kvkk" && (
-                    <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-1">
-                      <p>6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") kapsamında, e-havuzz ("Şirket", "Site" veya "Veri Sorumlusu") olarak kişisel verilerinizin güvenliğine önem veriyoruz.</p>
+                    <div className="space-y-3 max-h-[60vh] overflow-y-auto pr-1 text-slate-700">
+                      <h2 className="text-sm font-black text-slate-900 uppercase">KİŞİSEL VERİLERİN KORUNMASI AYDINLATMA METNİ</h2>
+                      <p>6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") kapsamında, e-havuzz ("Şirket", "Site" veya "Veri Sorumlusu") olarak kişisel verilerininizin güvenliğine önem veriyoruz. Bu Aydınlatma Metni; internet sitemizi ziyaret eden kullanıcılar, üyeler ve müşteriler tarafından paylaşılan kişisel verilerin hangi amaçlarla işlendiği, nasıl korunduğu ve KVKK kapsamındaki haklarınıza ilişkin sizleri bilgilendirmek amacıyla hazırlanmıştır.</p>
                       <h3 className="font-bold text-slate-900">1. Veri Sorumlusu</h3>
                       <p>Şirket Adı: e-havuzz<br/>Web Sitesi: https://e-havuzz-frontend.vercel.app/<br/>E-Posta: info@ehavuzz.com</p>
-                      <h3 className="font-bold text-slate-900">2. İşlenen Kişisel Veriler</h3>
-                      <p>Sitemiz üzerinden işlem yaparken paylaştığınız; Ad Soyad, Telefon Numarası, E-posta Adresi, Teslimat Adresi, Fatura Bilgileri, Sipariş Bilgileri, IP Adresi ve Çerez verileri işlenmektedir.</p>
-                      <h3 className="font-bold text-slate-900">3. Kişisel Verilerin İşlenme Amaçları</h3>
-                      <p>Sipariş oluşturulması, ürün teslimatı, ödeme süreçlerinin yürütülmesi, müşteri destek hizmetlerinin sunulması ve yasal yükümlülüklerin yerine getirilmesi amaçlarıyla işlenmektedir.</p>
                     </div>
                   )}
 
@@ -274,7 +258,7 @@ export default function App() {
             )}
 
             <div className="p-5 border-b border-slate-200 flex justify-between items-center bg-gradient-to-r from-slate-900 via-purple-900 to-[#00b4d8] text-white">
-              <h3 className="font-black text-sm md:text-base tracking-wide flex items-center gap-2">
+              <h3 className="font-black text-sm md:text-base flex items-center gap-2 tracking-wide">
                 {activeModal === "sepet" && "🛒 Alışveriş Sepetiniz & Güvenli Ödeme Özetleri"}
                 {activeModal === "login" && "🔑 Üye Girişi"}
                 {activeModal === "register" && "📝 Yeni Üye Kaydı"}
@@ -283,7 +267,6 @@ export default function App() {
                 {activeModal === "kvkk" && "📜 KVKK Aydınlatma Metni"}
                 {activeModal === "cerez" && "🍪 Çerez (Cookie) Politikası"}
                 {activeModal === "iade" && "🔄 Mesafeli Satış & İade Şartları"}
-                {activeModal === "sozlesme" && "📄 Üyelik Sözleşmesi"}
                 {activeModal === "onbilgi" && "📄 Ön Bilgilendirme Formu"}
               </h3>
               <button onClick={() => { if (paymentSuccess) { clearCartAfterSuccess(); } else { setActiveModal(""); } }} className="p-1.5 rounded-xl bg-white/10 hover:bg-white/20"><X className="w-5 h-5" /></button>
@@ -292,7 +275,7 @@ export default function App() {
             <div className="p-6 overflow-y-auto text-slate-700 flex-1 flex flex-col justify-between">
               <div>
                 
-                {/* SEPET VE FORM AKIŞI */}
+                {/* SEPET VE ÖDEME ADIMI */}
                 {activeModal === "sepet" && (
                   <div className="text-sm">
                     {paymentSuccess ? (
@@ -304,6 +287,7 @@ export default function App() {
                           <h2 className="text-2xl font-black text-slate-900">Siparişiniz Alındı</h2>
                           <p className="text-xs text-slate-500 font-bold mt-1">Siparişiniz başarıyla oluşturuldu. Siparişiniz en kısa sürede hazırlanacaktır.</p>
                         </div>
+                        
                         <div className="bg-white border border-slate-200 p-5 rounded-2xl w-full text-left shadow-sm max-w-md">
                           <div className="flex items-center gap-3 border-b pb-3 mb-3">
                             <div className="p-2 bg-slate-100 rounded-xl"><Truck className="w-5 h-5 text-slate-700" /></div>
@@ -312,6 +296,7 @@ export default function App() {
                               <span className="font-black text-sm text-slate-900">{simulatedOrderCode}</span>
                             </div>
                           </div>
+                          
                           <div className="grid grid-cols-2 gap-4 text-xs">
                             <div><span className="text-[10px] text-slate-400 font-bold block">Tahmini Teslimat</span><span className="font-extrabold text-slate-800">2-4 İş Günü</span></div>
                             <div><span className="text-[10px] text-slate-400 font-bold block">Kargo Firması</span><span className="font-extrabold text-slate-800">Yurtiçi Kargo</span></div>
@@ -398,7 +383,7 @@ export default function App() {
                   </div>
                 )}
 
-                {/* GÜNCEL RESMÎ GİZLİLİK POLİTİKASI MODALI */}
+                {/* YENİ GÜNCELLENEN RESMÎ DETAYLI KVKK METNİ */}
                 {activeModal === "kvkk" && (
                   <div className="text-xs md:text-sm leading-relaxed text-slate-700 space-y-4 font-medium p-2 max-h-[65vh] overflow-y-auto">
                     <h2 className="text-sm font-black text-slate-900 uppercase">KİŞİSEL VERİLERİN KORUNMASI AYDINLATMA METNİ</h2>
@@ -417,10 +402,8 @@ export default function App() {
                     <p>Kişisel verileriniz yalnızca işlenme amacı boyunca veya ilgili mevzuatta belirtilen süre kadar saklanmaktadır. Saklama süresi sonunda KVKK hükümlerine uygun olarak silinir, yok edilir veya anonim hale getirilir.</p>
                     <h3 className="font-black text-slate-900">7. Haklarınız</h3>
                     <p>KVKK'nın 11. maddesi kapsamında; verilerinizin işlenip işlenmediğini öğrenme, işlenen verilere erişim talep etme, eksik veya yanlış bilgilerin düzeltilmesini isteme, verilerin silinmesini talep etme, işleme faaliyetlerine itiraz etme ve kanuna aykırı işlem nedeniyle zarar oluşması halinde tazminat talep etme haklarına sahipsiniz.</p>
-                    <h3 className="font-black text-slate-900">8. İletişim</h3>
-                    <p>KVKK kapsamındaki taleplerinizi aşağıdaki e-posta adresi üzerinden iletebilirsiniz.<br/><strong>E-posta:</strong> info@ehavuzz.com</p>
-                    <h3 className="font-black text-slate-900">9. Güncellemeler</h3>
-                    <p>Bu metin gerekli görülmesi halinde güncellenebilir. Güncel sürüm internet sitemizde yayımlandığı tarihten itibaren geçerlidir.</p>
+                    <h3 className="font-black text-slate-900">8. İletişim & 9. Güncellemeler</h3>
+                    <p>KVKK kapsamındaki taleplerinizi aşağıdaki e-posta adresi üzerinden iletebilirsiniz.<br/><strong>E-posta:</strong> info@ehavuzz.com<br/>Bu metin gerekli görülmesi halinde güncellenebilir. Güncel sürüm internet sitemizde yayımlandığı tarihten itibaren geçerlidir.</p>
                   </div>
                 )}
 
@@ -432,88 +415,114 @@ export default function App() {
                     <h3 className="font-black text-slate-900">Çerez Nedir?</h3>
                     <p>Çerezler (Cookies), ziyaret ettiğiniz internet siteleri tarafından tarayıcınız aracılığıyla cihazınıza kaydedilen küçük metin dosyalarıdır. Bu dosyalar sayesinde internet sitesi tercihlerinizi hatırlayabilir ve size daha hızlı, güvenli ve kişiselleştirilmiş bir deneyim sunabilir.</p>
                     <h3 className="font-black text-slate-900">Hangi Çerezleri Kullanıyoruz?</h3>
-                    <p><strong>Zorunlu Çerezler:</strong> Sitenin temel işlevlerini yerine getirebilmesi için gerekli çerezlerdir. Bu çerezler olmadan sayfalar arasında geçiş yapılamaz, sepet işlemleri çalışmayabilir and güvenlik doğrulamaları gerçekleştirilemez.</p>
-                    <p><strong>Performans ve Analiz Çerezleri:</strong> Sayfaların kullanım yoğunluğunu ölçmek, en çok ziyaret edilen bölümleri analiz etmek ve kullanıcı deneyimini geliştirmek amacıyla anonim istatistiksel veriler toplar.</p>
+                    <p><strong>Zorunlu Çerezler:</strong> Sitenin temel işlevlerini yerine getirebilmesi için gerekli çerezlerdir. Bu çerezler olmadan sayfalar arasında geçiş yapılamaz, sepet işlemleri çalışmayabilir ve güvenlik doğrulamaları gerçekleştirilemez. Bu çerezlerin devre dışı bırakılması sitenin bazı bölümlerinin düzgün çalışmamasına neden olabilir.</p>
+                    <p><strong>Performans ve Analiz Çerezleri:</strong> Sayfaların kullanım yoğunluğunu ölçmek, en çok ziyaret edilen bölümleri analiz etmek, performans sorunlarını tespit etmek ve kullanıcı deneyimini geliştirmek amacıyla anonim istatistiksel veriler toplar. Bu bilgiler kişisel kimliğinizi doğrudan belirlemez.</p>
                     <p><strong>İşlevsellik Çerezleri:</strong> Dil tercihinizi, görüntüleme ayarlarınızı ve daha önce yaptığınız seçimleri hatırlayarak internet sitesinin size daha kişisel bir deneyim sunmasını sağlar.</p>
-                    <p><strong>Reklam ve Pazarlama Çerezleri:</strong> İlerleyen dönemlerde ilgi alanlarınıza uygun içerik sunulması ve pazarlama faaliyetlerinin geliştirilmesi amacıyla mevzuata uygun şekilde kullanılabilir.</p>
+                    <p><strong>Reklam ve Pazarlama Çerezleri:</strong> İlerleyen dönemlerde ilgi alanlarınıza uygun içerik sunulması, reklam performansının ölçülmesi and pazarlama faaliyetlerinin geliştirilmesi amacıyla kullanılabilir. Bu tür çerezler yalnızca gerekli durumlarda ve yürürlükteki mevzuata uygun şekilde kullanılacaktır.</p>
                     <h3 className="font-black text-slate-900">Çerezleri Hangi Amaçlarla Kullanıyoruz?</h3>
                     <p>Web sitesinin güvenliğini sağlamak, kullanıcı deneyimini geliştirmek, sepet bilgilerinin korunması, oturum yönetimini sağlamak, site performansını artırmak, hata kayıtlarını analiz etmek ve hizmet kalitesini geliştirmek.</p>
                     <h3 className="font-black text-slate-900">Çerezleri Nasıl Kontrol Edebilirsiniz?</h3>
                     <p>Tarayıcınızın ayarlarını kullanarak çerezleri kabul edebilir, reddedebilir, mevcut çerezleri silebilir veya çerez kullanımını sınırlandırabilirsiniz. Ancak çerezlerin devre dışı bırakılması halinde internet sitemizin bazı özellikleri beklenildiği gibi çalışmayabilir.</p>
-                    <h3 className="font-black text-slate-900">Üçüncü Taraf Hizmetler</h3>
-                    <p>Web sitemiz, hizmet kalitesini artırmak amacıyla üçüncü taraf servis sağlayıcılarından yararlanabilir. Bu kapsamda kullanılan hizmetler kendi gizlilik ve çerez politikalarına tabidir.</p>
-                    <h3 className="font-black text-slate-900">Politika Güncellemeleri ve İletişim</h3>
-                    <p>Güncel sürüm yayımlandığı tarihten itibaren geçerli olacaktır. Sorularınız için bizimle iletişime geçebilirsiniz.<br/><strong>E-posta:</strong> info@ehavuzz.com<br/><strong>Web Sitesi:</strong> https://e-havuzz-frontend.vercel.app/</p>
+                    <h3 className="font-black text-slate-900">Üçüncü Taraf Hizmetler & Politika Güncellemeleri</h3>
+                    <p>Web sitemiz, hizmet kalitesini artırmak amacıyla üçüncü taraf servis sağlayıcılarından yararlanabilir. Bu kapsamda kullanılan hizmetler kendi gizlilik ve çerez politikalarına tabidir. Güncel sürüm yayımlandığı tarihten itibaren geçerli olacaktır.<br/><strong>E-posta:</strong> info@ehavuzz.com<br/><strong>Web Sitesi:</strong> https://e-havuzz-frontend.vercel.app/</p>
                   </div>
                 )}
 
-                {/* GÜNCEL RESMÎ GİZLİLİK POLİTİKASI MODALI */}
+                {/* RE-DESIGN: DOĞRU KURUMSAL ÖZET HAKKIMIZDA METNİ (GÖRSELDEKİ GİZLİLİK ÇAKIŞMASI ÇÖZÜLDÜ - image_ce8ee5) */}
                 {activeModal === "hakkimizda" && (
+                  <div className="text-xs md:text-sm leading-relaxed text-slate-700 space-y-4 font-medium p-2">
+                    <h2 className="text-sm font-black text-slate-900 uppercase">HAKKIMIZDA</h2>
+                    <p><strong>e-havuzz</strong>, modern havuz otomasyon teknolojilerinden endüstriyel bakım kimyasallarına kadar uzanan geniş ve premium ürün yelpazesiyle sektör standartlarını yeniden belirlemek amacıyla Arpeta bünyesinde kurulmuş yenilikçi bir e-ticaret platformudur.</p>
+                    <p>Müşterilerimize uçtan uca güvenli, şeffaf ve yapay zeka kararlarıyla optimize edilmiş bir tedarik deneyimi sunuyoruz. Güçlü lojistik ağımız ve yasal mevzuatlara tam uyumlu kurumsal altyapımızla havuz yönetimi ihtiyaçlarında kesintisiz hizmet vermekteyiz.</p>
+                  </div>
+                )}
+
+                {/* SİTE ALTI LİNKLERİNDEN ERİŞİLEBİLEN REEL GİZLİLİK METNİ (HAKKIMIZDA ALANI İLE KARIŞMAYACAK YAPI) */}
+                {activeModal === "sozlesme" && (
                   <div className="text-xs md:text-sm leading-relaxed text-slate-700 space-y-4 font-medium p-2 max-h-[65vh] overflow-y-auto">
                     <h2 className="text-sm font-black text-slate-900 uppercase">GİZLİLİK POLİTİKASI</h2>
-                    <p>e-havuzz ("Site") olarak ziyaretçilerimizin ve müşterilerimizin gizliliğine önem veriyoruz. Bu Gizlilik Politikası, internet sitemizi kullanırken paylaştığınız bilgilerin nasıl toplandığını, kullanıldığını, korunduğunu ve hangi durumlarda üçüncü kişilerle paylaşılabileceğini açıklamak amacıyla hazırlanmıştır. İnternet sitemizi kullanarak bu politikada belirtilen esasları kabul etmiş sayılırsınız.</p>
-                    <h3 className="font-black text-slate-900">Toplanan Bilgiler</h3>
-                    <p>Sitemizi ziyaret ettiğinizde veya sipariş oluşturduğunuzda; Ad ve soyad, E-posta adresi, Telefon numarası, Teslimat ve fatura adresi, Sipariş bilgileri, IP adresi, Tarayıcı ve cihaz bilgileri, Site kullanım hareketleri ve Çerez verileri toplanabilir. Ödeme işlemleri sırasında kullanılan banka veya kredi kartı bilgileriniz tarafımızca saklanmamaktadır.</p>
-                    <h3 className="font-black text-slate-900">Bilgilerin Kullanım Amaçları</h3>
-                    <p>Sipariş süreçlerinin yürütülmesi, ürün teslimatının sağlanması, müşteri hizmetlerinin sunulması, talep ve şikâyetlerin değerlendirilmesi, hesap güvenliğinin sağlanması, internet sitesinin geliştirilmesi, kullanıcı deneyiminin iyileştirilmesi, yasal yükümlülüklerin yerine getirilmesi, dolandırıcılık ve kötüye kullanımın önlenmesi.</p>
-                    <h3 className="font-black text-slate-900">Bilgilerin Korunması ve Paylaşılması</h3>
-                    <p>Kişisel verileriniz; ilgili mevzuat gereği yetkili kamu kurum ve kuruluşlarıyla, kargo ve lojistik hizmet sağlayıcılarıyla, ödeme hizmeti sağlayıcılarıyla, teknik altyapı ve barındırma hizmeti sunan iş ortaklarıyla yalnızca hizmetin sunulması amacıyla paylaşılabilir. Bunun dışında kişisel bilgileriniz üçüncü kişilere satılmaz veya kiralanmaz.</p>
-                    <h3 className="font-black text-slate-900">Veri Saklama Süresi ve Haklar</h3>
-                    <p>Kişisel bilgileriniz yalnızca işlenme amacı devam ettiği sürece veya yürürlükteki mevzuatta öngörülen süre boyunca saklanmaktadır. Kullanıcılar verilerinin işlenip işlenmediğini öğrenme, erişim talep etme ve düzeltilmesini isteme haklarına sahiptir.<br/><strong>E-posta:</strong> info@ehavuzz.com<br/><strong>Web Sitesi:</strong> https://e-havuzz-frontend.vercel.app/</p>
+                    <p>e-havuzz ("Site") olarak ziyaretçilerimizin ve müşterilerimizin gizliliğine önem veriyoruz. Bu Gizlilik Politikası, internet sitemizi kullanırken paylaştığınız bilgilerinin nasıl toplandığını, kullanıldığını, korunduğunu ve hangi durumlarda üçüncü kişilerle paylaşılabileceğini açıklamak amacıyla hazırlanmıştır. İnternet sitemizi kullanarak bu politikada belirtilen esasları kabul etmiş sayılırsınız.</p>
+                    <h3 className="font-black text-slate-900">Toplanan Bilgiler & Kullanım Amaçları</h3>
+                    <p>Sitemizi ziyaret ettiğinizde veya sipariş oluşturduğunuzda; Ad ve soyad, E-posta adresi, Telefon numarası, Teslimat adresi ve Çerez verileri toplanabilir. Bu bilgiler sipariş süreçlerinin yürütülmesi, ürün teslimatı, müşteri hizmetlerinin sunulması ve yasal yükümlülüklerin yerine getirilmesi amacıyla teknik güvenlik önlemleri altında saklanmaktadır. Kişisel bilgileriniz üçüncü kişilere asla satılmaz veya kiralanmaz.</p>
                   </div>
                 )}
 
-                {/* GÜNCEL RESMÎ MESAFELİ SATIŞ SÖZLEŞMESİ MODALI */}
+                {/* RE-DESIGN: MESAFELİ SATIŞ SÖZLEŞMESİ DETAYI */}
                 {activeModal === "iade" && (
                   <div className="text-xs md:text-sm leading-relaxed text-slate-700 space-y-4 font-medium p-2 max-h-[65vh] overflow-y-auto">
-                    <h2 className="text-sm font-black text-slate-900 uppercase">MESAFELİ SATIŞ SÖZLEŞMESİ</h2>
+                    <h2 className="text-sm font-black text-slate-900 uppercase">MESAFELİ SATIŞ SÖZLEŞMESİ & İPTAL İADE</h2>
                     <h3 className="font-black text-slate-900">1. Taraflar</h3>
-                    <p>İşbu Mesafeli Satış Sözleşmesi ("Sözleşme"), aşağıda bilgileri bulunan Satıcı ile internet sitesi üzerinden alışveriş yapan Alıcı arasında elektronik ortamda kurulmuştur.<br/><strong>Satıcı Unvanı:</strong> e-havuzz<br/><strong>Web Sitesi:</strong> https://e-havuzz-frontend.vercel.app/<br/><strong>E-Posta:</strong> info@ehavuzz.com<br/><strong>Alıcı:</strong> Sipariş sırasında sisteme girmiş olduğu ad, soyad, adres, telefon ve e-posta bilgilerinin doğru olduğunu kabul eder.</p>
-                    <h3 className="font-black text-slate-900">2. Konu ve Ürün Bilgileri</h3>
-                    <p>İşbu sözleşmenin konusu, Alıcı'nın Satıcı'ya ait internet sitesi üzerinden elektronik ortamda sipariş verdiği ürün veya hizmetin satışı ve teslimine ilişkin tarafların hak ve yükümlülüklerinin belirlenmesidir. Ürün adı, adedi, birim fiyatı, toplam tutar, kargo ücreti ve ödeme yöntemi sipariş onay ekranında belirtilmektedir.</p>
-                    <h3 className="font-black text-slate-900">4. Ödeme ve Teslimat</h3>
-                    <p>Alıcı, seçmiş olduğu ödeme yöntemi ile ödemeyi gerçekleştireceğini kabul eder. Ödeme işlemleri, güvenli ödeme altyapısı üzerinden gerçekleştirilmekte olup Satıcı kart bilgilerini saklamaz. Siparişler stok durumuna bağlı olarak en kısa sürede hazırlanır ve anlaşmalı kargo firması aracılığıyla teslim edilir.</p>
-                    <h3 className="font-black text-slate-900">6. Cayma Hakkı ve Kullanılamayacağı Durumlar</h3>
-                    <p>Alıcı, teslim aldığı ürünü 14 (on dört) gün içerisinde herhangi bir gerekçe göstermeksizin iade etme hakkına sahiptir. Cayma hakkının kullanılabilmesi için ürünün kullanılmamış, yeniden satışa uygun ve orijinal ambalajında olması şarttır. Kullanıcının isteği doğrultusunda hazırlanan kişiye özel ürünler ve hızlı bozulabilen ürünlerde cayma hakkı kullanılamaz.</p>
-                    <h3 className="font-black text-slate-900">8. Uyuşmazlıkların Çözümü</h3>
-                    <p>Uyuşmazlıklarda, T.C. Ticaret Bakanlığı tarafından her yıl belirlenen parasal sınırlar dahilinde Tüketici Hakem Heyetleri, bu sınırların üzerindeki uyuşmazlıklarda ise Tüketici Mahkemeleri yetkilidir. Alıcı elektronik ortamda onay verdiği anda tüm maddeleri kabul etmiş sayılır.</p>
+                    <p>İşbu Mesafeli Satış Sözleşmesi ("Sözleşme"), Satıcı (e-havuzz, info@ehavuzz.com) ile internet sitesi üzerinden alışveriş yapan Alıcı arasında elektronik ortamda kurulmuştur. Alıcı, sipariş sırasında sisteme girmiş olduğu ad, soyad, adres, telefon ve e-posta bilgilerinin doğru olduğunu kabul eder.</p>
+                    <h3 className="font-black text-slate-900">2. Konu, Ödeme ve Teslimat</h3>
+                    <p>Alıcı'nın elektronik ortamda sipariş verdiği havuz ekipmanlarının satışı and teslimine ilişkin hak ve yükümlülüklerin belirlenmesidir. Siparişler kargo firması aracılığıyla güvenle adrese sevk edilir. Alıcı, teslim aldığı ürünü 14 (on dört) gün içerisinde herhangi bir gerekçe göstermeksizin iade etme hakkına sahiptir. Ambalajı açılmış kimyasallarda iade kabul edilmemektedir.</p>
                   </div>
                 )}
 
-                {/* GÜNCEL RESMÎ ÖN BİLGİLENDİRME FORMU MODALI */}
+                {/* RE-DESIGN: ÖN BİLGİLENDİRME FORMU METNİ */}
                 {activeModal === "onbilgi" && (
                   <div className="text-xs md:text-sm leading-relaxed text-slate-700 space-y-4 font-medium p-2 max-h-[65vh] overflow-y-auto">
                     <h2 className="text-sm font-black text-slate-900 uppercase">ÖN BİLGİLENDİRME FORMU</h2>
-                    <h3 className="font-black text-slate-900">1. Amaç ve Satıcı Bilgileri</h3>
-                    <p>İşbu Ön Bilgilendirme Formu, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği kapsamında, internet sitesi üzerinden sipariş veren müşterilerin satın alma işlemi öncesinde bilgilendirilmesi amacıyla hazırlanmıştır.<br/><strong>Unvan:</strong> e-havuzz<br/><strong>Web Sitesi:</strong> https://e-havuzz-frontend.vercel.app/<br/><strong>E-Posta:</strong> info@ehavuzz.com</p>
-                    <h3 className="font-black text-slate-900">3. Ürün, Ödeme ve Teslimat Bilgileri</h3>
-                    <p>Satın alınan ürün veya hizmete ilişkin; ürün adı, adedi, birim fiyatı, toplam satış bedeli, vergiler ve kargo ücreti sipariş ekranında gösterilmektedir. Ödeme bilgileri güvenli ödeme altyapıları üzerinden işlenir. Siparişler, stok durumuna bağlı olarak hazırlanır and anlaşmalı kargo firması aracılığıyla teslim edilir.</p>
-                    <h3 className="font-black text-slate-900">6. Cayma Hakkı ve Şartları</h3>
-                    <p>Tüketici, ürünü teslim aldığı tarihten itibaren 14 (on dört) gün içerisinde herhangi bir gerekçe göstermeksizin cayma hakkını kullanabilir. Cayma hakkının kullanılabilmesi için ürünün kullanılmamış, yeniden satışa uygun durumda bulunması and orijinal ambalajı ile birlikte gönderilmesi gerekmektedir.</p>
-                    <h3 className="font-black text-slate-900">9. Uyuşmazlıkların Çözümü ve Onay</h3>
-                    <p>Uyuşmazlıkların çözümünde, T.C. Ticaret Bakanlığı tarafından her yıl belirlenen parasal sınırlar dahilinde Tüketici Hakem Heyetleri, bu sınırların üzerindeki uyuşmazlıklarda ise Tüketici Mahkemeleri yetkilidir. Alıcı, siparişini tamamlamadan önce bu formu okuduğunu ve onayladığını kabul eder.</p>
+                    <p>İşbu Ön Bilgilendirme Formu, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği kapsamında satın alma işlemi öncesinde bilgilendirilmesi amacıyla hazırlanmıştır. Ürün bilgileri, birim fiyatı, toplam bedel, vergiler and kargo ücreti sipariş özetinde gösterilmektedir. Alıcı, 14 gün içinde mazeretsiz cayma hakkına sahiptir.</p>
                   </div>
                 )}
 
-                {activeModal === "sozlesme" && (
-                  <div className="text-xs md:text-sm leading-relaxed text-slate-700 space-y-3 font-medium p-2">
-                    <h2 className="text-sm font-black text-slate-900 uppercase">e-havuzz Üyelik Şartları & Sözleşmesi</h2>
-                    <p>İşbu sözleşme, e-havuzz platformuna üye olan kullanıcının haklarını ve platform kurallarını karşılıklı olarak beyan eder. Kayıt olan her kullanıcı bu şartları kabul etmiş sayılır.</p>
-                  </div>
-                )}
-
+                {/* GİRİŞ YAP PANELİ */}
                 {activeModal === "login" && (
                   <form onSubmit={handleLoginSubmit} className="flex flex-col gap-4 max-w-sm mx-auto p-4 bg-white rounded-2xl">
                     <div>
                       <label className="block text-xs font-black text-slate-600 uppercase mb-1">Kullanıcı Adı</label>
-                      <input type="text" required placeholder="Kullanıcı adınızı girin" value={loginForm.username} onChange={(e) => setLoginForm({...loginForm, username: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 text-xs font-bold focus:outline-none focus:border-purple-600 transition-all" />
+                      <input type="text" required placeholder="Kullanıcı adınızı girin" value={loginForm.username} onChange={(e) => setLoginForm({...loginForm, username: e.target.value})} className="w-full p-2.5 rounded-xl bg-slate-50 border-2 text-xs font-bold focus:outline-none focus:border-purple-600" />
                     </div>
                     <div>
                       <label className="block text-xs font-black text-slate-600 uppercase mb-1">Şifre</label>
-                      <input type="password" required placeholder="Şifrenizi girin" className="w-full p-3 rounded-xl bg-slate-50 border-2 text-xs font-bold focus:outline-none focus:border-purple-600 transition-all" />
+                      <input type="password" required placeholder="Şifrenizi girin" className="w-full p-3 rounded-xl bg-slate-50 border-2 text-xs font-bold focus:outline-none focus:border-purple-600" />
                     </div>
-                    <button type="submit" className="w-full bg-purple-600 hover:bg-cyan-500 text-white font-black py-2.5 rounded-xl text-xs uppercase tracking-wider transition-all mt-2 shadow-sm">
-                      Giriş Yap
+                    <button type="submit" className="w-full bg-purple-600 text-white font-black py-2.5 rounded-xl text-xs uppercase tracking-wider mt-2 shadow-sm">Giriş Yap</button>
+                  </form>
+                )}
+
+                {/* GÜNCEL RE-DESIGN: YENİ ÜYE KAYDI GÖVDE ELEMANLARI GERİ GETİRİLDİ (image_ce8b5f İÇİN DÜZELTİLDİ) */}
+                {activeModal === "register" && (
+                  <form onSubmit={handleRegisterSubmit} className="flex flex-col gap-3 max-w-md mx-auto p-2 bg-white rounded-2xl animate-fadeIn">
+                    <div>
+                      <label className="block text-[10px] font-black uppercase text-slate-500 mb-0.5">Ad Soyad</label>
+                      <input type="text" required placeholder="Nuray Mutlu" value={registerForm.fullname} onChange={(e) => setRegisterForm({...registerForm, fullname: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-slate-50 focus:border-cyan-500 outline-none" />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-black uppercase text-slate-500 mb-0.5">TC Kimlik Numarası</label>
+                      <input type="text" required maxLength="11" placeholder="11 haneli TC no" value={registerForm.tcNo} onChange={(e) => setRegisterForm({...registerForm, tcNo: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-slate-50 focus:border-cyan-500 outline-none" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-0.5">Telefon</label>
+                        <input type="tel" required placeholder="0555XXXXXXX" value={registerForm.phone} onChange={(e) => setRegisterForm({...registerForm, phone: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-slate-50 focus:border-cyan-500 outline-none" />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-black uppercase text-slate-500 mb-0.5">E-posta</label>
+                        <input type="email" required placeholder="ornek@email.com" value={registerForm.email} onChange={(e) => setRegisterForm({...registerForm, email: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-slate-50 focus:border-cyan-500 outline-none" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-black uppercase text-slate-500 mb-0.5">Teslimat Adresi</label>
+                      <textarea required rows="2" placeholder="Mahalle, sokak, kapı no..." value={registerForm.city} onChange={(e) => setRegisterForm({...registerForm, city: e.target.value})} className="w-full p-2 text-xs font-bold rounded-xl border bg-slate-50 focus:border-cyan-500 outline-none"></textarea>
+                    </div>
+                    
+                    <div className="mt-1 flex items-start gap-2 bg-slate-50 p-2.5 rounded-xl border">
+                      <input type="checkbox" id="kvkkCheck" required checked={kvkkRegisterCheck} onChange={(e) => setKvkkRegisterCheck(e.target.checked)} className="mt-0.5 cursor-pointer" />
+                      <label htmlFor="kvkkCheck" className="text-[10px] font-bold text-slate-600 leading-tight cursor-pointer">
+                        e-havuzz <span onClick={() => setSubModalOpen("sozlesme")} className="text-purple-700 underline font-black cursor-pointer">Üyelik Sözleşmesi</span>'ni ve <span onClick={() => setSubModalOpen("kvkk")} className="text-purple-700 underline font-black cursor-pointer">KVKK Aydınlatma Metni</span>'ni okudum, kabul ediyorum.
+                      </label>
+                    </div>
+
+                    <div className="flex items-start gap-2 bg-slate-50 p-2.5 rounded-xl border">
+                      <input type="checkbox" id="comCheck" checked={commercialIletiCheck} onChange={(e) => setCommercialIletiCheck(e.target.checked)} className="mt-0.5 cursor-pointer" />
+                      <label htmlFor="comCheck" className="text-[10px] font-bold text-slate-600 leading-tight cursor-pointer">
+                        e-havuzz tarafından tarafıma bülten ve kampanya amaçlı elektronik ileti gönderilmesine onay veriyorum.
+                      </label>
+                    </div>
+
+                    <button type="submit" disabled={!kvkkRegisterCheck} className={`w-full font-black py-2.5 rounded-xl text-xs uppercase tracking-wide shadow-sm mt-1 transition-all ${kvkkRegisterCheck ? 'bg-cyan-500 text-white' : 'bg-slate-200 text-slate-400 cursor-not-allowed'}`}>
+                      Kayıt İşlemini Tamamla
                     </button>
                   </form>
                 )}
@@ -524,13 +533,7 @@ export default function App() {
                       <h4 className="font-black text-purple-900 text-base mb-3">📝 React E-Ticaret Projesinin Gelişim Hikayesi</h4>
                       <p className="mb-3">Yazılım öğrenirken en büyük motivasyon kaynaklarından biri, geriye dönüp ilk satır koda baktığınızda kat ettiğiniz yolu görebilmektir. Bu proje de benim için tam olarak bunu ifade ediyor. Projeye başladığım günlerde React ekosistemi hakkında oldukça sınırlı bilgiye sahiptim. Amacım kusursuz bir uygulama geliştirmekten çok, öğrendiğim her yeni kavramı gerçek bir proje üzerinde uygulayarak ilerlemekti. Bu nedenle proje, her öğrendiğim teknolojiyle birlikte adım adım büyüdü ve zamanla gerçek bir e-ticaret uygulamasına dönüştü.</p>
                       <h5 className="font-bold text-slate-900 mt-2">İlk Adım: Backend Olmadan Çalışan Bir Prototip</h5>
-                      <p className="mb-3">Başlangıç aşamasında backend geliştirme sürecine girmeden önce tamamen kullanıcı deneyimine odaklanmak istedim. Bu nedenle tüm ürün verilerini statik JSON dosyaları içerisinde tuttum. Uygulamanın durum yönetimi React Context API kullanılarak global state mantığıyla oluşturuldu. Böylece backend bağımlılığı olmadan çalışan, ürün listeleme, ürün detay görüntüleme ve sepet işlemlerini gerçekleştirebilen tamamen işlevsel bir prototip ortaya çıktı.</p>
-                      <h5 className="font-bold text-slate-900 mt-2">Neden React + Vite?</h5>
-                      <p className="mb-3">Projeyi geliştirirken hızlı derleme süresi ve sade yapı sunması nedeniyle Vite tercih ettim. Sayfalar arasında geçişleri yönetebilmek için react-router-dom kütüphanesini projeye ekledim. Böylece uygulama modern bir Single Page Application (SPA) mimarisine dönüştü.</p>
-                      <h5 className="font-bold text-slate-900 mt-2">Dinamik Routing Yapısını Kurmak</h5>
-                      <p className="mb-3">İlerleyen aşamalarda BrowserRouter, Routes ve Route bileşenlerini kullanarak tüm sayfa akışını yeniden tasarladım. Özellikle ürün detay sayfasında kullanılan /product/ yapısı sayesinde her ürün tek bir bileşen üzerinden dinamik olarak görüntülenebilir hale geldi. Bu yapı projenin ölçeklenebilirliğini önemli ölçüde artırdı.</p>
-                      <h5 className="font-bold text-slate-900 mt-2">Responsive Ürün Listeleme</h5>
-                      <p className="mb-3">Kullanıcı deneyiminin yalnızca masaüstü değil mobil cihazlarda da iyi olması gerektiğini fark ettim. Bu nedenle ürün listeleme ekranını CSS Grid yapısındaki repeat(auto-fill, minmax(250px, 1fr)) mimarisiyle yeniden oluşturdum. Ürün kartları JavaScript'in map() fonksiyonu kullanılarak dinamik şekilde üretildi ve tamamen responsive bir görünüm elde edildi.</p>
+                      <p className="mb-3">Başlangıç aşamasında backend geliştirme sürecine girmeden önce tamamen kullanıcı deneyimine odaklanmak istedim. Bu nedenle tüm ürün verilerini statik JSON dosyaları içerisinde tuttum. Uygulamanın durum yönetimi React Context API kullanılarak global state mantığıyla oluşturuldu. Böylece sepet işlemlerini gerçekleştirebilen tamamen işvelsel bir prototip ortaya çıktı.</p>
                       <h5 className="font-bold text-slate-900 mt-2">Prop Drilling Yerine Context API</h5>
                       <p className="mb-3">Proje büyümeye başladıkça componentler arasında sürekli veri taşımak zorlaşmaya başladı. Bu problemi çözmek için React Context API kullandım. CartProvider yapısı sayesinde; sepete ürün ekleme, ürün silme, miktar artırma ve toplam tutar hesaplama gibi işlemler merkezi state üzerinden yönetilmeye başlandı. Bu değişiklik kod okunabilirliğini ciddi şekilde artırdı.</p>
                     </div>
@@ -542,8 +545,9 @@ export default function App() {
         </div>
       )}
 
-      {/* HEADER VE ARAMA BARI */}
+      {/* ANASAYFA ARABİRİMİ */}
       <div>
+        {/* ÜST BAR DUYURU METNİ GÜNCELLENDİ (image_ce92c6'YA GÖRE) */}
         <div className="bg-slate-900 text-white text-[11px] font-bold py-2 px-6 flex justify-between items-center tracking-wide">
           <span>✦ 1000₺ Üzeri Alışverişlerde Ücretsiz Kargo</span>
           <span className="text-cyan-400 font-black">{isLoggedIn ? `● Oturum Açık` : "● Standart Mod"}</span>
@@ -604,7 +608,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* RE-DESIGN VİTRİN */}
+        {/* MAĞAZA GÖVDESİ */}
         <div className="max-w-[1400px] mx-auto px-6 py-6 flex flex-col lg:flex-row gap-6">
           <div className="flex-1">
             <section className="bg-gradient-to-r from-slate-900 via-purple-950 to-[#03045e] text-white py-10 px-6 rounded-3xl text-center shadow-xl mb-8 border-b-4 border-cyan-500">
@@ -669,7 +673,7 @@ export default function App() {
         </div>
       </div>
 
-      {/* YASAL KURALLARA TAM UYUMLU GÜNCEL KATEGORİZE FOOTER ALANI */}
+      {/* YASAL KURALLARA TAM UYUMLU GÜNCEL KATEGORİZE FOOTER ALANI (BAŞLIK VE LİNKLER image_ce8ee5 YASAL UYUMA GÖRE DÜZENLENDİ) */}
       <footer className="bg-slate-950 text-slate-300 mt-16 border-t-4 border-purple-600">
         <div className="max-w-[1400px] mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 text-xs">
           <div>
@@ -689,11 +693,10 @@ export default function App() {
             </ul>
           </div>
 
-          {/* GÜNCEL BAŞLIK VE TİKSİZ LİNKLER PANELİ */}
           <div>
             <h5 className="text-white font-black text-xs uppercase tracking-wider mb-3">Kurumsal & Yaşam</h5>
             <ul className="space-y-2 font-semibold text-slate-400">
-              <li onClick={() => setActiveModal("hakkimizda")} className="hover:text-cyan-400 cursor-pointer transition-colors">✦ Gizlilik Politikası</li>
+              <li onClick={() => setActiveModal("sozlesme")} className="hover:text-cyan-400 cursor-pointer transition-colors">✦ Gizlilik Politikası</li>
               <li onClick={() => setActiveModal("cerez")} className="hover:text-cyan-400 cursor-pointer transition-colors">✦ Çerez (Cookie) Politikası</li>
               <li onClick={() => setActiveModal("iade")} className="hover:text-cyan-400 cursor-pointer transition-colors">✦ Mesafeli Satış Sözleşmesi</li>
               <li onClick={() => setActiveModal("onbilgi")} className="hover:text-cyan-400 cursor-pointer transition-colors">✦ Ön Bilgilendirme Formu</li>
