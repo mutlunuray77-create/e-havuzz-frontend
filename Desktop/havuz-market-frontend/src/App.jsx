@@ -331,10 +331,12 @@ export default function App() {
   const [loginForm, setLoginForm] = useState({ username: '', password: '' });
   const [registerForm, setRegisterForm] = useState({ fullName: '', phone: '', address: '', password: '' });
 
+  // Modal Durumları
   const [activeModal, setActiveModal] = useState(""); 
   const [asistanSoru, setAsistanSoru] = useState("");
   const [asistanCevap, setAsistanCevap] = useState("");
 
+  // Ödeme & Müşteri Formu
   const [checkoutForm, setCheckoutForm] = useState({
     fullName: '',
     phone: '',
@@ -352,9 +354,7 @@ export default function App() {
           setDisplayedProducts(response.data);
         }
       })
-      .catch(() => {
-        // Backend kapalıysa bile INITIAL_PRODUCTS doğrudan çalışmaya devam eder
-      });
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -403,7 +403,7 @@ export default function App() {
     if (!registerForm.fullName || !registerForm.phone || !registerForm.address) return;
     setCurrentUser(registerForm.fullName);
     setActiveModal("");
-    setNotification(`🎉 Aramıza hoş geldiniz, ${registerForm.fullName}! Kaydınız başarıyla oluşturuldu.`);
+    setNotification(`🎉 Aramıza hoş geldiniz, ${registerForm.fullName}!`);
     setCheckoutForm(prev => ({
       ...prev,
       fullName: registerForm.fullName,
@@ -415,7 +415,7 @@ export default function App() {
 
   const handlePaymentSubmit = (e) => {
     e.preventDefault();
-    alert(`🎉 Harika! Siparişiniz Başarıyla Alındı!\nSipariş Takip No: #HM-${Math.floor(100000 + Math.random() * 900000)}\nTaşıyıcı Firma: Arpeta Mini`);
+    alert(`🎉 Harika! Ödemeniz Alındı ve Siparişiniz Başarıyla Oluşturuldu!\n\nTeslimat Adresi: ${checkoutForm.address}\nTaşıyıcı Firma: Arpeta Mini\nSipariş Takip No: #HM-918230`);
     setCart([]);
     setActiveModal("kargo");
   };
@@ -436,16 +436,17 @@ export default function App() {
         </div>
       )}
 
+      {/* TÜM MODALLAR */}
       {activeModal && (
         <div className="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl border border-slate-200 flex flex-col max-h-[90vh]">
+          <div className="bg-white rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl border border-slate-200 flex flex-col max-h-[90vh] animate-in fade-in zoom-in duration-200">
             
             <div className="p-5 border-b border-slate-100 flex justify-between items-center bg-gradient-to-r from-slate-900 via-purple-950 to-cyan-900 text-white">
               <h3 className="font-extrabold text-base flex items-center gap-2">
                 {activeModal === "giris" && "Hesabınıza Giriş Yapın"}
                 {activeModal === "uyeol" && "Ailemize Katılın - Üye Ol"}
                 {activeModal === "sepet" && "Alışveriş Sepetiniz"}
-                {activeModal === "odeme" && "Güvenli Ödeme ve Teslimat"}
+                {activeModal === "odeme" && "💳 Güvenli Ödeme & Teslimat Bilgileri"}
                 {activeModal === "kargo" && "Arpeta Mini Kargo Takip Sistemi"}
                 {activeModal === "asistan" && "Akıllı Havuz Asistanı"}
                 {activeModal === "blog" && "E-Havuz Market Blog"}
@@ -462,6 +463,7 @@ export default function App() {
 
             <div className="p-6 overflow-y-auto text-slate-600 flex-1">
               
+              {/* 1. GİRİŞ YAP */}
               {activeModal === "giris" && (
                 <form onSubmit={handleLoginSubmit} className="flex flex-col gap-4">
                   <p className="text-xs text-slate-500">Kullanıcı adı ve şifrenizi girerek hemen oturum açın.</p>
@@ -502,6 +504,7 @@ export default function App() {
                 </form>
               )}
 
+              {/* 2. ÜYE OL */}
               {activeModal === "uyeol" && (
                 <form onSubmit={handleRegisterSubmit} className="flex flex-col gap-3">
                   <p className="text-xs text-slate-500">E-Havuz Market avantajlarından faydalanmak için formu doldurun.</p>
@@ -558,10 +561,11 @@ export default function App() {
                 </form>
               )}
 
+              {/* 3. SEPET (ONAYLAYINCA ÖDEME FORMUNA GEÇER) */}
               {activeModal === "sepet" && (
                 <div>
                   {cart.length === 0 ? (
-                    <div className="text-center py-12 text-slate-400 text-sm">Sepetinizde ürün bulunmamaktadır.</div>
+                    <div className="text-center py-12 text-slate-400 text-sm font-semibold">Sepetinizde ürün bulunmamaktadır.</div>
                   ) : (
                     <div className="flex flex-col gap-3">
                       <div className="max-h-64 overflow-y-auto pr-1 flex flex-col gap-2">
@@ -580,7 +584,7 @@ export default function App() {
                         ))}
                       </div>
 
-                      <div className="bg-slate-100 p-3 rounded-xl text-xs flex flex-col gap-1 border border-slate-200 mt-2">
+                      <div className="bg-slate-100 p-3.5 rounded-2xl text-xs flex flex-col gap-1.5 border border-slate-200 mt-2">
                         <div className="flex justify-between">
                           <span>Ürünler Tutarı:</span>
                           <span className="font-bold">₺{urunlerToplami.toLocaleString('tr-TR')}</span>
@@ -592,7 +596,7 @@ export default function App() {
                           </span>
                         </div>
                         {urunlerToplami < 1000 && (
-                          <span className="text-[10px] text-amber-600 font-semibold mt-1">
+                          <span className="text-[10px] text-amber-600 font-semibold mt-0.5">
                             ℹ️ Sepetinize ₺{(1000 - urunlerToplami).toLocaleString('tr-TR')} değerinde ürün daha ekleyin, kargo bedava olsun!
                           </span>
                         )}
@@ -602,118 +606,144 @@ export default function App() {
                         </div>
                       </div>
 
+                      {/* BUTONA BASINCA DOĞRUDAN ÖDEME VE BİLGİ ALMA EKRANI AÇILIR */}
                       <button 
                         onClick={() => setActiveModal("odeme")}
-                        className="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3.5 rounded-2xl text-xs shadow-lg transition-all mt-4 flex items-center justify-center gap-2"
+                        className="w-full bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-700 hover:to-purple-700 text-white font-bold py-3.5 rounded-2xl text-xs shadow-lg transition-all mt-4 flex items-center justify-center gap-2"
                       >
-                        Siparişi Onayla ve Bilgileri Gir
+                        Siparişi Onayla ve Bilgileri Gir ➔
                       </button>
                     </div>
                   )}
                 </div>
               )}
 
+              {/* 4. KİŞİSEL BİLGİLER VE KART BİLGİLERİ (ÖDEME MODALI) */}
               {activeModal === "odeme" && (
-                <form onSubmit={handlePaymentSubmit} className="flex flex-col gap-3 text-xs">
-                  <div className="bg-purple-50 border border-purple-200 p-3 rounded-xl flex items-center justify-between">
-                    <span className="font-bold text-purple-900">Ödenecek Tutar:</span>
-                    <span className="font-black text-sm text-purple-900">₺{genelToplam.toLocaleString('tr-TR')}</span>
+                <form onSubmit={handlePaymentSubmit} className="flex flex-col gap-3.5 text-xs">
+                  <div className="bg-purple-50 border border-purple-200 p-3.5 rounded-2xl flex items-center justify-between">
+                    <div>
+                      <span className="text-[11px] text-purple-700 block font-semibold">Toplam Sipariş Tutarı</span>
+                      <span className="font-black text-base text-purple-950">₺{genelToplam.toLocaleString('tr-TR')}</span>
+                    </div>
+                    <span className="bg-purple-200/60 text-purple-900 text-[10px] font-bold px-3 py-1 rounded-full">
+                      {kargoUcreti === 0 ? "Ücretsiz Kargo" : "+50₺ Kargo"}
+                    </span>
                   </div>
 
-                  <h5 className="font-black text-slate-800 uppercase tracking-wider text-[11px] mt-1">1. Teslimat Bilgileri</h5>
-                  <div className="grid grid-cols-2 gap-2">
-                    <div>
-                      <label className="font-bold text-slate-700 block mb-1">Ad Soyad</label>
-                      <input 
-                        type="text" 
-                        required 
-                        value={checkoutForm.fullName}
-                        onChange={(e) => setCheckoutForm({ ...checkoutForm, fullName: e.target.value })}
-                        placeholder="Adınız Soyadınız" 
-                        className="w-full p-2 border rounded-xl"
-                      />
-                    </div>
-                    <div>
-                      <label className="font-bold text-slate-700 block mb-1">Telefon</label>
-                      <input 
-                        type="tel" 
-                        required 
-                        value={checkoutForm.phone}
-                        onChange={(e) => setCheckoutForm({ ...checkoutForm, phone: e.target.value })}
-                        placeholder="05XX XXX XX XX" 
-                        className="w-full p-2 border rounded-xl"
-                      />
-                    </div>
-                  </div>
-
+                  {/* KİŞİSEL TESLİMAT BİLGİLERİ */}
                   <div>
-                    <label className="font-bold text-slate-700 block mb-1">Açık Adres</label>
-                    <textarea 
-                      required 
-                      rows="2"
-                      value={checkoutForm.address}
-                      onChange={(e) => setCheckoutForm({ ...checkoutForm, address: e.target.value })}
-                      placeholder="İlçe, Mahalle, Cadde, No..." 
-                      className="w-full p-2 border rounded-xl"
-                    ></textarea>
-                  </div>
-
-                  <h5 className="font-black text-slate-800 uppercase tracking-wider text-[11px] mt-2 flex items-center gap-1">
-                    <CreditCard className="w-3.5 h-3.5 text-cyan-600" /> 2. Kart Bilgileri (Güvenli 3D Ödeme)
-                  </h5>
-                  <div>
-                    <label className="font-bold text-slate-700 block mb-1">Kart Numarası</label>
-                    <input 
-                      type="text" 
-                      required 
-                      maxLength="19"
-                      placeholder="4543 •••• •••• 1234" 
-                      value={checkoutForm.cardNumber}
-                      onChange={(e) => setCheckoutForm({ ...checkoutForm, cardNumber: e.target.value })}
-                      className="w-full p-2 border rounded-xl"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2">
-                    <div>
-                      <label className="font-bold text-slate-700 block mb-1">Son Kullanma (AA/YY)</label>
-                      <input 
-                        type="text" 
-                        required 
-                        maxLength="5"
-                        placeholder="12/28" 
-                        value={checkoutForm.cardExpiry}
-                        onChange={(e) => setCheckoutForm({ ...checkoutForm, cardExpiry: e.target.value })}
-                        className="w-full p-2 border rounded-xl"
-                      />
+                    <h5 className="font-black text-slate-800 uppercase tracking-wider text-[11px] mb-2 flex items-center gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-cyan-600" /> 1. Teslimat ve İletişim Bilgileri
+                    </h5>
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <div>
+                        <label className="font-bold text-slate-700 block mb-1">Ad Soyad *</label>
+                        <input 
+                          type="text" 
+                          required 
+                          value={checkoutForm.fullName}
+                          onChange={(e) => setCheckoutForm({ ...checkoutForm, fullName: e.target.value })}
+                          placeholder="Örn: Nuray Mutlu" 
+                          className="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-cyan-500 text-xs"
+                        />
+                      </div>
+                      <div>
+                        <label className="font-bold text-slate-700 block mb-1">Telefon Numarası *</label>
+                        <input 
+                          type="tel" 
+                          required 
+                          value={checkoutForm.phone}
+                          onChange={(e) => setCheckoutForm({ ...checkoutForm, phone: e.target.value })}
+                          placeholder="05XX XXX XX XX" 
+                          className="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-cyan-500 text-xs"
+                        />
+                      </div>
                     </div>
-                    <div>
-                      <label className="font-bold text-slate-700 block mb-1">CVV</label>
-                      <input 
-                        type="text" 
+
+                    <div className="mt-2">
+                      <label className="font-bold text-slate-700 block mb-1">Teslimat Açık Adresi *</label>
+                      <textarea 
                         required 
-                        maxLength="3"
-                        placeholder="•••" 
-                        value={checkoutForm.cardCvv}
-                        onChange={(e) => setCheckoutForm({ ...checkoutForm, cardCvv: e.target.value })}
-                        className="w-full p-2 border rounded-xl"
-                      />
+                        rows="2"
+                        value={checkoutForm.address}
+                        onChange={(e) => setCheckoutForm({ ...checkoutForm, address: e.target.value })}
+                        placeholder="İl, İlçe, Mahalle, Cadde, Bina ve Daire No..." 
+                        className="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-cyan-500 text-xs"
+                      ></textarea>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 text-[10px] text-slate-500 mt-1">
-                    <ShieldCheck className="w-4 h-4 text-emerald-600" /> 256-Bit SSL ile güvenli ödeme yapılmaktadır.
+                  {/* KART / ÖDEME BİLGİLERİ */}
+                  <div className="border-t border-slate-100 pt-3">
+                    <h5 className="font-black text-slate-800 uppercase tracking-wider text-[11px] mb-2 flex items-center gap-1.5">
+                      <CreditCard className="w-3.5 h-3.5 text-purple-600" /> 2. Kredi / Banka Kartı Bilgileri
+                    </h5>
+                    <div>
+                      <label className="font-bold text-slate-700 block mb-1">Kart Numarası *</label>
+                      <input 
+                        type="text" 
+                        required 
+                        maxLength="19"
+                        placeholder="5400 •••• •••• 1234" 
+                        value={checkoutForm.cardNumber}
+                        onChange={(e) => setCheckoutForm({ ...checkoutForm, cardNumber: e.target.value })}
+                        className="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-purple-600 text-xs tracking-widest font-mono"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2.5 mt-2">
+                      <div>
+                        <label className="font-bold text-slate-700 block mb-1">Son Kullanma (AA/YY) *</label>
+                        <input 
+                          type="text" 
+                          required 
+                          maxLength="5"
+                          placeholder="09/28" 
+                          value={checkoutForm.cardExpiry}
+                          onChange={(e) => setCheckoutForm({ ...checkoutForm, cardExpiry: e.target.value })}
+                          className="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-purple-600 text-xs text-center"
+                        />
+                      </div>
+                      <div>
+                        <label className="font-bold text-slate-700 block mb-1">CVV / Güvenlik Kodu *</label>
+                        <input 
+                          type="text" 
+                          required 
+                          maxLength="3"
+                          placeholder="•••" 
+                          value={checkoutForm.cardCvv}
+                          onChange={(e) => setCheckoutForm({ ...checkoutForm, cardCvv: e.target.value })}
+                          className="w-full p-2.5 border border-slate-200 rounded-xl focus:outline-none focus:border-purple-600 text-xs text-center"
+                        />
+                      </div>
+                    </div>
                   </div>
 
-                  <button 
-                    type="submit" 
-                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl mt-2 text-xs shadow-md transition-colors"
-                  >
-                    Ödemeyi Tamamla ve Siparişi Oluştur
-                  </button>
+                  <div className="flex items-center gap-2 text-[10px] text-slate-500 mt-1 bg-slate-50 p-2 rounded-xl">
+                    <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                    <span>256-Bit SSL sertifikası ile tüm ödeme verileriniz şifrelenmektedir.</span>
+                  </div>
+
+                  <div className="flex gap-2 mt-2">
+                    <button 
+                      type="button" 
+                      onClick={() => setActiveModal("sepet")} 
+                      className="w-1/3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl text-xs transition-colors"
+                    >
+                      ← Sepete Dön
+                    </button>
+                    <button 
+                      type="submit" 
+                      className="w-2/3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl text-xs shadow-md transition-colors flex items-center justify-center gap-2"
+                    >
+                      <CheckCircle className="w-4 h-4" /> Ödemeyi Tamamla ve Onayla
+                    </button>
+                  </div>
                 </form>
               )}
 
+              {/* 5. ARBETA MİNİ KARGO TAKİP */}
               {activeModal === "kargo" && (
                 <div className="flex flex-col gap-6 py-2">
                   <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-xs flex justify-between items-center">
@@ -752,13 +782,14 @@ export default function App() {
                     ))}
                   </div>
 
-                  <div className="bg-emerald-50 border border-emerald-200 p-3 rounded-xl text-xs text-emerald-900 flex items-center gap-3">
+                  <div className="bg-emerald-50 border border-emerald-200 p-3.5 rounded-xl text-xs text-emerald-900 flex items-center gap-3">
                     <Truck className="w-5 h-5 text-emerald-600 flex-shrink-0" />
                     <span><strong>Kurye Dağıtımda:</strong> Siparişiniz kuryemiz tarafından teslimat adresinize ulaştırılmak üzere araca yüklendi. (Arpeta Mini Güvencesiyle)</span>
                   </div>
                 </div>
               )}
 
+              {/* ASİSTAN MODALI */}
               {activeModal === "asistan" && (
                 <div className="flex flex-col gap-4 text-sm">
                   <p className="text-xs text-slate-500">Havuz otomasyonu, ürün seçimleri veya montaj hakkında aklınıza takılan her şeyi yazabilirsiniz.</p>
@@ -780,6 +811,7 @@ export default function App() {
                 </div>
               )}
 
+              {/* BLOG YAZISI */}
               {activeModal === "blog" && (
                 <div className="flex flex-col gap-4 text-xs leading-relaxed text-slate-700 max-h-[70vh] overflow-y-auto pr-2">
                   <div className="bg-gradient-to-r from-slate-900 to-cyan-950 text-white p-5 rounded-3xl shadow-md border border-cyan-500/20">
@@ -850,6 +882,7 @@ export default function App() {
                 </div>
               )}
 
+              {/* HAKKIMIZDA */}
               {activeModal === "hakkimizda" && (
                 <div className="flex flex-col gap-4 text-xs text-slate-600 leading-relaxed">
                   <div className="bg-gradient-to-r from-cyan-900 to-slate-900 text-white p-5 rounded-3xl shadow-sm">
@@ -887,6 +920,7 @@ export default function App() {
         </div>
       )}
 
+      {/* HEADER & LOGO BÖLÜMÜ */}
       <div>
         <div className="bg-slate-900 text-white text-xs py-2 px-6 flex justify-between items-center">
           <span className="font-medium text-cyan-300">✦ 1000₺ Üzeri Alışverişlerde Kargo Bedava! (Altında Sabit 50₺)</span>
@@ -977,6 +1011,7 @@ export default function App() {
           </div>
         </header>
 
+        {/* ASİSTAN BANNER'I */}
         <div className="max-w-[1400px] mx-auto px-6 mt-6">
           <div className="bg-gradient-to-r from-slate-950 via-cyan-950 to-purple-950 p-5 rounded-3xl text-white flex flex-col sm:flex-row items-center justify-between shadow-xl border border-cyan-500/30 gap-4">
             <div className="flex items-center gap-4">
@@ -1001,6 +1036,7 @@ export default function App() {
           </div>
         </div>
 
+        {/* ANA İÇERİK: KARAR MOTORU + FİLTRELER + 30 ÜRÜN */}
         <div className="max-w-[1400px] mx-auto px-6 py-6 flex flex-col lg:flex-row gap-6">
           
           <div className="flex-1">
