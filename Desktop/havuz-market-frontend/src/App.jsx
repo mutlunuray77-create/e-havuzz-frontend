@@ -6,26 +6,335 @@ import {
   Check, Package, Clock, ShieldCheck
 } from 'lucide-react';
 
+const INITIAL_PRODUCTS = [
+  // 1. KİMYASALLAR (6 Ürün)
+  {
+    id: 1,
+    name: "Gemaş Klor-San %90 Granül Stabilizatörlü Klor (25 kg)",
+    category: "Kimyasallar",
+    price: 3450,
+    image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500&q=80",
+    tag: "Bakteri Kalkanı",
+    moods: ["titiz", "teknolojik"],
+    aiInsight: "Yüksek stabilizatör içeriğiyle güneş ışığında parçalanmaz, bakteri ve alg oluşumunu %99 önler."
+  },
+  {
+    id: 2,
+    name: "Deep Blue Sıvı pH Düşürücü Konsantre Solüsyon (20 kg)",
+    category: "Kimyasallar",
+    price: 980,
+    image: "https://images.unsplash.com/photo-1585435557343-3b092031a831?w=500&q=80",
+    tag: "pH Dengesi",
+    moods: ["titiz", "yorgun"],
+    aiInsight: "Klorun tam verimle çalışması için su pH değerini ideal 7.2 - 7.6 aralığına hızla çeker."
+  },
+  {
+    id: 3,
+    name: "AquaPro Konsantre Köpürmeyen Yosun Önleyici (5 Litre)",
+    category: "Kimyasallar",
+    price: 620,
+    image: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=500&q=80",
+    tag: "Yosun Engeli",
+    moods: ["titiz", "sakin"],
+    aiInsight: "Köpük yapmayan özel formülüyle jakuzi ve şelaleli havuzlarda berrak, yosunsuz bir yüzey sağlar."
+  },
+  {
+    id: 4,
+    name: "PoolCare Kristal Sıvı Çöktürücü & Parlatıcı Topaklayıcı (5 kg)",
+    category: "Kimyasallar",
+    price: 540,
+    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=500&q=80",
+    tag: "Cam Berraklığı",
+    moods: ["titiz", "sakin"],
+    aiInsight: "Mikro partikülleri topaklayıp filtreye yönlendirerek bulanık suyu 6 saatte cam gibi yapar."
+  },
+  {
+    id: 5,
+    name: "AstralPool 200g Yavaş Çözünen Multi-Tablet Klor (5 kg)",
+    category: "Kimyasallar",
+    price: 1850,
+    image: "https://images.unsplash.com/photo-1583947215259-38e31be8751f?w=500&q=80",
+    tag: "5 Etkili Bakım",
+    moods: ["yorgun", "titiz"],
+    aiInsight: "Dezenfektan, yosun önleyici ve parlatıcıyı tek tablette birleştirerek 15 gün zahmetsiz koruma sunar."
+  },
+  {
+    id: 6,
+    name: "BioAqua Sezonluk Kış Bakım Kimyasalı Koruma Solüsyonu (5 L)",
+    category: "Kimyasallar",
+    price: 890,
+    image: "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?w=500&q=80",
+    tag: "Kış Koruması",
+    moods: ["teknolojik", "sakin"],
+    aiInsight: "Kış boyunca suyun kireç bağlamasını ve donarken yosunlaşmasını engelleyerek baharda tasarruf sağlar."
+  },
+
+  // 2. TEMİZLİK (6 Ürün)
+  {
+    id: 7,
+    name: "Dolphin E20 Akıllı Duvar & Zemin Otomatik Havuz Robotu",
+    category: "Temizlik",
+    price: 29500,
+    image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=500&q=80",
+    tag: "Otonom Temizlik",
+    moods: ["teknolojik", "yorgun"],
+    aiInsight: "Gelişmiş tarama algoritmasıyla 12 metreye kadar olan havuz tabanını ve duvarlarını otonom fırçalar."
+  },
+  {
+    id: 8,
+    name: "Zodiac Baracuda MX8 Çift Siklonik Emişli Mekanik Süpürge",
+    category: "Temizlik",
+    price: 14200,
+    image: "https://images.unsplash.com/photo-1581092335397-9583fe92d232?w=500&q=80",
+    tag: "Güçlü Emiş",
+    moods: ["teknolojik", "titiz"],
+    aiInsight: "Pompa debisiyle çalışan çift türbinli sistemiyle en zorlu yaprak ve tortuları doğrudan süzer."
+  },
+  {
+    id: 9,
+    name: "Kokido Telsiz Teleskopik Şarjlı El Dip Süpürgesi",
+    category: "Temizlik",
+    price: 4750,
+    image: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=500&q=80",
+    tag: "Hızlı Müdahale",
+    moods: ["yorgun", "titiz"],
+    aiInsight: "Hortum veya kablo gerektirmeden şarjlı lityum piliyle basamak ve jakuzi köşelerini anında temizler."
+  },
+  {
+    id: 10,
+    name: "AquaChek TruTest Dijital Renk Okuyuculu Su Test Cihazı",
+    category: "Temizlik",
+    price: 3200,
+    image: "https://images.unsplash.com/photo-1576086213369-97a306d36557?w=500&q=80",
+    tag: "Dijital Hassasiyet",
+    moods: ["teknolojik", "titiz"],
+    aiInsight: "Serbest klor, pH ve toplam alkaliniteyi şerit renklerine göre dijital LCD ekranda sıfır hatayla ölçer."
+  },
+  {
+    id: 11,
+    name: "Gemaş Alüminyum Gövdeli 4.8 Metre Teleskopik Sap & Kepçe Seti",
+    category: "Temizlik",
+    price: 1250,
+    image: "https://images.unsplash.com/photo-1527525443983-6e60c75fff46?w=500&q=80",
+    tag: "Derin Ağ",
+    moods: ["titiz", "sakin"],
+    aiInsight: "Güçlendirilmiş hafif alüminyum gövdesi ve polikarbonat kenarlıklı derin torbasıyla yüzeydeki kalıntıları yorulmadan toplar."
+  },
+  {
+    id: 12,
+    name: "BlueLine 45 cm Paslanmaz Çelik Telli Liner & Beton Fırçası",
+    category: "Temizlik",
+    price: 780,
+    image: "https://images.unsplash.com/photo-1563453392212-326f5e854473?w=500&q=80",
+    tag: "Derin Hijyen",
+    moods: ["titiz"],
+    aiInsight: "Özel eğimli tasarımı havuz köşe hatlarındaki inatçı kireç ve sararmış lekeleri çizmeden söküp atar."
+  },
+
+  // 3. AYDINLATMA (6 Ürün)
+  {
+    id: 13,
+    name: "Seamaid Sıva Üstü Çok Renkli RGB Slim LED Havuz Lambası (18W)",
+    category: "Aydınlatma",
+    price: 2450,
+    image: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500&q=80",
+    tag: "Ambiyans",
+    moods: ["sakin", "teknolojik"],
+    aiInsight: "16 farklı renk programı ve 400 lümen parlaklığıyla gece yüzüşlerine sinematik bir ışık ambiyansı katar."
+  },
+  {
+    id: 14,
+    name: "Gemaş PAR56 Kovan Tipi Gün Işığı Ultra Parlak LED Ampul (30W)",
+    category: "Aydınlatma",
+    price: 1890,
+    image: "https://images.unsplash.com/photo-1517646287270-a5a9ca602e5c?w=500&q=80",
+    tag: "Gün Işığı",
+    moods: ["sakin"],
+    aiInsight: "3000K doğal gün ışığı sıcaklığıyla geleneksel akkor lambalara kıyasla %85 daha az elektrik harcar."
+  },
+  {
+    id: 15,
+    name: "SmartPool Wi-Fi & Bluetooth Destekli Akıllı LED Lamba Kontrol Paneli",
+    category: "Aydınlatma",
+    price: 5600,
+    image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=500&q=80",
+    tag: "Mobil Kontrol",
+    moods: ["teknolojik", "yorgun"],
+    aiInsight: "Telefon uygulaması üzerinden havuz renklerini, müzik ritmine uyumlu ışık efektlerini ve zamanlayıcıyı yönetir."
+  },
+  {
+    id: 16,
+    name: "Hayward Paslanmaz Çelik Çerçeveli Mini Su Altı Spot LED (9W)",
+    category: "Aydınlatma",
+    price: 1650,
+    image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=500&q=80",
+    tag: "Merdiven Spotu",
+    moods: ["sakin", "teknolojik"],
+    aiInsight: "Kompakt tasarımı sayesinde spa basamakları, masaj jetleri ve havuz içi nişlerini vurgulamak için idealdir."
+  },
+  {
+    id: 17,
+    name: "SolarFlow Güneş Enerjili Yüzen Renk Değiştiren LED Havuz Küresi",
+    category: "Aydınlatma",
+    price: 850,
+    image: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=500&q=80",
+    tag: "Solar Konfor",
+    moods: ["sakin", "yorgun"],
+    aiInsight: "Gündüz güneş enerjisiyle şarj olur, hava kararınca su üzerinde süzülerek büyüleyici bir gece parıltısı yayar."
+  },
+  {
+    id: 18,
+    name: "Tork 300W IP68 Toroid Havuz İzolasyon Aydınlatma Trafosu",
+    category: "Aydınlatma",
+    price: 1950,
+    image: "https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?w=500&q=80",
+    tag: "Tam Güvenlik",
+    moods: ["teknolojik"],
+    aiInsight: "220V şebeke gerilimini can güvenliği standardı olan 12V AC'ye gürültüsüz ve sıfır kayıpla dönüştürür."
+  },
+
+  // 4. EKİPMANLAR (6 Ürün)
+  {
+    id: 19,
+    name: "AISI 316 Paslanmaz Çelik Standart 3 Basamaklı Havuz Merdiveni",
+    category: "Ekipmanlar",
+    price: 6800,
+    image: "https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?w=500&q=80",
+    tag: "Tuz Dayanımlı",
+    moods: ["yorgun", "titiz"],
+    aiInsight: "AISI 316 kalite çeliği sayesinde tuzlu su klor jeneratörü kullanılan havuzlarda dahi kararma ve paslanma yapmaz."
+  },
+  {
+    id: 20,
+    name: "Kobra Model Parlak Paslanmaz Çelik Şelale Masaj Nozulu (50 cm)",
+    category: "Ekipmanlar",
+    price: 11400,
+    image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=500&q=80",
+    tag: "Boyun Masajı",
+    moods: ["yorgun", "sakin"],
+    aiInsight: "Homojen su perdesi akışıyla omuz ve boyun bölgesine hidroterapi masajı yaparak günün yorgunluğunu alır."
+  },
+  {
+    id: 21,
+    name: "Hayward Geniş Ağızlı Beton Tipi Skimmer Yüzey Sıyırıcı (17.5 L)",
+    category: "Ekipmanlar",
+    price: 2100,
+    image: "https://images.unsplash.com/photo-1506157786151-b8491531f063?w=500&q=80",
+    tag: "Yüzey Emişi",
+    moods: ["titiz", "teknolojik"],
+    aiInsight: "Geniş boğaz tasarımıyla su yüzeyindeki polen, böcek ve yaprakları batmadan önce sepetinde yakalar."
+  },
+  {
+    id: 22,
+    name: "AstralPool Döner Başlıklı Ayarlanabilir Jakuzi Hidromasaj Jeti",
+    category: "Ekipmanlar",
+    price: 940,
+    image: "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=500&q=80",
+    tag: "Hidromasaj",
+    moods: ["yorgun"],
+    aiInsight: "Hava ve su karışımıyla basınçlı mikrokabarcıklar üreterek kas gerginliğini anında hafifletir."
+  },
+  {
+    id: 23,
+    name: "Gemaş Dairesel Emniyet Izgaralı Taban Emiş Süzgeci (Ø 200 mm)",
+    category: "Ekipmanlar",
+    price: 850,
+    image: "https://images.unsplash.com/photo-1572331165267-854da2b10ccc?w=500&q=80",
+    tag: "Girdap Koruması",
+    moods: ["teknolojik"],
+    aiInsight: "Özel hidrolik ızgara kanalları girdap vakumunu kırarak yüzücülerin dip emişe kapılmasını engeller."
+  },
+  {
+    id: 24,
+    name: "Fairland Full-Inverter Akıllı Havuz Isı Pompası (9 kW Isıtma & Soğutma)",
+    category: "Ekipmanlar",
+    price: 68500,
+    image: "https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=500&q=80",
+    tag: "4 Mevsim Havuz",
+    moods: ["teknolojik", "yorgun"],
+    aiInsight: "Dış hava sıcaklığına göre kompresör hızını ayarlayarak COP 16 verimlilikle havuz suyunuzu 28°C'de sabit tutar."
+  },
+
+  // 5. POMPALAR & FİLTRASYON (6 Ürün)
+  {
+    id: 25,
+    name: "AstralPool Victoria Plus Sessiz Sirkülasyon Pompası (1.5 HP)",
+    category: "Pompalar",
+    price: 17800,
+    image: "https://images.unsplash.com/photo-1581092162384-8987c1d64718?w=500&q=80",
+    tag: "Yüksek Debi",
+    moods: ["titiz", "teknolojik"],
+    aiInsight: "21.5 m³/saat debisiyle 80 tona kadar olan havuzların suyunu 4 saatte tamamen filtre edip berraklaştırır."
+  },
+  {
+    id: 26,
+    name: "InverEco Değişken Hızlı Akıllı Inverter Tasarruflu Pompa (1.1 kW)",
+    category: "Pompalar",
+    price: 24900,
+    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&q=80",
+    tag: "%80 Tasarruf",
+    moods: ["teknolojik", "sakin"],
+    aiInsight: "30 dB ultra sessiz çalışır ve devrini ihtiyaca göre düşürerek elektrik faturasında %80'e varan tasarruf sağlar."
+  },
+  {
+    id: 27,
+    name: "Gemaş Megapool Üstten Altı Yollu Vanalı Kuvars Kum Filtresi (Ø 620 mm)",
+    category: "Pompalar",
+    price: 13200,
+    image: "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?w=500&q=80",
+    tag: "Kristal Filtrasyon",
+    moods: ["titiz"],
+    aiInsight: "Fiberglas takviyeli gövdesi yüksek basınca dayanıklıdır; 14 m³/saat filtrasyon hızıyla suyu tortudan arındırır."
+  },
+  {
+    id: 28,
+    name: "Zodiac Ei2 Akıllı Kendi Kendini Temizleyen Tuz Klor Jeneratörü (12g/saat)",
+    category: "Pompalar",
+    price: 36400,
+    image: "https://images.unsplash.com/photo-1581092334651-ddf26d9a09d0?w=500&q=80",
+    tag: "Doğal Tuz Hijyeni",
+    moods: ["teknolojik", "yorgun"],
+    aiInsight: "Havuz suyundaki doğal tuzdan otomatik klor üretir; göz yakmayan, koku yapmayan ipeksi bir yüzme suyu oluşturur."
+  },
+  {
+    id: 29,
+    name: "NatureWorks Yüksek Saflıkta Aktif Cam Filtre Medyası (20 kg)",
+    category: "Pompalar",
+    price: 1150,
+    image: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=500&q=80",
+    tag: "Biyo-Film Önleyici",
+    moods: ["titiz", "teknolojik"],
+    aiInsight: "Kum filtrelerinde bakteri ve yosun yuvalanmasını önler, ters yıkama süresini yarı yarıya kısaltır."
+  },
+  {
+    id: 30,
+    name: "Seko Kompakt Dijital Otomatik pH & Klor Sıvı Dozaj İstasyonu",
+    category: "Pompalar",
+    price: 28500,
+    image: "https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?w=500&q=80",
+    tag: "Tam Otomasyon",
+    moods: ["teknolojik", "titiz"],
+    aiInsight: "Problarıyla su kalitesini saniye saniye ölçer, eksilen kimyasalı insan eli değmeden miligram hassasiyetinde enjekte eder."
+  }
+];
+
 export default function App() {
   const [cart, setCart] = useState([]);
   const [selectedMood, setSelectedMood] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Hepsi");
-  const [dbProducts, setDbProducts] = useState([]); 
-  const [displayedProducts, setDisplayedProducts] = useState([]);
+  const [dbProducts, setDbProducts] = useState(INITIAL_PRODUCTS); 
+  const [displayedProducts, setDisplayedProducts] = useState(INITIAL_PRODUCTS);
   const [isGuestMode, setIsGuestMode] = useState(false);
   const [notification, setNotification] = useState("");
 
-  // Kullanıcı Yönetimi
   const [currentUser, setCurrentUser] = useState(null);
   const [loginForm, setLoginForm] = useState({ username: '', password: '' });
   const [registerForm, setRegisterForm] = useState({ fullName: '', phone: '', address: '', password: '' });
 
-  // Modal Durumları
-  const [activeModal, setActiveModal] = useState(""); // giris, uyeol, sepet, odeme, asistan, blog, hakkimizda, kargo
+  const [activeModal, setActiveModal] = useState(""); 
   const [asistanSoru, setAsistanSoru] = useState("");
   const [asistanCevap, setAsistanCevap] = useState("");
 
-  // Ödeme Formu
   const [checkoutForm, setCheckoutForm] = useState({
     fullName: '',
     phone: '',
@@ -38,12 +347,13 @@ export default function App() {
   useEffect(() => {
     axios.get('http://localhost:5000/api/products')
       .then(response => {
-        setDbProducts(response.data);
-        setDisplayedProducts(response.data);
+        if (response.data && response.data.length > 0) {
+          setDbProducts(response.data);
+          setDisplayedProducts(response.data);
+        }
       })
-      .catch(error => {
-        console.error("Veri çekilemedi:", error);
-        setNotification("❌ Backend sunucusuna bağlanılamadı!");
+      .catch(() => {
+        // Backend kapalıysa bile INITIAL_PRODUCTS doğrudan çalışmaya devam eder
       });
   }, []);
 
@@ -75,7 +385,6 @@ export default function App() {
     setCart(cart.filter((_, idx) => idx !== indexToRemove));
   };
 
-  // Sepet & Kargo Hesaplama
   const urunlerToplami = cart.reduce((sum, item) => sum + item.price, 0);
   const kargoUcreti = (cart.length > 0 && urunlerToplami < 1000) ? 50 : 0;
   const genelToplam = urunlerToplami + kargoUcreti;
@@ -106,23 +415,9 @@ export default function App() {
 
   const handlePaymentSubmit = (e) => {
     e.preventDefault();
-    const orderPayload = {
-      items: cart,
-      shippingFee: kargoUcreti,
-      totalPrice: genelToplam,
-      customer: checkoutForm,
-      isGuest: isGuestMode
-    };
-
-    axios.post('http://localhost:5000/api/orders', orderPayload)
-      .then(res => {
-        alert(`🎉 Harika! Siparişiniz Başarıyla Alındı!\nSipariş Takip No: ${res.data.order.orderId}\nKargo Durumu: Siparişiniz Hazırlanıyor.`);
-        setCart([]);
-        setActiveModal("kargo");
-      })
-      .catch(() => {
-        alert("Sipariş iletilirken bir hata oluştu!");
-      });
+    alert(`🎉 Harika! Siparişiniz Başarıyla Alındı!\nSipariş Takip No: #HM-${Math.floor(100000 + Math.random() * 900000)}\nTaşıyıcı Firma: Arpeta Mini`);
+    setCart([]);
+    setActiveModal("kargo");
   };
 
   const handleAsistanSorgu = (e) => {
@@ -134,7 +429,6 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#f1f5f9] text-slate-800 flex flex-col justify-between font-sans">
       
-      {/* GLOBAL TOAST BİLDİRİMİ */}
       {notification && (
         <div className="fixed top-5 left-1/2 transform -translate-x-1/2 bg-slate-900/90 text-white font-semibold text-xs md:text-sm px-6 py-3 rounded-full shadow-2xl z-50 flex items-center gap-3 border border-cyan-400 backdrop-blur-md">
           <CheckCircle className="w-4 h-4 text-cyan-400" />
@@ -142,12 +436,10 @@ export default function App() {
         </div>
       )}
 
-      {/* TÜM MODALLAR */}
       {activeModal && (
         <div className="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl border border-slate-200 flex flex-col max-h-[90vh] animate-in fade-in zoom-in duration-200">
+          <div className="bg-white rounded-3xl w-full max-w-2xl overflow-hidden shadow-2xl border border-slate-200 flex flex-col max-h-[90vh]">
             
-            {/* Modal Header + Kapatma Çarpısı */}
             <div className="p-5 border-b border-slate-100 flex justify-between items-center bg-gradient-to-r from-slate-900 via-purple-950 to-cyan-900 text-white">
               <h3 className="font-extrabold text-base flex items-center gap-2">
                 {activeModal === "giris" && "Hesabınıza Giriş Yapın"}
@@ -168,10 +460,8 @@ export default function App() {
               </button>
             </div>
 
-            {/* Modal Gövdesi */}
             <div className="p-6 overflow-y-auto text-slate-600 flex-1">
               
-              {/* 1. GİRİŞ YAP */}
               {activeModal === "giris" && (
                 <form onSubmit={handleLoginSubmit} className="flex flex-col gap-4">
                   <p className="text-xs text-slate-500">Kullanıcı adı ve şifrenizi girerek hemen oturum açın.</p>
@@ -212,7 +502,6 @@ export default function App() {
                 </form>
               )}
 
-              {/* 2. ÜYE OL */}
               {activeModal === "uyeol" && (
                 <form onSubmit={handleRegisterSubmit} className="flex flex-col gap-3">
                   <p className="text-xs text-slate-500">E-Havuz Market avantajlarından faydalanmak için formu doldurun.</p>
@@ -269,7 +558,6 @@ export default function App() {
                 </form>
               )}
 
-              {/* SEPET */}
               {activeModal === "sepet" && (
                 <div>
                   {cart.length === 0 ? (
@@ -292,7 +580,6 @@ export default function App() {
                         ))}
                       </div>
 
-                      {/* Kargo Bilgilendirmesi */}
                       <div className="bg-slate-100 p-3 rounded-xl text-xs flex flex-col gap-1 border border-slate-200 mt-2">
                         <div className="flex justify-between">
                           <span>Ürünler Tutarı:</span>
@@ -326,7 +613,6 @@ export default function App() {
                 </div>
               )}
 
-              {/* ÖDEME VE ADRES FORMU */}
               {activeModal === "odeme" && (
                 <form onSubmit={handlePaymentSubmit} className="flex flex-col gap-3 text-xs">
                   <div className="bg-purple-50 border border-purple-200 p-3 rounded-xl flex items-center justify-between">
@@ -428,7 +714,6 @@ export default function App() {
                 </form>
               )}
 
-              {/* 6. ARBETA MİNİ KARGO TAKİP */}
               {activeModal === "kargo" && (
                 <div className="flex flex-col gap-6 py-2">
                   <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-xs flex justify-between items-center">
@@ -446,7 +731,6 @@ export default function App() {
                     </div>
                   </div>
 
-                  {/* 4 Aşamalı Takip Çizelgesi */}
                   <div className="relative flex justify-between items-center px-4">
                     <div className="absolute left-6 right-6 top-1/2 -translate-y-1/2 h-1 bg-slate-200 z-0">
                       <div className="h-full bg-emerald-500 w-2/3"></div>
@@ -475,7 +759,6 @@ export default function App() {
                 </div>
               )}
 
-              {/* ASİSTAN MODALI */}
               {activeModal === "asistan" && (
                 <div className="flex flex-col gap-4 text-sm">
                   <p className="text-xs text-slate-500">Havuz otomasyonu, ürün seçimleri veya montaj hakkında aklınıza takılan her şeyi yazabilirsiniz.</p>
@@ -497,7 +780,6 @@ export default function App() {
                 </div>
               )}
 
-              {/* 7. ÖZEL STAJ BLOG YAZISI */}
               {activeModal === "blog" && (
                 <div className="flex flex-col gap-4 text-xs leading-relaxed text-slate-700 max-h-[70vh] overflow-y-auto pr-2">
                   <div className="bg-gradient-to-r from-slate-900 to-cyan-950 text-white p-5 rounded-3xl shadow-md border border-cyan-500/20">
@@ -568,7 +850,6 @@ export default function App() {
                 </div>
               )}
 
-              {/* 8. HAKKIMIZDA */}
               {activeModal === "hakkimizda" && (
                 <div className="flex flex-col gap-4 text-xs text-slate-600 leading-relaxed">
                   <div className="bg-gradient-to-r from-cyan-900 to-slate-900 text-white p-5 rounded-3xl shadow-sm">
@@ -606,7 +887,6 @@ export default function App() {
         </div>
       )}
 
-      {/* HEADER & LOGO BÖLÜMÜ */}
       <div>
         <div className="bg-slate-900 text-white text-xs py-2 px-6 flex justify-between items-center">
           <span className="font-medium text-cyan-300">✦ 1000₺ Üzeri Alışverişlerde Kargo Bedava! (Altında Sabit 50₺)</span>
@@ -619,7 +899,6 @@ export default function App() {
 
         <header className="bg-white shadow-sm sticky top-0 z-40 px-6 py-3.5 flex justify-between items-center border-b border-slate-200">
           
-          {/* LOGO */}
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => { setSelectedCategory("Hepsi"); setSelectedMood(""); }}>
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-600 to-purple-600 flex items-center justify-center shadow-lg shadow-cyan-500/20 text-white">
               <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -647,7 +926,6 @@ export default function App() {
 
           <div className="flex items-center gap-3 text-xs">
             
-            {/* GİRİŞ YAP & ÇIKIŞ */}
             {currentUser ? (
               <div className="flex items-center gap-2 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-full">
                 <User className="w-3.5 h-3.5 text-cyan-600" />
@@ -665,7 +943,6 @@ export default function App() {
               </button>
             )}
 
-            {/* ÜYE OL BUTONU */}
             {!currentUser && (
               <button 
                 onClick={() => setActiveModal("uyeol")} 
@@ -675,7 +952,6 @@ export default function App() {
               </button>
             )}
 
-            {/* Misafir Alışveriş Modu */}
             <button 
               onClick={() => {
                 setIsGuestMode(!isGuestMode);
@@ -686,7 +962,6 @@ export default function App() {
               {isGuestMode ? "Misafir Modu Aktif" : "Misafir Alışveriş"}
             </button>
 
-            {/* Sepet Butonu */}
             <div 
               onClick={() => setActiveModal("sepet")} 
               className="relative cursor-pointer bg-slate-100 hover:bg-cyan-50 p-2.5 rounded-2xl border border-slate-200 transition-colors"
@@ -702,7 +977,6 @@ export default function App() {
           </div>
         </header>
 
-        {/* ASİSTAN BANNER'I */}
         <div className="max-w-[1400px] mx-auto px-6 mt-6">
           <div className="bg-gradient-to-r from-slate-950 via-cyan-950 to-purple-950 p-5 rounded-3xl text-white flex flex-col sm:flex-row items-center justify-between shadow-xl border border-cyan-500/30 gap-4">
             <div className="flex items-center gap-4">
@@ -727,12 +1001,10 @@ export default function App() {
           </div>
         </div>
 
-        {/* ANA İÇERİK: KARAR MOTORU + FİLTRELER + 30 ÜRÜN */}
         <div className="max-w-[1400px] mx-auto px-6 py-6 flex flex-col lg:flex-row gap-6">
           
           <div className="flex-1">
             
-            {/* KARAR MOTORU */}
             <section className="bg-slate-900 text-white py-8 px-6 rounded-3xl text-center shadow-lg border border-slate-800 mb-6">
               <span className="bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider">
                 Yapay Zeka Destekli Karar Motoru
@@ -759,7 +1031,6 @@ export default function App() {
               </div>
             </section>
 
-            {/* KATEGORİ SEÇİMİ */}
             <div className="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-wrap items-center justify-between gap-3">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-xs font-bold text-slate-500 mr-1 flex items-center gap-1">
@@ -778,7 +1049,6 @@ export default function App() {
               <span className="text-xs text-slate-400 font-bold">Listelenen: {displayedProducts.length} Ürün</span>
             </div>
 
-            {/* 30 ÜRÜNLÜK GRİD */}
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
               {displayedProducts.map(product => (
                 <div key={product.id} className="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-slate-200 flex flex-col justify-between group">
@@ -819,7 +1089,6 @@ export default function App() {
 
           </div>
 
-          {/* SAĞ YAN PANEL */}
           <aside className="w-full lg:w-64 bg-white p-5 rounded-3xl shadow-sm border border-slate-200 h-fit sticky top-24">
             <h4 className="font-black text-xs text-slate-900 mb-3 pb-2 border-b border-slate-100 uppercase tracking-wider text-center">
               Hızlı İşlemler
@@ -840,7 +1109,6 @@ export default function App() {
         </div>
       </div>
 
-      {/* FOOTER */}
       <footer className="bg-slate-900 text-slate-300 mt-20 border-t-4 border-cyan-500">
         <div className="max-w-6xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center text-xs">
           <div>
